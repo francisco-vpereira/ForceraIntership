@@ -1,0 +1,106 @@
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 										Adicionar capa guardada 
+%				Ficheiro guardado como templeate-cover.pdf no diretório front-matter
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\pagestyle{empty}
+\includepdf[pages={1},pagecommand={},scale=1]{front-matter/templeate-cover.pdf}
+\clearemptydoublepage
+
+
+
+\pagestyle{empty}
+\includepdf[pages={2},pagecommand={},scale=1]{front-matter/templeate-cover.pdf}
+\clearemptydoublepage
+
+
+
+%\pagestyle{empty}
+%\includepdf[pages={3},pagecommand={},scale=1,offset=0 -70 offy]{front-matter/templeate-cover-dec.pdf}
+%\clearemptydoublepage
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 									Adicionar página de rosto
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\input{front-matter/coverface.tex}
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 										Adicionar citação
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% \input{front-matter/quote.tex}
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 									Adicionar agradecimentos
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\markboth{Acknowledgements}{Acknowledgements}
+\include{front-matter/acknowledgements.tex}
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 										Adicionar resumo
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\markboth{Resumo}{Resumo}
+\include{front-matter/resumo.tex}
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 									 	Adicionar abstrato
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\markboth{Abstract}{Abstract}
+\include{front-matter/abstract.tex}
+
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 									   Adicionar motivações
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\markboth{Motivation}{Motivation}
+\include{front-matter/motivation.tex}
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 									Adicionar tabela de conteúdos
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\renewcommand{\contentsname}{Table of Contents}
+\tableofcontents
+\addcontentsline{toc}{chapter}{Table of Contents}
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 									Adicionar lista de figuras
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\clearemptydoublepage
+%\renewcommand\listfigurename{List of Figures}
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 									Adicionar lista de tabelas
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\clearemptydoublepage
+% \renewcommand\listtablename{List of Tables}
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
+\clearemptydoublepage
+
+
+
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% 								  Adicionar lista de abreviaturas
+% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\markboth{List of Abreviations}{List of Abreviations}
+\include{front-matter/abreviations-2.tex}
