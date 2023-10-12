@@ -1,21 +1,4 @@
-# Notas Forcera
-
-
-### Lista de sites : 
-
-1. [OCDS](https://www.open-contracting.org/) : Open Contracting Data Standard 
-    + [Manual](https://www.open-contracting.org/wp-content/uploads/2016/11/OCP2016-Red-flags-for-integrityshared-1.pdf) sobre Red Flags. 
-2. [Procurement Red Flags](https://redflags.ai/)
-3. [Red Flags](https://www.redflags.eu/) in Hungary
-4. [K Monitor](https://k-monitor.hu/home)
-5. [Transparency International](https://www.transparency.org/)
-6. [Transparência Internacional Portugal](https://transparencia.pt/)
-7. [Base de Dados](https://www.base.gov.pt/base4)
-
-
-***
-
-<h1><center> Notas : <a href=https://www.open-contracting.org/wp-content/uploads/2016/11/OCP2016-Red-flags-for-integrityshared-1.pdf> Red Flags for integrity</a></center></h1>
+<h1><center> Resumo : <a href=https://www.open-contracting.org/wp-content/uploads/2016/11/OCP2016-Red-flags-for-integrityshared-1.pdf> Red Flags for integrity : Giving the green light to open data solutions</a></center></h1>
 
 <h3><center>Parte I</center></h3>
 
