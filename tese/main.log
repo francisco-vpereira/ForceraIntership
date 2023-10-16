@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.10.3)  8 OCT 2023 11:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.10.3)  16 OCT 2023 10:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1623,432 +1623,33 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 
  (./front-matter/abreviations-2.tex
 
-LaTeX Warning: Hyper reference `acro:afm' on page xxi undefined on input line 8
+LaTeX Warning: Hyper reference `acro:cpv' on page xxi undefined on input line 8
 .
 
 
-LaTeX Warning: Hyper reference `acro:afm' on page xxi undefined on input line 8
+LaTeX Warning: Hyper reference `acro:cpv' on page xxi undefined on input line 8
 .
 
 
-LaTeX Warning: Hyper reference `acro:cern' on page xxi undefined on input line 
-9.
-
-
-LaTeX Warning: Hyper reference `acro:cern' on page xxi undefined on input line 
-9.
-
-
-LaTeX Warning: Hyper reference `acro:cmoz' on page xxi undefined on input line 
-10.
-
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 10.
-
-LaTeX Warning: Hyper reference `acro:cmoz' on page xxi undefined on input line 
-10.
-
-
-LaTeX Warning: Hyper reference `acro:cmo' on page xxi undefined on input line 1
-1.
-
-
-LaTeX Warning: Hyper reference `acro:cmo' on page xxi undefined on input line 1
-1.
-
-
-LaTeX Warning: Hyper reference `acro:cmtoz' on page xxi undefined on input line
- 12.
-
-
-LaTeX Warning: Hyper reference `acro:cmtoz' on page xxi undefined on input line
- 12.
-
-
-LaTeX Warning: Hyper reference `acro:cmto' on page xxi undefined on input line 
-13.
-
-
-LaTeX Warning: Hyper reference `acro:cmto' on page xxi undefined on input line 
-13.
-
-
-LaTeX Warning: Hyper reference `acro:cto' on page xxi undefined on input line 1
-4.
-
-
-LaTeX Warning: Hyper reference `acro:cto' on page xxi undefined on input line 1
-4.
-
-
-LaTeX Warning: Hyper reference `acro:dft' on page xxi undefined on input line 1
-5.
-
-
-LaTeX Warning: Hyper reference `acro:dft' on page xxi undefined on input line 1
-5.
-
-
-LaTeX Warning: Hyper reference `acro:dj' on page xxi undefined on input line 16
-.
-
-
-LaTeX Warning: Hyper reference `acro:dj' on page xxi undefined on input line 16
-.
-
-
-LaTeX Warning: Hyper reference `acro:dos' on page xxi undefined on input line 1
-7.
-
-
-LaTeX Warning: Hyper reference `acro:dos' on page xxi undefined on input line 1
-7.
-
-
-LaTeX Warning: Hyper reference `acro:dsc' on page xxi undefined on input line 1
-8.
-
-
-LaTeX Warning: Hyper reference `acro:dsc' on page xxi undefined on input line 1
-8.
-
-
-LaTeX Warning: Hyper reference `acro:efg' on page xxi undefined on input line 1
-9.
-
-
-LaTeX Warning: Hyper reference `acro:efg' on page xxi undefined on input line 1
+LaTeX Warning: Hyper reference `acro:fcup' on page xxi undefined on input line 
 9.
 
 
 LaTeX Warning: Hyper reference `acro:fcup' on page xxi undefined on input line 
-20.
-
-
-LaTeX Warning: Hyper reference `acro:fcup' on page xxi undefined on input line 
-20.
-
-
-LaTeX Warning: Hyper reference `acro:flapw' on page xxi undefined on input line
- 21.
-
-
-LaTeX Warning: Hyper reference `acro:flapw' on page xxi undefined on input line
- 21.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 21--22
-[]\OT1/ptm/m/n/8 Full-Potential Linearized-
- []
-
-
-LaTeX Warning: Hyper reference `acro:fm' on page xxi undefined on input line 22
-.
-
-
-LaTeX Warning: Hyper reference `acro:fm' on page xxi undefined on input line 22
-.
-
-
-LaTeX Warning: Hyper reference `acro:fopt' on page xxi undefined on input line 
-23.
-
-
-LaTeX Warning: Hyper reference `acro:fopt' on page xxi undefined on input line 
-23.
-
-
-LaTeX Warning: Hyper reference `acro:frams' on page xxi undefined on input line
- 24.
-
-
-LaTeX Warning: Hyper reference `acro:frams' on page xxi undefined on input line
- 24.
-
-
-Underfull \hbox (badness 6675) in paragraph at lines 24--25
-[]\OT1/ptm/m/n/8 Ferroelectric Random-Access
- []
-
-
-LaTeX Warning: Hyper reference `acro:fwhm' on page xxi undefined on input line 
-25.
-
-
-LaTeX Warning: Hyper reference `acro:fwhm' on page xxi undefined on input line 
-25.
-
-
-LaTeX Warning: Hyper reference `acro:gga' on page xxi undefined on input line 2
-6.
-
-
-LaTeX Warning: Hyper reference `acro:gga' on page xxi undefined on input line 2
-6.
-
-
-LaTeX Warning: Hyper reference `acro:gipaw' on page xxi undefined on input line
- 27.
-
-
-LaTeX Warning: Hyper reference `acro:gipaw' on page xxi undefined on input line
- 27.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 27--28
-[]\OT1/ptm/m/n/8 Gauge In-clud-ing Pro-jected
- []
-
-
-LaTeX Warning: Hyper reference `acro:hfi' on page xxi undefined on input line 2
-8.
-
-
-LaTeX Warning: Hyper reference `acro:hfi' on page xxi undefined on input line 2
-8.
-
-
-LaTeX Warning: Hyper reference `acro:hif' on page xxi undefined on input line 2
 9.
 
 
-LaTeX Warning: Hyper reference `acro:hif' on page xxi undefined on input line 2
-9.
+LaTeX Warning: Hyper reference `acro:ocds' on page xxi undefined on input line 
+10.
 
 
-LaTeX Warning: Hyper reference `acro:ifimup' on page xxi undefined on input lin
-e 30.
-
-
-LaTeX Warning: Hyper reference `acro:ifimup' on page xxi undefined on input lin
-e 30.
-
-
-LaTeX Warning: Hyper reference `acro:isolde' on page xxi undefined on input lin
-e 31.
-
-
-LaTeX Warning: Hyper reference `acro:isolde' on page xxi undefined on input lin
-e 31.
-
-
-LaTeX Warning: Hyper reference `acro:ks' on page xxi undefined on input line 32
-.
-
-
-LaTeX Warning: Hyper reference `acro:ks' on page xxi undefined on input line 32
-.
-
-
-LaTeX Warning: Hyper reference `acro:lda' on page xxi undefined on input line 3
-3.
-
-
-LaTeX Warning: Hyper reference `acro:lda' on page xxi undefined on input line 3
-3.
-
-
-LaTeX Warning: Hyper reference `acro:lpv' on page xxi undefined on input line 3
-4.
-
-
-LaTeX Warning: Hyper reference `acro:lpv' on page xxi undefined on input line 3
-4.
-
-
-LaTeX Warning: Hyper reference `acro:mhf' on page xxi undefined on input line 3
-5.
-
-
-LaTeX Warning: Hyper reference `acro:mhf' on page xxi undefined on input line 3
-5.
-
-
-LaTeX Warning: Hyper reference `acro:nmr' on page xxi undefined on input line 3
-6.
-
-
-LaTeX Warning: Hyper reference `acro:nmr' on page xxi undefined on input line 3
-6.
-
-
-LaTeX Warning: Hyper reference `acro:nmr' on page xxi undefined on input line 3
-7.
-
-
-LaTeX Warning: Hyper reference `acro:nmr' on page xxi undefined on input line 3
-7.
-
-
-LaTeX Warning: Hyper reference `acro:nte' on page xxi undefined on input line 3
-8.
-
-
-LaTeX Warning: Hyper reference `acro:nte' on page xxi undefined on input line 3
-8.
-
-
-LaTeX Warning: Hyper reference `acro:ood' on page xxi undefined on input line 3
-9.
-
-
-LaTeX Warning: Hyper reference `acro:ood' on page xxi undefined on input line 3
-9.
-
-
-LaTeX Warning: Hyper reference `acro:oor' on page xxi undefined on input line 4
-0.
-
-
-LaTeX Warning: Hyper reference `acro:oor' on page xxi undefined on input line 4
-0.
-
-
-LaTeX Warning: Hyper reference `acro:oot' on page xxi undefined on input line 4
-1.
-
-
-LaTeX Warning: Hyper reference `acro:oot' on page xxi undefined on input line 4
-1.
-
-
-LaTeX Warning: Hyper reference `acro:pac' on page xxi undefined on input line 4
-2.
-
-
-LaTeX Warning: Hyper reference `acro:pac' on page xxi undefined on input line 4
-2.
-
-
-LaTeX Warning: Hyper reference `acro:paw' on page xxi undefined on input line 4
-3.
-
-
-LaTeX Warning: Hyper reference `acro:paw' on page xxi undefined on input line 4
-3.
-
-
-LaTeX Warning: Hyper reference `acro:pbe' on page xxi undefined on input line 4
-4.
-
-
-LaTeX Warning: Hyper reference `acro:pbe' on page xxi undefined on input line 4
-4.
-
-
-LaTeX Warning: Hyper reference `acro:pdos' on page xxi undefined on input line 
-45.
-
-
-LaTeX Warning: Hyper reference `acro:pdos' on page xxi undefined on input line 
-45.
-
-
-LaTeX Warning: Hyper reference `acro:pp' on page xxi undefined on input line 46
-.
-
-
-LaTeX Warning: Hyper reference `acro:pp' on page xxi undefined on input line 46
-.
-
-
-LaTeX Warning: Hyper reference `acro:qtaim' on page xxi undefined on input line
- 47.
-
-
-LaTeX Warning: Hyper reference `acro:qtaim' on page xxi undefined on input line
- 47.
-
-
-LaTeX Warning: Hyper reference `acro:rp' on page xxi undefined on input line 48
-.
-
-
-LaTeX Warning: Hyper reference `acro:rp' on page xxi undefined on input line 48
-.
-
-
-LaTeX Warning: Hyper reference `acro:rt' on page xxi undefined on input line 49
-.
-
-
-LaTeX Warning: Hyper reference `acro:rt' on page xxi undefined on input line 49
-.
-
-
-LaTeX Warning: Hyper reference `acro:scf' on page xxi undefined on input line 5
-0.
-
-
-LaTeX Warning: Hyper reference `acro:scf' on page xxi undefined on input line 5
-0.
-
-
-LaTeX Warning: Hyper reference `acro:sopt' on page xxi undefined on input line 
-51.
-
-
-LaTeX Warning: Hyper reference `acro:sopt' on page xxi undefined on input line 
-51.
-
-
-LaTeX Warning: Hyper reference `acro:tdpac' on page xxi undefined on input line
- 52.
-
-
-LaTeX Warning: Hyper reference `acro:tdpac' on page xxi undefined on input line
- 52.
-
-
-LaTeX Warning: Hyper reference `acro:uspp' on page xxi undefined on input line 
-53.
-
-
-LaTeX Warning: Hyper reference `acro:uspp' on page xxi undefined on input line 
-53.
-
-
-LaTeX Warning: Hyper reference `acro:wfm' on page xxi undefined on input line 5
-4.
-
-
-LaTeX Warning: Hyper reference `acro:wfm' on page xxi undefined on input line 5
-4.
-
-
-LaTeX Warning: Hyper reference `acro:xc' on page xxi undefined on input line 55
-.
-
-
-LaTeX Warning: Hyper reference `acro:xc' on page xxi undefined on input line 55
-.
-
-
-LaTeX Warning: Hyper reference `acro:xrd' on page xxi undefined on input line 5
-6.
-
-
-LaTeX Warning: Hyper reference `acro:xrd' on page xxi undefined on input line 5
-6.
-
-
-LaTeX Warning: Hyper reference `acro:xrpd' on page xxi undefined on input line 
-57.
-
-
-LaTeX Warning: Hyper reference `acro:xrpd' on page xxi undefined on input line 
-57.
+LaTeX Warning: Hyper reference `acro:ocds' on page xxi undefined on input line 
+10.
 
 [21
 
 
-
-pdfTeX warning (ext4): destination with the same identifier (name{nmr}) has bee
-n already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.61 \clearemptydoublepage
-                          ] [22
+] [22
 
 ]))
 Chapter 1.
@@ -2071,7 +1672,7 @@ Chapter 2.
 LaTeX Warning: Command \r invalid in math mode on input line 4.
 
 [3])
-<front-matter/fcup_clipped.png, id=296, 152.2488pt x 77.5698pt>
+<front-matter/fcup_clipped.png, id=249, 152.2488pt x 77.5698pt>
 File: front-matter/fcup_clipped.png Graphic file (type png)
 <use front-matter/fcup_clipped.png>
 Package pdftex.def Info: front-matter/fcup_clipped.png  used on input line 109.
@@ -2111,11 +1712,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 56755C2A370128B0F711468BF4AF8545;1899.
  ) 
 Here is how much of TeX's memory you used:
- 43458 strings out of 477965
- 961438 string characters out of 5839349
- 1875388 words of memory out of 5000000
- 62678 multiletter control sequences out of 15000+600000
- 557834 words of font info for 125 fonts, out of 8000000 for 9000
+ 43296 strings out of 477965
+ 960266 string characters out of 5839349
+ 1859388 words of memory out of 5000000
+ 62573 multiletter control sequences out of 15000+600000
+ 549299 words of font info for 105 fonts, out of 8000000 for 9000
  16 hyphenation exceptions out of 8191
  104i,21n,97p,1348b,683s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/
@@ -2124,10 +1725,10 @@ s/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/urw/ti
 mes/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/s
 hare/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-dist/fonts/t
 ype1/urw/times/utmri8a.pfb>
-Output written on main.pdf (29 pages, 317061 bytes).
+Output written on main.pdf (29 pages, 312791 bytes).
 PDF statistics:
- 369 PDF objects out of 1000 (max. 8388607)
- 301 compressed objects within 4 object streams
- 94 named destinations out of 1000 (max. 500000)
+ 313 PDF objects out of 1000 (max. 8388607)
+ 246 compressed objects within 3 object streams
+ 48 named destinations out of 1000 (max. 500000)
  194 words of extra memory for PDF output out of 10000 (max. 10000000)
 
