@@ -28,3 +28,10 @@
 - [ ] Ver sites sugeridos
 - [ ] Classificar as flags da spreadsheet - tender award contract - de 2 maneiras : Facilidade de implementação e Valor da Flag. Numa fase inicial, começamos por implementar as flags com maior facilidade de implementação e maior valor. Aliar esta classificação com site do base-gov
 - [ ] Definir bem *public procurement* e as *red flags* : não é só identificar fraude mas, também, detetar lapsos/erros
+
+
+## Semana 3
+
+4. Reunião 16/10/2023
+
+- [ ] 
