@@ -34,4 +34,23 @@
 
 4. Reunião 16/10/2023
 
-- [ ] 
+- [ ] continuar a classificar flags
+
+5. Reunião 18/10/2023
+
+--- 
+
+*Dúvidas :* 
+
+- [ ] Famalicão :  Neste [caso](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10296678) o preço contratual é 99.150,50€ e o preço base é 283.774,92 €. Isto quer dizer que a empresa que ganhou a licitação realizou uma proposta que pode ser executada por 99.150€ e o valor máximo que a entidade adjudicatária estaria disposta a pagar é 283.774 €?
+
+- [ ] Relativamente à flag R007 : Unreasonable specifications (broad or too narrow ) - no caso do [contrato efetuado pela Câmara de Lagos](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10295389) no artigo 14º nrº 1 significa que para termos mais informações acerca do concurso ( quais as condições de elegibilidade ) temos de entrar em contato com o jurí do procedimento ?
+
+- [ ] [Montijo](https://www.base.gov.pt/Base4/pt/detalhe/?type=entidades&id=304018) : mesmo contrato duplicado mas com preços contratuais diferentes
+
+- [ ] [IPO](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10295077) : uma das empresas apresentou uma proposta de 1 cêntimo 
+
+- [ ] Texto introdução tese
+---
+
+- [ ] Atribuir cotação/peso a cada um dos parâmetros ( valor da flag e facilidade de implementação ) e criar uma coluna extra com uma média ponderada, por exemplo. Objetivo é atribuir um *score* para cada flag 
