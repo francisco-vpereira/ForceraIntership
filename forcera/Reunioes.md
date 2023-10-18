@@ -42,13 +42,13 @@
 
 *Dúvidas :* 
 
-- [ ] Famalicão :  Neste [caso](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10296678) o preço contratual é 99.150,50€ e o preço base é 283.774,92 €. Isto quer dizer que a empresa que ganhou a licitação realizou uma proposta que pode ser executada por 99.150€ e o valor máximo que a entidade adjudicatária estaria disposta a pagar é 283.774 €?
+- [x] Famalicão :  Neste [caso](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10296678) o preço contratual é 99.150,50€ e o preço base é 283.774,92 €. Isto quer dizer que a empresa que ganhou a licitação realizou uma proposta que pode ser executada por 99.150€ e o valor máximo que a entidade adjudicatária estaria disposta a pagar é 283.774 €? - **Sim**
 
 - [ ] Relativamente à flag R007 : Unreasonable specifications (broad or too narrow ) - no caso do [contrato efetuado pela Câmara de Lagos](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10295389) no artigo 14º nrº 1 significa que para termos mais informações acerca do concurso ( quais as condições de elegibilidade ) temos de entrar em contato com o jurí do procedimento ?
 
-- [ ] [Montijo](https://www.base.gov.pt/Base4/pt/detalhe/?type=entidades&id=304018) : mesmo contrato duplicado mas com preços contratuais diferentes
+-  [x] [Montijo](https://www.base.gov.pt/Base4/pt/detalhe/?type=entidades&id=304018) : mesmo contrato duplicado mas com preços contratuais diferentes
 
-- [ ] [IPO](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10295077) : uma das empresas apresentou uma proposta de 1 cêntimo 
+- [x] [IPO](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10295077) : uma das empresas apresentou uma proposta de 1 cêntimo - **Pode ser uma red flag**
 
 - [ ] Texto introdução tese
 ---
