@@ -1,0 +1,35 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%% PARA DEFINIR O TIPO DE LETRA  %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[no-math]{fontspec}	%Para permitir personalizaÃ§Ãµes ao tipo de fonte no OSX
+\setmainfont[Ligatures=TeX]{Arial}
+
+\setmainfont{Arial}
+
+\setsansfont{Arial}[Scale=MatchLowercase]
+\setmonofont{Arial}[Scale=MatchLowercase]
+
+\sffamily
+\renewcommand{\familydefault}{\sfdefault}
+
+\newfontfamily\headfont{Arial}
+\newcommand\texthead[1]{\headfont #1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%% PARA DEFINIR O TIPO DE LETRA MATHMODE %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usepackage[cmintegrals,	%makes use of integrals drawn from Computer Modern rather than the more upright, 
+%							%but unattractive, txfonts integrals.
+%scaled=1.00,				%allows you to scale all fonts in this math package to match a chosen text font family
+%nosymbolsc,					%saves you a math group of mostly rather obscure symbols
+%noamssymbols,				%saves you one or two math groups (the AMS symbols) if you have no need of them
+%						    %uprightGreek,													
+%						    %specifies the use of upright rather than slanted Greek symbols for upper case only.
+%						    %frenchmath														
+%						    %forces uppercase and lowercase Greek to upright shape and makes uppercase math
+%							% Roman letters render in upright rather than slanted shape
+%]{newtxsf}
+%
+%\usepackage[italic,defaultmathsizes,selfGreek]{mathastext}
