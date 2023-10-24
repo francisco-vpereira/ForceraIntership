@@ -54,3 +54,10 @@
 ---
 
 - [ ] Atribuir cotação/peso a cada um dos parâmetros ( valor da flag e facilidade de implementação ) e criar uma coluna extra com uma média ponderada, por exemplo. Objetivo é atribuir um *score* para cada flag 
+
+- [ ] Instalar PostgreSQL num *Container* 
+## Semana 4
+
+6. Reunião 23/10/2023
+
+- [ ] Instalação PostgresSQL

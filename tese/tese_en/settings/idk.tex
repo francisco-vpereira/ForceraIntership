@@ -1,0 +1,65 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%ALTERAR A DISTANCIA DO TOPO DA PAGINA ATAO MODULO COM IFORMAcao CAPITULO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%  %%%% For the case \chapter:
+%%%%%%%%  \makeatletter
+%%%%%%%%  \renewcommand*{\@makechapterhead}[1]{%
+%%%%%%%%    \vspace*{1\p@}%
+%%%%%%%%    {\parindent \z@ \raggedright \normalfont
+%%%%%%%%      \ifnum \c@secnumdepth >\m@ne
+%%%%%%%%        \if@mainmatter%%%%% Fix for frontmatter, mainmatter, and backmatter 040920
+%%%%%%%%          \DOCH
+%%%%%%%%        \fi
+%%%%%%%%      \fi
+%%%%%%%%      \interlinepenalty\@M
+%%%%%%%%      \if@mainmatter%%%%% Fix for frontmatter, mainmatter, and backmatter 060424
+%%%%%%%%        \DOTI{#1}%
+%%%%%%%%      \else%
+%%%%%%%%        \DOTIS{#1}%
+%%%%%%%%      \fi
+%%%%%%%%    }}
+%%%%%%%%    
+%%%%%%%%  %%%% For the case \chapter*:
+%%%%%%%%  \renewcommand*{\@makeschapterhead}[1]{%
+%%%%%%%%    \vspace*{1\p@}%
+%%%%%%%%    {\parindent \z@ \raggedright
+%%%%%%%%      \normalfont
+%%%%%%%%      \interlinepenalty\@M
+%%%%%%%%      \DOTIS{#1}
+%%%%%%%%      \vskip 10\p@
+%%%%%%%%    }}
+%%%%%%%%  \makeatother
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%COMANDO PARA DEFINIR A PROFUNDIDADE DA NUMERACAO DOS CAP,SEC,...-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setcounter{secnumdepth}{6}
+\setcounter{tocdepth}{6}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%Para definir a quebrea de linhas e palavras
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hyphenpenalty=50 % default 50
+\tolerance=200      % default 200
+
+\flushbottom
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%PARA DEFINIR O DETALHE NA NUMERAcao AUTOMATICA%%%%%%%%%%%%%-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\numberwithin{equation}{chapter}
+\numberwithin{figure}{chapter}
+\numberwithin{table}{chapter}
