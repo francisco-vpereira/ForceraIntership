@@ -50,12 +50,12 @@
 
 - [x] [IPO](https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=10295077) : uma das empresas apresentou uma proposta de 1 cêntimo - **Pode ser uma red flag**
 
-- [ ] Texto introdução tese
+- [x] Texto introdução tese
 ---
 
-- [ ] Atribuir cotação/peso a cada um dos parâmetros ( valor da flag e facilidade de implementação ) e criar uma coluna extra com uma média ponderada, por exemplo. Objetivo é atribuir um *score* para cada flag 
+- [x] Atribuir cotação/peso a cada um dos parâmetros ( valor da flag e facilidade de implementação ) e criar uma coluna extra com uma média ponderada, por exemplo. Objetivo é atribuir um *score* para cada flag 
 
-- [ ] Instalar PostgreSQL num *Container* 
+- [x] Instalar PostgreSQL num *Container* 
 ## Semana 4
 
 6. Reunião 23/10/2023
@@ -64,7 +64,7 @@
 
 7. Reunião 25/10/2023
 
-- [ ] Criar ficheiro com os passos de instalação do docker e postgres
+- [x] Criar ficheiro com os passos de instalação do docker e postgres
 - [ ] Criar funções que permitam extrair informações de um contrato 
     - Exemplo : criar uma função cujo input seja o número de anúncio e retorne o preço base
 - [ ] Ao invés de utilizar um notebook, optar antes por um script *.py*
