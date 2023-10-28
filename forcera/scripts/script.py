@@ -25,9 +25,6 @@ cur = conn.cursor()
 # ---------------------------------------# 
 
 def preco_contrato(id_anuncio):
-    '''
-    Função que retorna preço contratual a partir do id do anúncio
-    '''
     cur = conn.cursor()
     cur.execute('''
         SELECT preco_contratual
@@ -35,21 +32,93 @@ def preco_contrato(id_anuncio):
         WHERE idcontrato = %s; ''', (id_anuncio,))
     return np.asarray(cur.fetchall())[0]
 
-#print(preco_contrato('8584389')) 
+
+# ------------------------------------------------------------------------------- # 
 
 
-
-def all_ids():
+def preco_contrato1(ide, table):
     '''
-    Função que retorna todos os ids dos contratos
+    Função que retorna preço contratual a partir do id do anúncio para um data tabela
+
+    Parâmetros :
+        - ide : id do anúncio
+        - table : tabela de interesse
+
+    Return : 
+        - int : preço contratual
     '''
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT preco_contratual
+        FROM "{}"
+        WHERE idcontrato = %s; '''.format(table), (ide,))
+    return np.asarray(cur.fetchone())[0]
+
+
+# ------------------------------------------------------------------------------- # 
+
+
+def all_ids(table):
+    '''
+    Função que retorna todos os ids dos contratos de uma tabela
+
+    Parâmetros :    
+        - table : tabela de interesse
+
+    Return : 
+        - numpy array : ids de todos os contratos de uma tabela 
+    '''
+
     cur = conn.cursor()
     cur.execute(''' 
                 SELECT idcontrato
-                FROM "CONTRACTS";
-                ''')
+                FROM "{}"; '''.format(table)) 
     return np.asarray(cur.fetchall())
 
-ids = all_ids()
-print(ids)
+
+# ------------------------------------------------------------------------------- # 
+
+
+def col_names(table):
+    '''
+    Função que retorna os nomes das colunas de uma tabela
+    
+    Parâmetros : 
+        - table : tabela de interesse
+
+    return : 
+        - pandas DataFrame : nomes das colunas
+    '''
+
+    cur = conn.cursor()
+    cur.execute('''
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_name = %s;''', (table,))
+
+    cnames = pd.DataFrame(cur.fetchall())
+    # cnames = [row[0] for row in cur.fetchall()]
+    return cnames
+
+
+# ------------------------------------------------------------------------------- # 
+
+
+def n_contracts(table):
+    '''
+    Retorna o número de contratos de uma tabela pertencente à base de dados
+
+    Parâmetros : 
+        - table : tabela de interesse
+
+    return : 
+        - int : número de contrato
+    '''
+    
+    cur = conn.cursor()
+    cur.execute('''
+                SELECT COUNT(*) 
+                FROM "{}"; '''.format(table))
+    ncontract = cur.fetchone()[0]
+    return ncontract
 
