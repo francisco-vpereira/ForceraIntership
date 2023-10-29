@@ -65,8 +65,8 @@
 7. Reunião 25/10/2023
 
 - [x] Criar ficheiro com os passos de instalação do docker e postgres
-- [ ] Criar funções que permitam extrair informações de um contrato 
+- [x] Criar funções que permitam extrair informações de um contrato 
     - Exemplo : criar uma função cujo input seja o número de anúncio e retorne o preço base
-- [ ] Ao invés de utilizar um notebook, optar antes por um script *.py*
+- [x] Ao invés de utilizar um notebook, optar antes por um script *.py*
 - [ ] Estudar OOP
 - [ ] Possíveis bibliotecas a utilizar futuramente : Keras e Tensorflow 
