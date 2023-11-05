@@ -70,3 +70,19 @@
 - [x] Ao invés de utilizar um notebook, optar antes por um script *.py*
 - [ ] Estudar OOP
 - [ ] Possíveis bibliotecas a utilizar futuramente : Keras e Tensorflow 
+
+
+## Semana 5
+
+8. Reunião 30/10/2023
+
+- [ ] Criar função para dar nomes de entidades adjudicatárias a partir do NIF
+- [ ] Selecionar outras red flags
+
+9. Reunião 01/11/2023
+- Feriado
+
+10. Reunião 03/11/2023
+
+- Não acrescentei nada por causa do trabalho de STP 
+
