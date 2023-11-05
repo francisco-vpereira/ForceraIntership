@@ -1,16 +1,20 @@
-# ---------------------------------------# 
-#              Bibliotecas
-# ---------------------------------------# 
+# ------------------------------------------------------------------------------- # 
+# 1. Bibliotecas
+# ------------------------------------------------------------------------------- # 
+
 import psycopg2
 from psycopg2 import OperationalError
+
 import pandas as pd
 import numpy as np
+
 from IPython.display import HTML
 
 
-# ---------------------------------------# 
-#      Criar ligação com a database
-# ---------------------------------------# 
+# ------------------------------------------------------------------------------- #  
+# 2. Criar ligação com a database
+# ------------------------------------------------------------------------------- # 
+ 
 conn = psycopg2.connect(
     host="localhost",
     port = 5434,
@@ -20,9 +24,9 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 
-# ---------------------------------------# 
-#               Funções
-# ---------------------------------------# 
+# ------------------------------------------------------------------------------- # 
+# 3. Funções
+# ------------------------------------------------------------------------------- # 
 
 def preco_contrato(id_anuncio):
     cur = conn.cursor()
@@ -31,6 +35,9 @@ def preco_contrato(id_anuncio):
         FROM "CONTRACTS"
         WHERE idcontrato = %s; ''', (id_anuncio,))
     return np.asarray(cur.fetchall())[0]
+
+f1 = preco_contrato('8584389')
+# print(f1)
 
 
 # ------------------------------------------------------------------------------- # 
@@ -55,6 +62,26 @@ def preco_contrato1(ide, table):
     return np.asarray(cur.fetchone())[0]
 
 
+f2 = preco_contrato1('8584389','CONTRACTS')
+# print(f2)
+
+# ------------------------------------------------------------------------------- # 
+
+
+def preco_contrato2(id_anuncio):
+    
+    '''
+    Função que retorna preço contratual a partir de uma lista de ids de anúncios
+    '''
+    
+    cur.execute('''
+        SELECT preco_contratual
+        FROM "CONTRACTS"
+        WHERE idcontrato IN %s; ''', (tuple(id_anuncio),))
+    
+    return np.asarray(cur.fetchall())
+
+
 # ------------------------------------------------------------------------------- # 
 
 
@@ -73,9 +100,14 @@ def all_ids(table):
     cur.execute(''' 
                 SELECT idcontrato
                 FROM "{}"; '''.format(table)) 
-    return np.asarray(cur.fetchall())
+    return list(cur.fetchall())
 
 
+ids = all_ids('CONTRACTS')
+# print(ids)
+
+f3 = preco_contrato2(ids)
+# print(f3)
 # ------------------------------------------------------------------------------- # 
 
 
@@ -100,6 +132,9 @@ def col_names(table):
     # cnames = [row[0] for row in cur.fetchall()]
     return cnames
 
+f4 = col_names('CONTRACTS')
+# print(f4)
+
 
 # ------------------------------------------------------------------------------- # 
 
@@ -122,3 +157,6 @@ def n_contracts(table):
     ncontract = cur.fetchone()[0]
     return ncontract
 
+
+f5 = n_contracts('CONTRACTS')
+# print(f5)
