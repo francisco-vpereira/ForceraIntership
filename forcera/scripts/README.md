@@ -23,14 +23,14 @@
 
 - [x]  Função que retorna preço contratual a partir do id de um anúncio  
 
-- [ ]  Função que retorna preço base a partir do id de um anúncio
+- [x]  Função que retorna preço base a partir do id de um anúncio
 
 - [x]  Função que retorna todos os ids de todos os anúncios
 
 - [x]  Função que retorna preço contratual para um conjunto de ids de anúncios
 
-- [ ]  Função que retorna preço base para um conjunto de ids de anúncios
-    - [ ] Neste caso, verificar quais os ids que não correpondem a valores nulos
+- [x]  Função que retorna preço base para um conjunto de ids de anúncios
+    - [x] Neste caso, verificar quais os ids que não correpondem a valores nulos
 
 <p>
 
