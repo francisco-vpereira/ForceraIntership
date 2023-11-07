@@ -15,22 +15,30 @@
 
 # Funções necessárias
 
-- [x] 1. Função que retorna preço contratual a partir do id de um anúncio  
+- [x] Função que retorna os nomes de todas as colunas da tabela
+    - [x] para um tabela em específico
+<p>
 
-- [ ] 2. Função que retorna preço base a partir do id de um anúncio
+- [x] Função quer retorna o número de contratos
 
-- [x] 3. Função que retorna todos os ids de todos os anúncios
+- [x]  Função que retorna preço contratual a partir do id de um anúncio  
 
-- [x] 4. Função que retorna preço contratual para um conjunto de ids de anúncios
+- [ ]  Função que retorna preço base a partir do id de um anúncio
 
-- [ ] 5. Função que retorna preço base para um conjunto de ids de anúncios
+- [x]  Função que retorna todos os ids de todos os anúncios
 
-- [ ] 6. Função que retorna todos os ids de anúncios para um determinado tipo de procedimento
+- [x]  Função que retorna preço contratual para um conjunto de ids de anúncios
 
-- [x] 7. Função que retorna os nomes de todas as colunas da tabela
-    * para um tabela em específico
-    * para um tabela e tipo de procedimento específico
+- [ ]  Função que retorna preço base para um conjunto de ids de anúncios
+    - [ ] Neste caso, verificar quais os ids que não correpondem a valores nulos
 
-<br>
+<p>
 
-- [x] 8. Função que retorna o número de contratos de uma tabela
+- [ ]  Função que retorna todos os ids de anúncios para um determinado tipo de procedimento
+
+- [ ] Função que retorna todos os ids de anúncios para um determinado tipo de contrato
+
+- [ ] Função que retorna todos os ids de anúncios para um determinado tipo de procedimento e contrato
+
+
+
