@@ -4,11 +4,17 @@
 
 2. Categorizar as flags de acordo com a facilidade de implementação e valor
 
-3. Focar, numa fase inicial, num conjunto de contratos. Selecionaram-se apenas ajustes diretos e contratos públicos referentes a CPV's que dizem respeito a serviços de IT
+3. Focar, numa fase inicial, num conjunto de contratos. Selecionaram-se apenas ajustes diretos e contratos públicos referentes a CPV's que dizem respeito a serviços de IT - 72
 
 4. Contruiu-se a primeira flag que compara preço base com preço contratual 
 
-5. Construi-se função que verifica se os precos contratuais dentro dos ajustes diretos estã
+5. Construi-se função que verifica se os precos contratuais dentro dos ajustes diretos caem dentro de um intervalo em torno do preco base
+
+6. Nesta mesma função, inclui-se a presença de um parametro de racio para comparar com precobase/precocontratual. Nos casos em que este quociente é mt alto vai ser verificado se ha ou nao presenca de vários lotes no contrato
+
+7. Construcao de uma funcao que vai analisar ajustes diretos. Priemiro verifica quais os ids dos contratos q ultrapassam o valor maximo permitido por lei q é 20k€. Se ultrapssar dispara a flag. Se num ajuste direto nao houver fundamentação é disparada a flag tambem
+
+8. Os ajustes diretos foram ordenados por ordem crescente de nt de celebracao. Comparou-se o nr de ajustes diretos celebrados com o nt de ajustes suspeitos, calculou-se o racio entre os 2. 
 
 
 
@@ -127,7 +133,6 @@ A natureza e designação do tipo de contrato que é possível realizar para cad
 \section{Objetivo do estágio}
 
 FALAR DO OBJETIVO GERAL 
-\\
 \\
 
 
