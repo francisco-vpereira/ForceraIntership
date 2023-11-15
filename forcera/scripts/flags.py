@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import seaborn as sns
 from IPython.display import HTML
+import webbrowser
 
 
 
@@ -129,6 +130,9 @@ def redflag2(t,ids):
 
     prices = t.PrecoContratual
     flags[np.where(prices > 20000)] = 1
+
+    fundamento = t.iloc[:,21]
+    flags[np.where(fundamento == "")] = 1
     
     # Conversão do tuplo de ids num array de uma coluna
     ids = np.array(ids).reshape((n,))

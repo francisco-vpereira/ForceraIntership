@@ -8,10 +8,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import seaborn as sns
 from IPython.display import HTML
-
-
-
-
+import webbrowser
 
 
 
@@ -33,13 +30,36 @@ cur = conn.cursor()
 
 
 
-
-
-
-
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 # FUNÇÕES PARA EXPLORAR O CONJUNTO DE DADOS
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
+
+
+def h(df):
+    """
+    Função que permite ver dataframe completa e de forma mais organizada
+    """
+    return HTML(df.to_html(index=False))
+
+
+
+
+def url(id):
+    """
+    Função que abre página web do anúncio a partir do id do contrato. Só funciona para um contrato de cada vez
+    """
+    
+    cur = conn.cursor()
+
+    cur.execute('''
+        SELECT "url_anuncio"
+        FROM "contratos"
+        WHERE "id" = %s;''',(id, ))
+
+    return webbrowser.open(cur.fetchall()[0][0])    
+
+
+
 
 
 def col_names(table):
@@ -114,6 +134,7 @@ def all_ids(table):
 
 def ajuste_dir():
     """
+    Função que retorna os ID's de todos os ajustes diretos em regime geral celebrados
     """
     
     cur = conn.cursor()
@@ -131,6 +152,7 @@ def ajuste_dir():
 
 def consulta_prev():
     """
+    Função que retorna os ID's de todas as consultas prévias celebradas
     """
     
     cur = conn.cursor()
@@ -148,6 +170,7 @@ def consulta_prev():
 
 def concurso_pub():
     """
+    Função que retorna os ID's de todos os concursos públicos celebrados
     """
     
     cur = conn.cursor()
