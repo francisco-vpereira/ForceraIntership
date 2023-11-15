@@ -86,3 +86,19 @@
 
 - Não acrescentei nada por causa do trabalho de STP 
 
+
+## Semana 6
+
+## Semana 7
+
+11. Reunião 13/11/2023
+
+- De entre os ajustes diretos, verificar para cada empresa o número de ajustes diretos efetuados, o número de ajustes diretos suspeitos e o rácio 
+
+12. Reunião 15/11/2023
+
+- Criar base de dados para guardar contratos celebrados entre diferentes NIFs. Ver quantos e quais contratos foram celebrados ( através do ID ) entre a empresa correspondente ao NIF1 e as empresas com NIF2 até NIFn. Fazer isso para todas as empresas. 
+
+
+
+
