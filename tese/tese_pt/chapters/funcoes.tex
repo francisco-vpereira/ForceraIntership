@@ -1,0 +1,119 @@
+Numa primeira fase foram criadas funções para explorar o conjunto de dados. 
+
+A função \textit{col\_names} retorna-nos uma dataframe com todos os nomes das colunas. A função \textit{n\_contracts} retorna-nos o número de linhas, ou seja, o número de contratos totais, da base de dados. \\
+
+É preciso criar um função com o código que já tenho para categorizar os contratos de acordo com o tipo de procedimento. Idem para o tipo de contrato. 
+
+Foi desenvolvida, também, uma função \textit{h} que permite ver uma dataframe de forma mais apresentável. 
+
+\section{Mini-funções}
+
+Para a contrução das flags são necessárias várias funções pequenas. Cada função irá ter um único propósito e os outputs de certas funções irão ser usados como inputs de outras funções. 
+
+Para identificar um contrato necessitamos do seu id. Assim, criou-se a função \textit{all\_ids} que retorna os ids de todos os contratos da dataframe. Contudo, como não vamos trabalhar com todos os tipos de contratos e procedimentos, é necessário filtrar estes ids. Para isso, fui por partes.
+
+Criei as funções \textit{ajustes\_dir}, \textit{consulta\_prev} e \textit{concurso\_pub} que retornam os ids de todos os ajustes diretos, consultas prévias e concursos públicos, respetivamente. 
+
+De seguida, filtrei os contratos por tipo de procedimento e por CPV. Para isso, criei a função \textit{cpv\_direto} que retorna todos os ids de ajustes diretos para serviços de consultoria em IT ( todos os CPV's começados por 72). De seguida, fiz o mesmo para contratos públicos na função \textit{cpv\_cpub}. De forma a generalizar, criei a função \textit{cpv} que retorna todos os ids de contratos de um tipo de procedimento e para um determinado CPV. Tanto o tipo de procedimento como os primeiros 2 algarismos do CPV são parâmetros de entrada da função. 
+
+O primeiro passo, que passa por obter os ids dos contratos desejados está feito. Os id's dos contratos vão ser o input da maioria das funções que se seguem. 
+
+Para começar, criaram-se duas funções que permitem ver qual é o contrato associado a um determinado id. A função \textit{contrato} tem como input um único id de um contrato ( todas estas funções dizem respeito à tabela \textit{contratos} da DB) e retorna uma dataframe com uma única linha referente ao contrato associado a esse mesmo id. A função \textit{contratos} faz exatamente a mesma coisa mas para um conjunto de id's. 
+
+Quando as flags tiverem construídas e quisermos ver o anúncio de um contrato suspeito no site do basegov, podemos fazê-lo usando a função \textit{url} que, novamente, tem como parâmetro de entrada o id de um contrato. Esta função pode ter bastante utilidade nos casos que chamam bastante a atenção, como por exemplo, quando se viu um ajuste direto de 3 milhões de euros. \\
+\\
+
+\section{Funções para a primeira flag}
+
+A primeira flag construída tem como objetivo comparar o preço base com o preço contratual. Esta flag não vai funcionar para ajustes diretos visto que não existe preço base. 
+
+Primeiro, obteve-se o preco contratual e foi-se, novamente, por passos. 
+A função \textit{preco\_contratual1} devolve, a partir do id de um anúncio, o valor do preço contratual desse mesmo anúncio. A função \textit{preco\_contratual2} faz exatamente a mesma coisa mas para um tabela genérica. Esta função não vai ter grande utilidade porque só há uma tabela na database. A função \textit{preco\_contrato3} generaliza a primeira função pois retorna um conjunto de preços contratuais referentes a um conjunto de id's de anúncios que leva como input. A função \textit{preco\_contratual4} generaliza a função anterior para qualquer tabela mas, no fundo, também não vai ter grande importância. A função \textit{preco\_contratual3} é a função que importa. Os precos contratuais são retornados no formato de array pois dessa forma torna-se mais fácil manipular os valores, fazer comparações, etc. 
+
+De seguida, foi feito o mesmo para o preço base. Foi utilizada a mesma abordagem e chegou-se à função \textit{preco\_base3} que retorna os valores dos preços base para um conjunto de id's. Foi necessário formatar os valores antes de os retornar visto que, no momento da aquisição, estes vinham no formato ---.---,--€. 
+
+Neste momento já podemos fazer o seguinte : utilizando a função \textit{cpv}, obter os id's de contratos de um dos tipos desejados e para um determinado cpv. Nesta fase inicial, obtiveram-se os ids de ajsutes diretos e concursos públicos para CPV's começados por 72. 
+
+Com esses id's podemos ver os preços contratuais. No caso dos contratos públicos podemos ver o valor dos preços base. Assim, estamos em condições de construir a primeira flag. 
+
+\section{Flag 1}
+
+A primeira flag construída compara o preço base com o preço contratual para concursos públicos. Para que ela funcione temos de dar como input o conjunto de preços bases e contratuais associados a um determinado conjunto de contratos que já conseguimos determinar usando as funções criadas anteriormente. É preciso fornecer uma tolerância que vai definir o intervalo em torno do preço base, os ids dos contratos associados e um racio máximo aceitável entre o preco base e contratual. 
+
+
+O objetivo passa por verificar se o preço contratual cai num intervalo em torno do preço base. Se cair é ativada uma flag. O preço base é conhecido à priori, por isso esta flag não tem muito valor por si só. Quando for acoplada com outras flags pode sugerir um comportamento suspeito. Também é preciso ter em conta como é que o preço base é calculado. Se o preço base for calculado por excesso e o preço contratual for próximo do preço base, pode haver corrupção tanto por parte da entidade adjudicante como da adjudicatária. 
+
+Esta função também dispara uma flag nos casos em que o rácio preço base a dividir por preço contratual é muito alto, sendo este limite um parâmetro de entrada da função. Se o preço base for centenas de vezes superior ao preco contratual, é muito provável que o contrato esteja dividido por lotes e, nesse caso, é precisar verificar quais são os lotes associados ao contrato - a partir do número do anúncio pois todos os lotes partilham o mesmo. Tendo o preco contratual de todos os lotes, somam-se e compara-se o resultado ao preco base. Contudo, esta análise dos lotes terá que ser feita numa função externa.  
+
+Por fim, o resultado retornado é um conjunto de id's na forma de tuplo. Estes id's podem ser usados posteriormente noutras funções para imprimir os contratos ou para abrir o url da pagina do basegov associado - isto tudo usando as funções definidas anteriormente. 
+
+Esta função devia ser adaptada para fazer o seguinte : comparar na mesma o preco contratual com o intervalo em torno do preço base, calcular o rácio e ver se quando estamos a falar de preços bases acima de 100x superior o preco contratual existem ou nao lotes e ver os casos em que o preço base é umas 2-10x superior ao preço contratual. Isto porque, para um obra que custe, por ex., 100.000€ e o preço contratual é 50.000€ pode ser estranho. Pode ser o preço base que é mal calculado, pode ser uma forma de afastas outras empresas ( mas isto mais no caso em que o preço base é, por ex., 10x superior ao preço contratual - podem existir muitas empresas capazes de efetuar o serviço A mas se virem no concurso que o preço base é muito grande podem não se candidatar por serem uma empresa mais pequena, por ex. )
+
+
+
+\section{Flag 2}
+
+Esta função foi criada apenas para ajustes diretos. Não está definida nas flags da OCDS. 
+
+Os ajustes diretos tem diferentes limites máximos impostos por lei, mediante o tipo de obra/serviço. 
+
+Esta função tem como input uma dataframe correspondente a todos os ajustes diretos realizados com CPV 72, sendo esta obtida fazendo uso dos funções \textit{contratos} e \textit{cpv} definidas antes, e os ids dos contratos associados aos ajustes diretos. 
+
+A função vai comparar todos os preços contratuais com o valor de 20.000€ pois é o limite máximo de aquisição de serviços. Esta parte tem de  ser atualizada no futuro. Contudo, a maior parte dos ajustes diretos é Aquisição de Serviços. Se os valores forem superiores a este preço, é ativada uma flag.
+
+A segunda parte da função verifica se foi feita uma fundamentação para o ajuste direto. Esta vai ser sempre uma alínea qq do CCP. Mas tem de estar preenchida. Se o valor ultrapassar os 20000€ e não estiver fundamentado é claramente comportamento suspeito. Se o contrato só tiver a parte da fundamentação por preencher, pode ser má prática. 
+
+
+\section{Análise dos Concursos Públicos}
+
+Aqui só foram usadas funções ja definidas. Criaram-se variáveis que guardam o valor do preço base e contratual dos concursos. Deu-se isso como input à funcao \textit{redflag}, além dos outros que são definidos por mim, e obtiveram-se as redflags. Representou-se um barplot dos precos contratuais em cima dos preços base para verificar a diferença entre os mesmos. 
+
+
+\section{Análise dos Ajustes Diretos em Regime Geral}
+
+Aqui, novamente, foram utilizadas as funções já criadas anteriormente para obter uma dataframe com os contratos referentes a ajustes diretos e os ids associados. Foi feito um sumário estatístico dos valores dos preços contratuais e um histograma e um boxplot. Mas como tem outliers, vê-se mal. 
+
+Ordenei os ajustes diretos por fundamentação. Não nenhum campo vazio. 
+
+Com isto tudo ja se podem calcular as flags usando a função \textit{redflag2}. 
+
+É interessante saber qual a proporção de atividades suspeitas por entidade adjudicante e entidade adjudicatária. Para isso, calculou-se primeiro o número de contratos suspeitos e respetiva percentagem. 
+
+Para conseguir analisar foi preciso separar as colunas das entidades adjudicantes e adjudicatárias - que estavam no formato Entidade(NIF)(URL) - em três colunas distintas para cada uma das duas entidades. Isto é necessário para filtrar os contratos pelo NIF porque diferentes entidades podem ter o mesmo NIF. 
+
+Depois disso, ordenou-se por ordem decrescente de ajustes diretos realizados os NIFS das empresas. Uma das listas ordenadas só para as entidades adjudicantes, outra para as entidades adjudicatárias. 
+
+Para esta analise foi necessário criar duas funções que retornem os ids dos ajustes diretos a partir do NIF da empresa. Queremos todos os ajustes diretos celebrados para um determinada entidade a partir do seu NIF. Isso foi feito a partir das funções \textit{e\_adjudicante} e \textit{e\_adjudicataria}. 
+
+De seguida, foi então calculado para cada NIF o número de ajustes diretos realizados usando uma das funções anteriores e os respetivos ID's. Para cada NIF, foi comparado cada um dos nos id's com a lsita de id's dado pela função \textit{redflags2} e feito o rácio para ver a percentagem de contratos suspeitos. 
+
+Agora seria interessante verificar se existem, dentro destas empresas, subgrupos entre entidades adjudicantes e adjudicatárias. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
