@@ -513,21 +513,21 @@ def preco_base3(id_anuncio):
         SELECT anuncio_preco_base
         FROM "contratos"
         WHERE id IN %s; ''', (tuple(id_anuncio),))
-
+    
     preco = list(cur.fetchall())
-
-
+    #return preco    
+    
     # Como os valores do preco base estão no formato ---.---,--€ é precio converter em -------.-- para comparar posteriormente
     n = len(preco)
     p = np.zeros(n)
     
     for i in range(n):
-
-        if preco[i][0] != 'None':
-            p[i] = (preco[i][0]).replace(".00", "").replace(".", "").replace(",",".").replace("€","")
-
-        else:
-            pass
-            
-    return p
     
+       if preco[i][0] != 'None':
+           #p[i] = (preco[i][0]).replace(".00", "").replace(".", "").replace(",",".").replace("€","")
+           p[i] = (preco[i][0])
+    
+       else:
+           pass
+           
+    return p
