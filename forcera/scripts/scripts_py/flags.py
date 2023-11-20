@@ -10,6 +10,7 @@ import seaborn as sns
 from IPython.display import HTML
 import webbrowser
 
+from functions import *
 
 
 
@@ -34,7 +35,7 @@ cur = conn.cursor()
 # FUNÇÕES PARA CADA FLAG 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
-def redflag(pbase, pcontr, tol, ids, r):
+def redflag(pbase, pcontr, tol, ids, r,df):
     
     """
     Função que calcula a diferença entre o preço base e preço contratual de um contrato realizado
@@ -48,6 +49,7 @@ def redflag(pbase, pcontr, tol, ids, r):
         tol : valor da tolerância. Só pode tomar valores entre 0 e 1
         ids : id's dos contratos em questão
         r : ratio máximo permitido entre preço base / preço contratual
+        df : dataframe que contém todos os contratos públicos. Necessitamos deste parâmetro para usar na função racio( )
 
     Return : 
         f : tuplo com os id's dos contratos com flag associada
@@ -66,7 +68,7 @@ def redflag(pbase, pcontr, tol, ids, r):
 
     # Array que guarda ocorrência - ou não - de uma flag
     flags = np.zeros(n)
-
+    
     for i in range(n):
 
         # Definir limites superior e inferior, respetivamente
@@ -80,9 +82,16 @@ def redflag(pbase, pcontr, tol, ids, r):
         if pbase[i] == 0 :
             flags[i] = 1    
 
-        if  ratio > r :
-            flags[i] = 1
-            
+
+    #print(np.sum(flags))
+    
+    flags1 = np.where(pbase/pcontr > r)[0]
+    coiso = racio(flags1, df, r = 5)
+    flags[coiso] = 1
+
+    # Só para garatir que estão a ser ativadas flags
+    #print(np.sum(flags))
+    
     # Conversão do tuplo de ids num array de uma coluna
     ids = np.array(ids).reshape((n,))
 

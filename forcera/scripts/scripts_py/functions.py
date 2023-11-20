@@ -531,3 +531,73 @@ def preco_base3(id_anuncio):
            pass
            
     return p
+
+
+
+
+def racio(indice, df, r):
+    
+    """
+    Função que, para um determinado ID de contrato, verifica se existem outros ID's com o mesmo número de anúncio
+    Se existirem, soma todos os de preços contratuais e compara ao preço base
+    Esta função só se aplica para valores do rácio pb/pc superiores a um determinado valor e irá apenas ser chamada dentro da função
+    redflags2
+
+    Parâmetros:
+        indice : índices dos anúncios com racio superior a limite
+        df : dataframe que contém todos os contratos públicos
+        r : racio máximo tolerado
+    """
+
+    # Número de anúncio para os contratos acima de um certo rácio
+    n_anuncio = df.iloc[indice,1]
+
+    df = df.rename(columns={2:'PrecoBase', 18:'PrecoContratual'})
+    df.PrecoContratual = df.PrecoContratual.astype(float)
+    df.PrecoBase = df.PrecoBase.astype(float)
+    
+    # Create a pandas Series from the column values
+    serie = pd.Series(n_anuncio)
+    
+    # Get counts of each unique value and their indices
+    value_counts = serie.value_counts().reset_index()
+    value_counts.columns = ['NumberID', 'NrOccurrence']
+    
+    # Get indices of each unique value
+    indices = serie.reset_index()
+    indices.columns = ['Lotes', 'NumberID']
+    indices = indices.groupby('NumberID')['Lotes'].apply(list).reset_index()
+    
+    # Merge the counts and indices into a single dataframe
+    result_df = pd.merge(value_counts, indices, on='NumberID')
+
+    n = len(result_df)
+    pbase = np.zeros(n)
+    pcont = np.zeros(n)
+    div   = np.zeros(n)
+    
+    for i in range(n):
+        pbase[i] = np.mean(df.PrecoBase.iloc[result_df.Lotes[i]])
+        pcont[i] = np.sum(df.PrecoContratual.iloc[result_df.Lotes[i]])
+        div[i] = pbase[i]/pcont[i]
+
+    pbase = pd.Series(pbase)
+    pcont = pd.Series(pcont)
+    div = pd.Series(div)
+    
+    result_df['PrecoBase'] = pbase
+    result_df['PrecoContratualSoma'] = pcont
+    result_df['Rácio'] = div
+
+    # print(result_df) se quisermos ver a dataframe completa 
+
+    # Índices onde rácio continua a ser maior do que a tolerância
+    A = (np.where(result_df.Rácio > r))[0]
+
+    # Índices dos lotes 
+    B = np.array(result_df.Lotes[A])
+
+    # Converter solução num array 1D
+    flat_array = np.concatenate([np.array(sublist) for sublist in B])
+    
+    return flat_array
