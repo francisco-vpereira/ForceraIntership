@@ -35,7 +35,7 @@ cur = conn.cursor()
 # FUNÇÕES PARA CADA FLAG 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
-ddef redflag(pbase, pcontr, tol, ids, r,df):
+def redflag(pbase, pcontr, tol, ids, r,df):
     
     """
     Função que calcula a diferença entre o preço base e preço contratual de um contrato realizado
