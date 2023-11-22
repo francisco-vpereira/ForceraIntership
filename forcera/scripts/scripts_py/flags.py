@@ -35,7 +35,7 @@ cur = conn.cursor()
 # FUNÇÕES PARA CADA FLAG 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
-def redflag(pbase, pcontr, tol, ids, r,df):
+def redflag(pbase, pcontr, tol, ids, r, df):
     
     """
     Função que calcula a diferença entre o preço base e preço contratual de um contrato realizado
@@ -69,37 +69,37 @@ def redflag(pbase, pcontr, tol, ids, r,df):
     # Array que guarda ocorrência - ou não - de uma flag
     flags = np.zeros(n)
     
-    for i in range(n):
-
-        # Definir limites superior e inferior, respetivamente
-        up_lim = pbase[i] * (1 + tol)
-        lo_lim = pbase[i] * (1 - tol)
-        ratio = pbase[i] / pcontr[i]
-        
-        if lo_lim < pcontr[i] < up_lim :
-            flags[i] = 1
-            
-        if pbase[i] == 0 :
-            flags[i] = 1    
-
-
-    #print(np.sum(flags))
+    # Disparar flag se preço contratual for superior ao preço base
+    flags[np.where(pcontr > pbase)[0]] = 1
     
+    # Disparar flag se preço contratual for nulo ( campo não preenchido no basegov / potencial má prática )
+    flags[np.where(pcontr == 0)[0]] = 1
+
+    # Disparar flag se preço base for nulo ( campo não preenchido no basegov / potencial má prática )
+    flags[np.where(pbase == 0)[0]] = 1
+
+    # Se o preço contratual for superior ao preço base OU estiver muito perto, no limite inferior, do preço base é ativada a flag
+    # Para isso, vamos definir um valor limite inferior - lo_lim - a partir do qual é ativada a flag 
+    lo_lim = pbase * (1-tol)
+    flags[np.where(pcontr > lo_lim)[0]] = 1
+
+
+    # Para todos os contratos em que se verifique que o rácio precobase/precocontratual é superior a um dado valor
+    # é preciso verificar se existem outros lotes. Para isso, identificamos o nr de anuncio
     flags1 = np.where(pbase/pcontr > r)[0]
     coiso = racio(flags1, df, r = 5)
 
     if len(coiso) > 0:
-        flags[coiso] = 1
+        flags[coiso[0]] = 1
 
-    # Só para garatir que estão a ser ativadas flags
-    #print(np.sum(flags))
-    
+
     # Conversão do tuplo de ids num array de uma coluna
+    # Assim conseguimos ver quais são os contratos com flag = 1
     ids = np.array(ids).reshape((n,))
 
-    # Contratos com ocorrência de uma flag
-    pos = np.where(flags != 0)
-
+    # Contratos com ocorrência de uma flag ( posições / índices ) 
+    pos = np.where(flags != 0)[0]
+    
     # Selecionar contratos onde ocorre flag
     f = ids[pos]
 
