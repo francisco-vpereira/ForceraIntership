@@ -549,6 +549,9 @@ def racio(indice, df, r):
         r : racio máximo tolerado
     """
 
+    if len(indice) == 0:
+            return 0 
+        
     # Número de anúncio para os contratos acima de um certo rácio
     n_anuncio = df.iloc[indice,1]
 
@@ -597,7 +600,11 @@ def racio(indice, df, r):
     # Índices dos lotes 
     B = np.array(result_df.Lotes[A])
 
-    # Converter solução num array 1D
-    flat_array = np.concatenate([np.array(sublist) for sublist in B])
-    
-    return flat_array
+
+    if len(indice) == 1:
+        return B
+
+    else:
+        # Converter solução num array 1D
+        flat_array = np.concatenate([np.array(sublist) for sublist in B])
+        return flat_array

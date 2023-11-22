@@ -35,7 +35,7 @@ cur = conn.cursor()
 # FUNÇÕES PARA CADA FLAG 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
-def redflag(pbase, pcontr, tol, ids, r,df):
+ddef redflag(pbase, pcontr, tol, ids, r,df):
     
     """
     Função que calcula a diferença entre o preço base e preço contratual de um contrato realizado
@@ -87,7 +87,9 @@ def redflag(pbase, pcontr, tol, ids, r,df):
     
     flags1 = np.where(pbase/pcontr > r)[0]
     coiso = racio(flags1, df, r = 5)
-    flags[coiso] = 1
+
+    if len(coiso) > 0:
+        flags[coiso] = 1
 
     # Só para garatir que estão a ser ativadas flags
     #print(np.sum(flags))
