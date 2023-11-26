@@ -533,7 +533,9 @@ def preco_base3(id_anuncio):
     return p
 
 
-
+# --------------------------------------------------------------------------------------------------------------------------------------------------------- #
+# TRATAMENTO DOS LOTES 
+# --------------------------------------------------------------------------------------------------------------------------------------------------------- #
 
 def racio(indice, df, r):
     
@@ -556,8 +558,8 @@ def racio(indice, df, r):
     n_anuncio = df.iloc[indice,1]
 
     df = df.rename(columns={2:'PrecoBase', 18:'PrecoContratual'})
-    df.PrecoContratual = df.PrecoContratual.astype(float)
-    df.PrecoBase = df.PrecoBase.astype(float)
+    df.PrecoContratual = df.PrecoContratual.replace('None', 0).astype(float)
+    df.PrecoBase = df.PrecoBase.replace('None', 0).astype(float)
     
     # Create a pandas Series from the column values
     serie = pd.Series(n_anuncio)
@@ -608,3 +610,67 @@ def racio(indice, df, r):
         # Converter solução num array 1D
         flat_array = np.concatenate([np.array(sublist) for sublist in B])
         return flat_array
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------- #
+# ATRIBUIR VALOR CONTÍNUO À FLAG QUE COMPARA PREÇO BASE COM PREÇO CONTRATUAL
+# --------------------------------------------------------------------------------------------------------------------------------------------------------- #
+
+def exp1(x):
+    """
+    Ramo da função para x pertencente [0,0.1]
+    """
+    a = 1 ; b = 100
+    return a * np.exp(-b * x)
+
+def poly(x):
+    """
+    Ramo da função para x pertencente [0.5,inf[
+    """
+    a = 1.08
+    b = 0.36
+    c = -0.45
+    return a*x**2 + b*x + c
+
+def difrel(a,b):
+    """
+    Calcula diferença relativa entre preço base e preço contratual
+    """
+    return abs(a-b)/a * 100
+
+
+def fun(x):
+    """
+    Atribui um valor de 0 a 1 consoante o valor da diferença entre preço base e preço contratual
+    """ 
+    
+    n = len(x)
+    score = np.zeros(n)
+
+    for i in range(n):
+        
+        if x[i] < 0.1 :
+            score[i] = exp1(x[i])
+
+        elif x[i] > 0.1 and x[i] < 0.5:
+            score[i] = 0
+
+        elif 0.5 <= x[i] <= 1:
+            score[i] = poly(x[i])
+
+        else:
+            score[i] = 1
+
+    return score
+
+
+def flagconti(fl):
+    """
+    Função flag contínua : determina preço base e preço contratual a partir dos id's dos contratos. Neste caso, são os id's correspondentes às flags ativadas. 
+    Calcula o valor da diferença relativa usando a função anteriormente definida : difrel()
+    Por fim, para cada valor da diferença, atribui um valor entre 0 e 1
+    """
+    Pb = preco_base3(fl)
+    Pc = preco_contrato3(fl)
+    percentage = difrel(Pb,Pc)
+    return fun(percentage)
