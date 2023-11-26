@@ -106,7 +106,6 @@ def redflag(pbase, pcontr, tol, ids, r, df):
     # Conversão do conjunto de contratos em tuplo para poder usar como input nas funções que têm como input id's de contratos
     f = f.reshape((len(f),1))
     f = tuple(map(tuple,f))
-    
     return f
 
 
@@ -160,5 +159,39 @@ def redflag2(t,ids):
 
     return f
 
+
+def prazo(df):
+    """
+    Função que dispara flag em contratos públicos com prazo de candidatura inferior a 6 dias
+    
+    Parâmetros:
+        df : dataframe que contém os contratos públicos
+    
+    return:
+        flag : tuplo de id's 
+    """
+    
+    df = df.rename(columns={0:'ID', 1:'NrAnuncio', 2:'PrecoBase', 3:'Prazo', 16:'DataPub', 17:'DataCel', 18:'PrecoContratual'})
+    ID = df.ID
+    
+    # Índices onde não foi preenchido data de prazo de candidatura
+    null_date = np.where(df.Prazo == '')[0]
+
+    # Converter datas não preenchidas em zero
+    df.loc[df['Prazo'] == '', 'Prazo'] = '0'
+
+    # Converter dias em float para poder detetar valores inferiores a 6 dias
+    df.Prazo = df.Prazo.astype(float)
+
+    # Índices de contratos - suspeitos - com prazo inferior a 6 dias
+    sus = np.where(df.Prazo < 6)[0]
+
+    # Selecionar contratos onde ocorre flag
+    flag = ID[sus]
+
+    # Conversão do conjunto de contratos em tuplo para poder usar como input nas funções que têm como input id's de contratos
+    flag = tuple(flag)
+    
+    return flag 
 
 
