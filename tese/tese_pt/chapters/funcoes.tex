@@ -1,18 +1,27 @@
-Numa primeira fase foram criadas funções para explorar o conjunto de dados. 
+\section{Exploração do Dataset}
 
-A função \textit{col\_names} retorna-nos uma dataframe com todos os nomes das colunas. A função \textit{n\_contracts} retorna-nos o número de linhas, ou seja, o número de contratos totais, da base de dados. \\
+Numa primeira fase foram criadas funções para explorar o conjunto de dados. \\
 
-É preciso criar um função com o código que já tenho para categorizar os contratos de acordo com o tipo de procedimento. Idem para o tipo de contrato. 
+A função \textbf{col\_names} retorna-nos uma dataframe com todos os nomes das colunas. A função \textbf{n\_contracts} retorna-nos o número de linhas, ou seja, o número de contratos totais, da base de dados. \\
 
-Foi desenvolvida, também, uma função \textit{h} que permite ver uma dataframe de forma mais apresentável. 
+Foi desenvolvida, também, uma função \textbf{h} que permite ver uma dataframe de forma mais apresentável.\\
+
+\textit{É preciso criar uma função com o código que já tenho para categorizar os contratos de acordo com o tipo de procedimento. Idem para o tipo de contrato.} \\
+
+ 
+
+
+
+
+
 
 \section{Mini-funções}
 
-Para a contrução das flags são necessárias várias funções pequenas. Cada função irá ter um único propósito e os outputs de certas funções irão ser usados como inputs de outras funções. 
+Para a contrução das \textit{flags} são necessárias várias funções pequenas. Cada função irá ter um único propósito e os outputs de certas funções irão ser usados como inputs de outras funções. 
 
-Para identificar um contrato necessitamos do seu id. Assim, criou-se a função \textit{all\_ids} que retorna os ids de todos os contratos da dataframe. Contudo, como não vamos trabalhar com todos os tipos de contratos e procedimentos, é necessário filtrar estes ids. Para isso, fui por partes.
+Para identificar um contrato necessitamos do seu id. Assim, criou-se a função \textbf{all\_ids} que retorna os ids de todos os contratos da dataframe. Contudo, como não vamos trabalhar com todos os tipos de contratos e procedimentos, é necessário filtrar estes ids. Para isso, fui por partes.
 
-Criei as funções \textit{ajustes\_dir}, \textit{consulta\_prev} e \textit{concurso\_pub} que retornam os ids de todos os ajustes diretos, consultas prévias e concursos públicos, respetivamente. 
+Criei as funções \textbf{ajustes\_dir}, \textbf{consulta\_prev} e \textbf{concurso\_pub} que retornam os ids de todos os ajustes diretos, consultas prévias e concursos públicos, respetivamente. 
 
 De seguida, filtrei os contratos por tipo de procedimento e por CPV. Para isso, criei a função \textit{cpv\_direto} que retorna todos os ids de ajustes diretos para serviços de consultoria em IT ( todos os CPV's começados por 72). De seguida, fiz o mesmo para contratos públicos na função \textit{cpv\_cpub}. De forma a generalizar, criei a função \textit{cpv} que retorna todos os ids de contratos de um tipo de procedimento e para um determinado CPV. Tanto o tipo de procedimento como os primeiros 2 algarismos do CPV são parâmetros de entrada da função. 
 
