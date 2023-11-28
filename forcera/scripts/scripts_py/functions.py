@@ -618,18 +618,20 @@ def racio(indice, df, r):
 
 def exp1(x):
     """
-    Ramo da função para x pertencente [0,0.1]
+    Ramo da função para x pertencente [0,10]
     """
-    a = 1 ; b = 100
+    a = 1 ; b = 2
     return a * np.exp(-b * x)
 
 def poly(x):
     """
-    Ramo da função para x pertencente [0.5,inf[
+    Ramo da função para x pertencente [50,inf[
     """
-    a = 1.08
-    b = 0.36
-    c = -0.45
+
+    a = 1.08571429e-04  
+    b = 3.71428571e-03 
+    c = -4.57142857e-01
+    
     return a*x**2 + b*x + c
 
 def difrel(a,b):
@@ -649,20 +651,19 @@ def fun(x):
 
     for i in range(n):
         
-        if x[i] < 0.1 :
+        if x[i] < 10 :
             score[i] = exp1(x[i])
 
-        elif x[i] > 0.1 and x[i] < 0.5:
+        elif x[i] > 10 and x[i] < 50:
             score[i] = 0
 
-        elif 0.5 <= x[i] <= 1:
+        elif 50 <= x[i] <= 100:
             score[i] = poly(x[i])
 
         else:
             score[i] = 1
 
     return score
-
 
 def flagconti(fl):
     """
@@ -673,4 +674,4 @@ def flagconti(fl):
     Pb = preco_base3(fl)
     Pc = preco_contrato3(fl)
     percentage = difrel(Pb,Pc)
-    return fun(percentage)
+    return Pb, Pc, percentage , fun(percentage)
