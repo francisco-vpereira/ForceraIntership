@@ -102,3 +102,10 @@
 
 
 
+- ver nr de concursos feitos pela entidade adjudicante
+- racio entre esse nr e o nr de concursos ganhos pela entidade com maior nr de contratos celebrados
+- medir idice de rejeicao de um empresa
+- qts concursos a entidade adjudicante abriu
+- qts conc a entidade adjudicataria ganhou com no geral e com essa entidade adjudicante, se havia mt empresas a candidatar-se nesse mm concurso
+- ver dias de publicacao de DR q calha em feriados, ferias, etc
+- binomial e multinomial
