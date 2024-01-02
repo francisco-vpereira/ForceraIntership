@@ -102,6 +102,7 @@
 
 
 
+Reunião 6/12
 - ver nr de concursos feitos pela entidade adjudicante
 - racio entre esse nr e o nr de concursos ganhos pela entidade com maior nr de contratos celebrados
 - medir idice de rejeicao de um empresa
@@ -109,3 +110,9 @@
 - qts conc a entidade adjudicataria ganhou com no geral e com essa entidade adjudicante, se havia mt empresas a candidatar-se nesse mm concurso
 - ver dias de publicacao de DR q calha em feriados, ferias, etc
 - binomial e multinomial
+
+Reunião 13/12
+- R049 : plot Número médio de concursos ganhos por empresa - categorizar em função do preço contratual. Categorizar preço contratual em 4/5 categorias
+- Depois de categorizar preço contratual, tentar categorizar por distritos : Lisboa, Porto, Restantes
+- Começar a escrever o que estou a fazer, inserindo gráficos
+- Separar flags por notebook : escrever resumo detalhado de cada notebook para cada flag
