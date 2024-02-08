@@ -22,6 +22,8 @@ Correções Gerais :
 
 - Incluir alguns casos reais : mostrar contratos em que não seja e outros em que seja ativada a flag para provar que o código funciona. Mostrar resultados
 
+Trabalho futuro : 
+
 - Criar um script python que, automaticamente, corra todos os indicadores nos contratos da base de dados
 
     - Primeiro passo : fazer isso para o conjunto de contratos históricos
