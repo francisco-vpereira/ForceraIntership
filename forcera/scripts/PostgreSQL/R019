@@ -1,0 +1,48 @@
+-- CRIAÇÃO DA TABELA 
+
+
+--CREATE TABLE cpv_stat1 (
+--    cpv double precision,
+--    tipocontrato text,
+--    nec_t double precision,
+--    count double precision,
+--    mean double precision,
+--    std double precision,
+--    min double precision,
+--    q1 double precision,
+--    q2 double precision,
+--    q3 double precision,
+--    max double precision
+--);
+
+
+
+--------------------------------------------------------------------------------------
+-- Eliminar linhas em que não existam contratos numa determinada categoria de contrato
+--------------------------------------------------------------------------------------
+--DELETE FROM cpv_stat1
+--WHERE count = 0;
+
+
+
+--select * from cpv_stat order by mean desc;
+--select * from concursospublicos limit 10;
+
+
+
+-------------------------------------------------------------------------------------------
+-- Selecionar IDs, para todos os CPVs e em Concursos Públicos, em que o número de entidades
+-- concorrentes seja inferior à metade do valor médio calculado
+-------------------------------------------------------------------------------------------
+
+--SELECT concursospublicos."id"
+--FROM concursospublicos 
+--JOIN cpv_stat ON concursospublicos."cpv2" = cpv_stat."cpv"
+--WHERE concursospublicos."nr_entidadesconcorrentes" < 0.5 * cpv_stat."mean";
+
+SELECT SUBSTRING(concursospublicos."cpv", 1, 2) AS cpv_prefix, COUNT(*)
+FROM concursospublicos 
+JOIN cpv_stat ON concursospublicos."cpv2" = cpv_stat."cpv"
+WHERE concursospublicos."nr_entidadesconcorrentes" < 0.5 * cpv_stat."mean"
+GROUP BY cpv_prefix
+ORDER BY COUNT(*) DESC;

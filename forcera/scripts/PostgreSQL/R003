@@ -1,0 +1,11 @@
+-- Prazo mínimo para a apresentação das propostas em concursos públicos sem publicidade internacional
+-- Empreitadas >= 14 dias
+-- Bens e Serviços >= 6 dias
+
+--SELECT concursospublicos."id"
+--FROM concursospublicos
+--WHERE tipocontrato = 'Empreitadas' AND anuncio_proposal < 14;
+
+SELECT *
+FROM concursospublicos
+WHERE tipocontrato = 'Bens e Serviços' AND anuncio_proposal < 6

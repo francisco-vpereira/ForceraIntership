@@ -1,0 +1,15 @@
+-- Selecionar todos os ajustes diretos cujo preço ultrapasse o limite imposto por lei
+-- Condições :
+-- criterio = valor
+-- bens e serviços < 20000€
+-- Empreitadas < 30000€
+
+
+-- Bens e Serviços com preço de celebração superior a 20000€
+SELECT * FROM ajustesdiretos
+WHERE criterio = 'valor' AND (tipocontrato = 'Bens e Serviços' AND preco > 20000);
+
+
+-- Empreitadas com preço de celebração superior a 30000€
+--SELECT * FROM ajustesdiretos
+--WHERE criterio = 'valor' AND (tipocontrato = 'Empreitadas' AND preco > 30000);
