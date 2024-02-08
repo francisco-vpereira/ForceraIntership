@@ -25,6 +25,10 @@
 \usepackage{subcaption}
 \captionsetup{margin=10pt,font={footnotesize},labelfont=bf}%,labelsep=endash}
 
+\usepackage{color}
+\usepackage{tabularray}
+\usepackage{tabularx}
+
 \def\blankpage{%
 	\clearpage%
 	\thispagestyle{empty}%
@@ -102,7 +106,9 @@
 %%\usepackage{lscape}
 
 
-
+\usepackage{verbatim}
+\usepackage{verbatimbox}
+\usepackage{fancyvrb}
 \usepackage{todonotes}                          						%Para permitir  to do notes.
 \usepackage{makeidx}                            						%Para poder fazer um index
 \usepackage{footnote}
@@ -209,6 +215,96 @@
   \setlength{\parsep}{0pt}}
 {\end{enumerate}}
 
+\setlength{\parindent}{0pt}
+
+\usepackage{pdfpages}
+\usepackage{xcolor,listings}
+\usepackage{textcomp}
+\lstset{upquote=true}
+\usepackage{listings,lstautogobble}
+
+\lstset{
+	extendedchars=\true,
+	inputencoding=utf8x
+}
+
+
+\usepackage{longtable}
+\setcounter{secnumdepth}{5}
+\newtheorem*{remark}{Definição}
+
+
+\setlength{\intextsep}{10pt plus 1.0pt minus 2.0pt}
+
+
+
+
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+
+\NewTotalTColorBox[auto counter]{\Definition}{ +m }{ 
+	notitle,
+	colback=green!5!white,
+	frame hidden,
+	boxrule=0pt,
+	enhanced,
+	sharp corners,
+	borderline west={4pt}{0pt}{green!50!black},
+}{
+	\textcolor{green!50!black}{
+		\sffamily
+		\textbf{Definition~\thetcbcounter.}%
+	}%
+	#1
+}
+
+\NewTotalTColorBox[auto counter]{\Lemma}{ +m +m }{ 
+	notitle,
+	colback=orange!5!white,
+	colbacklower=white,
+	frame hidden,
+	boxrule=0pt,
+	bicolor,
+	sharp corners,
+	borderline west={4pt}{0pt}{orange!50!black},
+	fontupper=\sffamily
+}{
+	\textcolor{orange!50!black}{
+		\sffamily
+		\textbf{Definição}%
+	}%
+	#1
+	\tcblower%
+	\textcolor{orange!50!black}{
+		\sffamily
+		\textbf{}%
+	}%
+	#2
+}
+
+\NewTotalTColorBox[auto counter]{\Example}{ +m +m }{ 
+	notitle,
+	colback=blue!5!white,
+	colbacklower=white,
+	frame hidden,
+	boxrule=0pt,
+	bicolor,
+	sharp corners,
+	borderline west={4pt}{0pt}{blue!50!black},
+	fontupper=\sffamily
+}{
+	\textcolor{blue!50!black}{
+		\sffamily
+		\textbf{Example~\thetcbcounter.}%
+	}%
+	#1
+	\tcblower%
+	\textcolor{blue!50!black}{
+		\sffamily
+		\textbf{Proof.}%
+	}%
+	#2
+}
 
 
 
@@ -226,46 +322,3 @@
 
 
 
-
-
-
-
-
-
-
-
-% % Author name
-% \authorname[mailto:example@fc.up.pt]{Ricardo Manuel Alves Pacheco Moreira}
-
-% % Affiliation number 2
-% % USAGE: \otheraffiliation[url]{relative/path/to/}{INITIAL}{University name}
-% %\otheraffiliation[http://uni2.pt]{logos/logo2}{UNI2}{Universidade/Faculdade 2}
-
-% % Affiliation number 3
-% % USAGE: \extraaffiliation[url]{relative/path/to/logo}{INITIAL}{University name}
-% %\extraaffiliation[http://uni3.pt]{logos/logo3}{UNI3}{Universidade/Faculdade 3}
-
-
-% % Degrre name
-% \degreename{Mestrado em Física}
-
-
-% % Field of science
-% \sciencefield{Física}
-
-
-% % Department name
-% \department[http://dfa.fc.up.pt/]{Departamento de Física e Astronomia}
-
-
-% % Supervisor info
-% \supervisor[mailto:example@fc.up.pt]{Dra. Armandina Maria Lima Lopes} % Supervisor name
-% %\supervisorposition{Categoria} % Supervisor name position/Category (comment out to hide this field)
-% \supervisoraffiliation[]{Faculdade de Ciências} % Supervisor university/faculty % Supervisor university/faculty
-% %\supervisoraffiliation[]{Instituto de Engenharia de Sistemas e Computadores, Tecnologia e Ciência}
-
-
-% % Cosupervisor info ----- Comment out if not needed
-% \cosupervisor[mailto:example@fc.up.pt]{Prof. João Pedro Esteves de Araújo} % Cosupervisor name
-% %\cosupervisorposition{Categoria} % Cosupervisor name position/Category (comment out to hide this field)
-% \cosupervisoraffiliation[]{Faculdade de Ciências} % Supervisor university/faculty
