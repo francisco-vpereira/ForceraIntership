@@ -21,3 +21,11 @@ $ crontab -e
 
 * * * * * /usr/bin/zsh -c 'echo $RANDOM >> /PATH_TO_FILE/random_number.txt'
 ```
+
+### 4. Visualização 
+
+```
+$ crontab -l  # Para ver lista de cron jobs
+
+$ watch cat /PATH_TO_FILE/random_number.txt   # Para ver update em tempo real ao ficheiro
+```
