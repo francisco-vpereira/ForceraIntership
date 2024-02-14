@@ -6,10 +6,18 @@
 
 
 -- Bens e Serviços com preço de celebração superior a 20000€
-SELECT * FROM ajustesdiretos
-WHERE criterio = 'valor' AND (tipocontrato = 'Bens e Serviços' AND preco > 20000);
+--SELECT contratos_basegov."id" 
+--FROM contratos_basegov
+--JOIN ajustes_diretos ON contratos_basegov."id" = ajustes_diretos."id"
+--WHERE ajustes_diretos."criterio" = 'valor' 
+--		AND ajustes_diretos."tipo_contrato" = 'Bens e Serviços' 
+--		AND contratos_basegov."preco_contratual" > 20000;
 
 
 -- Empreitadas com preço de celebração superior a 30000€
---SELECT * FROM ajustesdiretos
---WHERE criterio = 'valor' AND (tipocontrato = 'Empreitadas' AND preco > 30000);
+SELECT contratos_basegov."id" 
+FROM contratos_basegov
+JOIN ajustes_diretos ON contratos_basegov."id" = ajustes_diretos."id"
+WHERE ajustes_diretos."criterio" = 'valor' 
+		AND ajustes_diretos."tipo_contrato" = 'Empreitadas' 
+		AND contratos_basegov."preco_contratual" > 30000;

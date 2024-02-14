@@ -20,10 +20,11 @@
 --GROUP BY month_day
 --ORDER BY COUNT(*) DESC;
 
-SELECT concursospublicos."id"
-FROM concursospublicos
-WHERE TO_CHAR(data_publicacao, 'MM-DD') IN ('01-01', '04-25', '05-01', '06-10', '08-15', '10-05', '11-01', '12-01', '12-08', '12-25');
-
+SELECT contratos_basegov."id" 
+FROM contratos_basegov
+WHERE tipo_procedimento = 'Concurso público' 
+	  AND TO_CHAR(contratos_basegov."anuncio_drPublicationDate", 'MM-DD') IN ('01-01', '04-25', '05-01', '06-10', '08-15', 
+    											  								'10-05', '11-01', '12-01', '12-08', '12-25'); 
 
 
 

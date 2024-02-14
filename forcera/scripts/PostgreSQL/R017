@@ -51,8 +51,31 @@
 
 
 
-SELECT concursospublicos."id", preco_contratual, precoc_stat."mean", precoc_stat."std", precoc_stat."cpv3", cpv
-FROM concursospublicos
-JOIN precoc_stat ON SUBSTRING(concursospublicos."cpv",1,3) = precoc_stat.cpv3
-WHERE concursospublicos.preco_contratual < 1.5 * precoc_stat.mean AND concursospublicos.preco_contratual > 0.5 * precoc_stat.mean;
+--SELECT concursospublicos."id", preco_contratual, precoc_stat."mean", precoc_stat."std", precoc_stat."cpv3", cpv
+--FROM concursospublicos
+--JOIN precoc_stat ON SUBSTRING(concursospublicos."cpv",1,3) = precoc_stat.cpv3
+--WHERE concursospublicos.preco_contratual < 1.5 * precoc_stat.mean AND concursospublicos.preco_contratual > 0.5 * precoc_stat.mean;
 
+
+
+
+-------------------------------------------------------------------------------------------
+-- Adicionar coluna com distância inter-quartil : Q3-Q1
+-------------------------------------------------------------------------------------------
+--ALTER TABLE precoc_stat
+--ADD COLUMN dq DOUBLE PRECISION;
+--
+--UPDATE precoc_stat 
+--SET dq = q3-q1;
+
+
+
+
+SELECT contratos_basegov."id",concursos_publicos."nr_entidadesconcorrentes", precoc_stat."mean", 
+		precoc_stat."q3" + 1.5*precoc_stat."dq" AS lim_superior,  precoc_stat."q1" - 1.5*precoc_stat."dq" AS lim_inferior,
+		precoc_stat."q1",precoc_stat."q2",precoc_stat."q3"
+FROM contratos_basegov 
+JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+JOIN precoc_stat ON SUBSTRING(contratos_basegov."cpv",1,3) = precoc_stat.cpv3
+WHERE concursos_publicos."nr_entidadesconcorrentes" < precoc_stat."q3" + 1.5*precoc_stat."dq" AND
+	  concursos_publicos."nr_entidadesconcorrentes" > precoc_stat."q1" - 1.5*precoc_stat."dq";

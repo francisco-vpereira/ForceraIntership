@@ -2,10 +2,18 @@
 -- Empreitadas >= 14 dias
 -- Bens e Serviços >= 6 dias
 
---SELECT concursospublicos."id"
---FROM concursospublicos
---WHERE tipocontrato = 'Empreitadas' AND anuncio_proposal < 14;
 
-SELECT *
-FROM concursospublicos
-WHERE tipocontrato = 'Bens e Serviços' AND anuncio_proposal < 6
+
+--SELECT contratos_basegov."id" 
+--FROM contratos_basegov
+--JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+--WHERE concursos_publicos."tipo_contrato" = 'Bens e Serviços' AND contratos_basegov."anuncio_proposalDeadline" < 6;
+
+
+SELECT contratos_basegov."id" 
+FROM contratos_basegov
+JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+WHERE (concursos_publicos."tipo_contrato" = 'Empreitadas' AND contratos_basegov."anuncio_proposalDeadline" < 14) 
+		OR
+	  (concursos_publicos."tipo_contrato" = 'Bens e Serviços' AND contratos_basegov."anuncio_proposalDeadline" < 6);
+

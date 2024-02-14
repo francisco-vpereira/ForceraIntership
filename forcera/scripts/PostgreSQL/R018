@@ -17,12 +17,14 @@
 --SET nr_entidadesconcorrentes = COALESCE(nr_entidadesconcorrentes, 1);
 
 
---select concursospublicos."id", nr_entidadesconcorrentes from concursospublicos 
---where nr_entidadesconcorrentes = 1;
+select contratos_basegov."id"
+from contratos_basegov
+join concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+where concursos_publicos."nr_entidadesconcorrentes" = 1;
 
 
-SELECT SUBSTRING(concursospublicos."cpv", 1, 2) AS cpv_prefix, COUNT(*)
-FROM concursospublicos 
-WHERE nr_entidadesconcorrentes = 1
-GROUP BY cpv_prefix
-ORDER BY COUNT(*) DESC;
+--SELECT SUBSTRING(concursospublicos."cpv", 1, 2) AS cpv_prefix, COUNT(*)
+--FROM concursospublicos 
+--WHERE nr_entidadesconcorrentes = 1
+--GROUP BY cpv_prefix
+--ORDER BY COUNT(*) DESC;
