@@ -28,13 +28,12 @@ conn = psycopg2.connect(
 
 
 
-# Definir dia
+# Definir dia de ontem no formato YYYY-MM-DD
 yesterday = datetime.now() - timedelta(1)
 ontem = datetime.strftime(yesterday, '%Y-%m-%d')
 
-print(ontem)
 
-# # Obter IDs de concursos publicos de ontem
+# Obter IDs de concursos publicos de ontem
 cur = conn.cursor()
 cur.execute('''
             SELECT id
@@ -45,7 +44,8 @@ ids_ontem = cur.fetchall()
 
 
 
-# Escrever valores na tabela
+# Escrever valores dos IDs de ontem na tabela
+# Inicialmente, definir o valor das flags binárias como false. Serão atualizadas nos passos seguintes
 cur = conn.cursor()
 for i in ids_ontem:
     cur.execute('''INSERT INTO table_temp(id, data_publicacao, "R003", "R018", "RF2", "RF3") VALUES (%s, %s, false, false, false, false);''', (i,ontem)) 
@@ -54,7 +54,7 @@ conn.commit()
 
 
 
-# Obter IDs de ontem referentes à flag R003
+# Obter IDs de ontem referentes à flag R003 e dar update na tabela
 cur = conn.cursor()
 cur.execute('''
             UPDATE table_temp
@@ -74,7 +74,7 @@ conn.commit()
 
 
 
-# Obter IDs de ontem referentes à flag R018
+# Obter IDs de ontem referentes à flag R018 e dar update na tabela
 cur = conn.cursor()
 cur.execute('''
             UPDATE table_temp
@@ -91,7 +91,7 @@ conn.commit()
 
 
 
-# Obter IDs de ontem referentes à flag RF2
+# Obter IDs de ontem referentes à flag RF2 e dar update na tabela
 cur = conn.cursor()
 cur.execute('''
             UPDATE table_temp
@@ -109,7 +109,7 @@ conn.commit()
 
 
 
-# Obter IDs de ontem referentes à flag RF3
+# Obter IDs de ontem referentes à flag RF3 e dar update na tabela
 cur = conn.cursor()
 cur.execute('''
             UPDATE table_temp
