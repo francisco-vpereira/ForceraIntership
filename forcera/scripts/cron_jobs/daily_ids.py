@@ -27,7 +27,6 @@ conn = psycopg2.connect(
 
 
 
-
 # Definir dia de ontem no formato YYYY-MM-DD
 yesterday = datetime.now() - timedelta(1)
 ontem = datetime.strftime(yesterday, '%Y-%m-%d')
