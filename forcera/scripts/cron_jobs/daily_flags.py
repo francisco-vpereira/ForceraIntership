@@ -51,45 +51,45 @@ last_id = cur.fetchone()[0]
 
 
 
-# Copiar dados dos novos contratos adicionados à tabela contratos_basegov 
-# Dados são copiados desde o contrato com o ID mais recente até ao contrato com o 
-# ID mais recente da tabela auxiliar concursos_publicos
-cur = conn.cursor()
-cur.execute('''
-            SELECT
-                contratos_basegov."id",
-                contratos_basegov."data_publicacao",
-                contratos_basegov."contractTypes",
-                contratos_basegov.fundamentacao,
-                contratos_basegov.entidade_adjudicante,
-                contratos_basegov.entidades_contratadas,
-                contratos_basegov.entidades_concorrentes,
-                contratos_basegov."executionPlace"
-            FROM contratos_basegov
-            WHERE tipo_procedimento = 'Concurso público' AND contratos_basegov."id" > %s
-            ORDER BY data_publicacao DESC, id DESC;
-            ''', (last_id,))
-new_data = cur.fetchall()
+# # Copiar dados dos novos contratos adicionados à tabela contratos_basegov 
+# # Dados são copiados desde o contrato com o ID mais recente até ao contrato com o 
+# # ID mais recente da tabela auxiliar concursos_publicos
+# cur = conn.cursor()
+# cur.execute('''
+#             SELECT
+#                 contratos_basegov."id",
+#                 contratos_basegov."data_publicacao",
+#                 contratos_basegov."contractTypes",
+#                 contratos_basegov.fundamentacao,
+#                 contratos_basegov.entidade_adjudicante,
+#                 contratos_basegov.entidades_contratadas,
+#                 contratos_basegov.entidades_concorrentes,
+#                 contratos_basegov."executionPlace"
+#             FROM contratos_basegov
+#             WHERE tipo_procedimento = 'Concurso público' AND contratos_basegov."id" > %s
+#             ORDER BY data_publicacao DESC, id DESC;
+#             ''', (last_id,))
+# new_data = cur.fetchall()
 
 
 
 
-# Inserir os valores extraidos na query anterior na tabela "concursos_publicos"
-cur = conn.cursor()
-for i in new_data:
-    cur.execute('''
-                INSERT INTO concursos_publicos(
-                    id,
-                    data_publicacao,
-                    "contractTypes",
-                    fundamentacao,
-                    entidade_adjudicante,
-                    entidades_contratadas,
-                    entidades_concorrentes,
-                    "executionPlace"
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
-            ''', i)
-conn.commit()
+# # Inserir os valores extraidos na query anterior na tabela "concursos_publicos"
+# cur = conn.cursor()
+# for i in new_data:
+#     cur.execute('''
+#                 INSERT INTO concursos_publicos(
+#                     id,
+#                     data_publicacao,
+#                     "contractTypes",
+#                     fundamentacao,
+#                     entidade_adjudicante,
+#                     entidades_contratadas,
+#                     entidades_concorrentes,
+#                     "executionPlace"
+#                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+#             ''', i)
+# conn.commit()
 
 
 
@@ -272,8 +272,8 @@ conn.commit()
 
 
 # Aplicar flag R017 ao novo conjunto de IDs 
-lim_inf_mc = " contratos_basegov.""preco_contratual"" < precoc_stat.""lower_fence"" "
-lim_sup_mc = " contratos_basegov.""preco_contratual"" > precoc_stat.""upper_fence"" " 
+lim_inf_mc = " contratos_basegov.""preco_contratual"" <= precoc_stat.""lower_fence"" "
+lim_sup_mc = " contratos_basegov.""preco_contratual"" >= precoc_stat.""upper_fence"" " 
 
 cur = conn.cursor()
 cur.execute('''
@@ -292,30 +292,30 @@ conn.commit()
 
 
 
-# Aplicar flag R019 ao novo conjunto de IDs 
-lim_inf19 = " concursos_publicos.""nr_entidadesconcorrentes"" > cpv_stat.""upper_fence"" "
-lim_sup19 = " concursos_publicos.""nr_entidadesconcorrentes"" < cpv_stat.""lower_fence"" "
+# # Aplicar flag R019 ao novo conjunto de IDs 
+# lim_inf19 = " concursos_publicos.""nr_entidadesconcorrentes"" >= cpv_stat.""upper_fence"" "
+# lim_sup19 = " concursos_publicos.""nr_entidadesconcorrentes"" <= cpv_stat.""lower_fence"" "
 
-cur = conn.cursor()
-cur.execute('''
-            UPDATE daily_flags
-            SET "R019" = true
-            WHERE daily_flags."id" IN (
-            	SELECT  contratos_basegov."id"
-            	FROM contratos_basegov 
-            	JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
-                JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
-            	WHERE contratos_basegov."id" > %s AND 
-                      ({lim_sup} OR {lim_inf}));
-            	'''.format(lim_sup=lim_sup19, lim_inf=lim_inf19), (last_id,))
-conn.commit() 
+# cur = conn.cursor()
+# cur.execute('''
+#             UPDATE daily_flags
+#             SET "R019" = true
+#             WHERE daily_flags."id" IN (
+#             	SELECT  contratos_basegov."id"
+#             	FROM contratos_basegov 
+#             	JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+#                 JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
+#             	WHERE contratos_basegov."id" > %s AND 
+#                       ({lim_sup} OR {lim_inf}));
+#             	'''.format(lim_sup=lim_sup19, lim_inf=lim_inf19), (last_id,))
+# conn.commit() 
 
 
-# Verificação
-cur = conn.cursor()
-cur.execute('''
-            UPDATE daily_flags
-            SET "verification" = true
-            WHERE daily_flags."id" > %s;
-            ''', (last_id,))
-conn.commit() 
+# # Verificação
+# cur = conn.cursor()
+# cur.execute('''
+#             UPDATE daily_flags
+#             SET "verification" = true
+#             WHERE daily_flags."id" > %s;
+#             ''', (last_id,))
+# conn.commit() 
