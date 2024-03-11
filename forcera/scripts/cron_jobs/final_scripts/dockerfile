@@ -1,0 +1,7 @@
+FROM public.ecr.aws/lambda/python:3.10
+
+RUN pip3 install requests psycopg2-binary
+
+COPY info_collector.py ${LAMBDA_TASK_ROOT}
+
+CMD [ "info_collector.lambda_handler" ]
