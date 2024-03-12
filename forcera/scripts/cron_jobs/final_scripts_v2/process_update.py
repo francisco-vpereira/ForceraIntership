@@ -23,7 +23,16 @@ conn = psycopg2.connect(
         )
 
 
-def main_process(event, context):
+def lambda_handler(event, context):
+    try:
+        main_process()
+    except Exception as e:
+        print(f"Error running script : {e}")
+
+    
+
+
+def main_process():
 
     # -------------------------------------------------------------------------------------------------------------------- #
     # ------------------------------------ UPDATE DA TABELA AUXILIAR *concursos_publicos* -------------------------------- #
