@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.10
+FROM public.ecr.aws/lambda/python:3.12
 
 RUN pip3 install requests psycopg2-binary
 
@@ -7,5 +7,4 @@ COPY flag_calculator.py ${LAMBDA_TASK_ROOT}
 COPY table_update.py ${LAMBDA_TASK_ROOT}
 COPY none_cases.py ${LAMBDA_TASK_ROOT}
 
-
-CMD [ "process_update.main_process" ]
+CMD [ "process_update.lambda_handler" ]
