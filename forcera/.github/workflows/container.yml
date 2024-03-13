@@ -33,6 +33,6 @@ jobs:
               REPOSITORY: container_flags
               IMAGE_TAG: latest
             run: |
-              docker build -t container_flags /scripts/cron_jobs/final_scripts_v2/
+              docker build -t container_flags ./scripts/cron_jobs/final_scripts_v2/
               docker tag container_flags:latest 654654334568.dkr.ecr.eu-north-1.amazonaws.com/container_flags:latest
               docker push 654654334568.dkr.ecr.eu-north-1.amazonaws.com/container_flags:latest
