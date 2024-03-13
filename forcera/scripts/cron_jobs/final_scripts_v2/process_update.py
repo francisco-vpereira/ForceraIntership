@@ -38,6 +38,8 @@ def main_process():
     # ------------------------------------ UPDATE DA TABELA AUXILIAR *concursos_publicos* -------------------------------- #
     # -------------------------------------------------------------------------------------------------------------------- #
 
+    print("Teste")
+
     # Obter último ID processado 
     last_id = table_update.lastid()
 
@@ -82,23 +84,24 @@ def main_process():
     if none_number == None:
         #print('Sem valores nulos', none_number)
 
-        if __name__ == "__main__":
+        
             
-            # Último ID copiado para a tabela daily_flags
-            latest_id = flag_calculator.lastid()
+        # Último ID copiado para a tabela daily_flags
 
-            
-            new_ids = flag_calculator.id_colector(latest_id)
-            flag_calculator.default_table(new_ids)    
-            flag_calculator.main(latest_id)
+        latest_id = flag_calculator.lastid()
+
+        
+        new_ids = flag_calculator.id_colector(latest_id)
+        flag_calculator.default_table(new_ids)    
+        flag_calculator.main(latest_id)
 
 
 
     else:
         #print('Existem valores nulos. \nPrimeiro ID com valor nulo: ', tuple(none_number), len(none_number))
         none_cases.remove_null(none_number)
-        if __name__ == "__main__":
-            latest_id = flag_calculator.lastid()
-            new_ids = flag_calculator.id_colector(latest_id)
-            flag_calculator.default_table(new_ids)    
-            flag_calculator.main(latest_id)
+        
+        latest_id = flag_calculator.lastid()
+        new_ids = flag_calculator.id_colector(latest_id)
+        flag_calculator.default_table(new_ids)    
+        flag_calculator.main(latest_id)
