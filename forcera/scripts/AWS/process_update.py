@@ -83,14 +83,9 @@ def main_process():
 
     if none_number == None:
         #print('Sem valores nulos', none_number)
-
-        
-            
         # Último ID copiado para a tabela daily_flags
 
         latest_id = flag_calculator.lastid()
-
-        
         new_ids = flag_calculator.id_colector(latest_id)
         flag_calculator.default_table(new_ids)    
         flag_calculator.main(latest_id)
@@ -99,8 +94,7 @@ def main_process():
 
     else:
         #print('Existem valores nulos. \nPrimeiro ID com valor nulo: ', tuple(none_number), len(none_number))
-        none_cases.remove_null(none_number)
-        
+        none_cases.remove_null(none_number) 
         latest_id = flag_calculator.lastid()
         new_ids = flag_calculator.id_colector(latest_id)
         flag_calculator.default_table(new_ids)    
