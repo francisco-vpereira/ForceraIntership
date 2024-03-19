@@ -38,7 +38,6 @@ def main_process():
     # ------------------------------------ UPDATE DA TABELA AUXILIAR *concursos_publicos* -------------------------------- #
     # -------------------------------------------------------------------------------------------------------------------- #
 
-    print("Teste")
 
     # Obter último ID processado 
     last_id = table_update.lastid()
@@ -62,6 +61,7 @@ def main_process():
     # Classificação dos novos contratos, em 2 categorias, consoante o tipo
     table_update.tipocontrato_classifier(tcontratos)
 
+    print("Tabela ConcursosPúblicos preenchida")
 
 
     # -------------------------------------------------------------------------------------------------------------------- #
