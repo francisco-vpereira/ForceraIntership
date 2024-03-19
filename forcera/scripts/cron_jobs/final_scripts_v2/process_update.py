@@ -77,20 +77,28 @@ def main_process():
     # Variável que toma 2 possíveis valores :
     # None caso não existam entradas NULL da coluna verification ( processo correu de forma corretamente da última vez )
     # tuplo de IDs associados a entradas NULL da coluna verification ( processo não terminou da última vez / correu com erros )
+    # -------------------------------------------------------------------------------------------------------------------- #
+    # ------------------------------------------------- CÁLCULO DAS FLAGS  ----------------------------------------------- #
+    # -------------------------------------------------------------------------------------------------------------------- #
+
+    # Se houver valores None na coluna verificação, significa que nem todas as flags foram calculadas para os novos contratos
+    # Nesse caso é preciso voltar a calcular
+    # Caso contrário, o processo segue normalmente
+
+
+
+    # Variável que toma 2 possíveis valores :
+    # None caso não existam entradas NULL da coluna verification ( processo correu de forma corretamente da última vez )
+    # tuplo de IDs associados a entradas NULL da coluna verification ( processo não terminou da última vez / correu com erros )
     none_number = none_cases.null_verification()
 
 
 
     if none_number == None:
         #print('Sem valores nulos', none_number)
-
-        
-            
         # Último ID copiado para a tabela daily_flags
 
         latest_id = flag_calculator.lastid()
-
-        
         new_ids = flag_calculator.id_colector(latest_id)
         flag_calculator.default_table(new_ids)    
         flag_calculator.main(latest_id)
@@ -99,8 +107,7 @@ def main_process():
 
     else:
         #print('Existem valores nulos. \nPrimeiro ID com valor nulo: ', tuple(none_number), len(none_number))
-        none_cases.remove_null(none_number)
-        
+        none_cases.remove_null(none_number) 
         latest_id = flag_calculator.lastid()
         new_ids = flag_calculator.id_colector(latest_id)
         flag_calculator.default_table(new_ids)    
