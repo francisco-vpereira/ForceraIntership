@@ -180,6 +180,8 @@ def contract_type(id_contrato):
                 WHERE concursos_publicos."id" > %s
                 ORDER BY data_publicacao DESC, id DESC;
                 ''', (id_contrato,))
+
+    print("Tipos de contrato coletados.")
     return(cur.fetchall())
 
 
@@ -196,8 +198,8 @@ def tipocontrato_classifier(tcs):
         e respstivo tipo de contrato.
     """
 
-    cur = conn.cursor()
     for i in tcs:
+        cur = conn.cursor()
         if 'obras' in i[1]:
             cur.execute('''
                         UPDATE concursos_publicos
@@ -213,6 +215,8 @@ def tipocontrato_classifier(tcs):
                 WHERE id = %s;
                 ''', (i[0],))
             conn.commit()
+        
+    print("Contratos inseridos.")
 
 
 
