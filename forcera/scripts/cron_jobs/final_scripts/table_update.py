@@ -128,19 +128,42 @@ def update_columns(id_contrato):
     cur.execute('''
                 UPDATE concursos_publicos
                 SET 
-                    adjudicante = split_part(split_part(entidade_adjudicante, '(', 1), ')', 1),
-                    nif1 = split_part(split_part(entidade_adjudicante, '(', 2), ')', 1),
-                    url1 = split_part(entidade_adjudicante, ')(', 2),
-                    adjudicataria = split_part(split_part(entidades_contratadas, '(', 1), ')', 1),
-                    nif2 = split_part(split_part(entidades_contratadas, '(', 2), ')', 1),
-                    url2 = split_part(entidades_contratadas, ')(', 2),
+                    url1 = substring(entidade_adjudicante from '\((https?://[^)]*)\)'),
+                    nif1 = substring(entidade_adjudicante from '\((\d+)\)\(https?://.*?\)'),
+                    adjudicante = regexp_replace(entidade_adjudicante, '\s*\(\d+\)\(https?:\/\/.*', ''),
+                    url2 = substring(entidades_contratadas from '\((https?://[^)]*)\)'),
+                    nif2 = substring(entidades_contratadas from '\((\d+)\)\(https?://.*?\)'),
+                    adjudicataria = regexp_replace(entidades_contratadas, '\s*\(\d+\)\(https?:\/\/.*', ''),
                     nr_entidadesconcorrentes = CARDINALITY(STRING_TO_ARRAY(entidades_concorrentes, '|||')) + 1
                 WHERE concursos_publicos."id" > %s;
                 ''',(id_contrato,))
     conn.commit()
 
 
+def update_null_nif1(id_contrato):
+    cur = conn.cursor()
+    cur.execute('''
+                UPDATE concursos_publicos
+                SET 
+                    url1 = substring(entidade_adjudicante from '\((https?://[^)]+)\)'),
+                    nif1 = substring(entidade_adjudicante from '\((\w+)\)\(https?://.*?\)'),
+                    adjudicante = substring(entidade_adjudicante from '^\s*([^()]+) ')
+                WHERE nif1 IS NULL AND concursos_publicos."id" > %s;
+                ''',(id_contrato,))
+    conn.commit()
 
+
+def update_null_nif2(id_contrato):
+    cur = conn.cursor()
+    cur.execute('''
+                UPDATE concursos_publicos
+                SET 
+                    url2 = substring(entidades_contratadas from '\((https?://[^)]+)\)'),
+                    nif2 = substring(entidades_contratadas from '\((\w+)\)\(https?://.*?\)'),
+                    adjudicataria = substring(entidades_contratadas from '^\s*([^()]+) ')
+                WHERE nif2 IS NULL AND concursos_publicos."id" > %s;
+                ''',(id_contrato,))
+    conn.commit()
 
 
 def nec_null(id_contrato):
@@ -221,26 +244,26 @@ def tipocontrato_classifier(tcs):
 
 
 
-# Correr as funções
+# # Correr as funções
 
-# Obter último ID processado 
-last_id = lastid()
+# # Obter último ID processado 
+# last_id = lastid()
 
-# Guardar novos contratos e colunas significativas
-contratos = new_contracts(last_id)
+# # Guardar novos contratos e colunas significativas
+# contratos = new_contracts(last_id)
 
-# Copiar novos contratos para a tabela concursos_publicos
-write_contracts(contratos)
+# # Copiar novos contratos para a tabela concursos_publicos
+# write_contracts(contratos)
 
-# Dar update às colunas auxiliares que foram construídas
-update_columns(last_id)
+# # Dar update às colunas auxiliares que foram construídas
+# update_columns(last_id)
 
-# Susbtituir entradas None por 1 da coluna nr_entidadesconcorrentes
-nec_null(last_id)
+# # Susbtituir entradas None por 1 da coluna nr_entidadesconcorrentes
+# nec_null(last_id)
 
-# Classificação dos contratos consoante o tipo
-# Guardar IDs dos novos contratos e respetivo tipo
-tcontratos = contract_type(last_id)
+# # Classificação dos contratos consoante o tipo
+# # Guardar IDs dos novos contratos e respetivo tipo
+# tcontratos = contract_type(last_id)
 
-# Classificação dos novos contratos, em 2 categorias, consoante o tipo
-tipocontrato_classifier(tcontratos)
+# # Classificação dos novos contratos, em 2 categorias, consoante o tipo
+# tipocontrato_classifier(tcontratos)
