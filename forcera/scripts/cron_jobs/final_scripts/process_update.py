@@ -51,6 +51,9 @@ table_update.write_contracts(contratos)
 
 # Dar update às colunas auxiliares que foram construídas
 table_update.update_columns(last_id)
+# Correção no split das entidades adjudicante e contratadas ( caso específico (SIGLA)NOME )
+table_update.update_null_nif1(last_id)
+table_update.update_null_nif2(last_id)
 
 # Susbtituir entradas None por 1 da coluna nr_entidadesconcorrentes
 table_update.nec_null(last_id)
@@ -83,24 +86,20 @@ none_number = none_cases.null_verification()
 
 if none_number == None:
     #print('Sem valores nulos', none_number)
+    # Último ID copiado para a tabela daily_flags
+    latest_id = flag_calculator.lastid()
 
-    if __name__ == "__main__":
-        
-        # Último ID copiado para a tabela daily_flags
-        latest_id = flag_calculator.lastid()
-
-        
-        new_ids = flag_calculator.id_colector(latest_id)
-        flag_calculator.default_table(new_ids)    
-        flag_calculator.main(latest_id)
+    
+    new_ids = flag_calculator.id_colector(latest_id)
+    flag_calculator.default_table(new_ids)    
+    flag_calculator.main(latest_id)
 
 
 
 else:
     #print('Existem valores nulos. \nPrimeiro ID com valor nulo: ', tuple(none_number), len(none_number))
     none_cases.remove_null(none_number)
-    if __name__ == "__main__":
-        latest_id = flag_calculator.lastid()
-        new_ids = flag_calculator.id_colector(latest_id)
-        flag_calculator.default_table(new_ids)    
-        flag_calculator.main(latest_id)
+    latest_id = flag_calculator.lastid()
+    new_ids = flag_calculator.id_colector(latest_id)
+    flag_calculator.default_table(new_ids)    
+    flag_calculator.main(latest_id)
