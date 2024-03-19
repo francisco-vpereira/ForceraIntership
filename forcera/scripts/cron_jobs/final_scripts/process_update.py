@@ -51,9 +51,9 @@ table_update.write_contracts(contratos)
 
 # Dar update às colunas auxiliares que foram construídas
 table_update.update_columns(last_id)
-# Correção no split das entidades adjudicante e contratadas ( caso específico (SIGLA)NOME )
-table_update.update_null_nif1(last_id)
-table_update.update_null_nif2(last_id)
+# Correção no split das entidades adjudicante e contratadas ( caso específico (SIGLA)NOME )clear
+# table_update.update_null_nif1(last_id)
+# table_update.update_null_nif2(last_id)
 
 # Susbtituir entradas None por 1 da coluna nr_entidadesconcorrentes
 table_update.nec_null(last_id)
