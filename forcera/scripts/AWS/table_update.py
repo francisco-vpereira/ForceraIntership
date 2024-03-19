@@ -107,6 +107,15 @@ def update_columns(id_contrato):
     3. Contar o número de entidades concorrentes
     Estes parâmetros serão utilizados para calcular algumas flags
 
+    O split das strings ( ponto 1.) foi atualizado dado que existe uma inconsistência de preenchimento no portal Base. 
+    Por vezes, quando os contratos são inseridos são feitos de uma de duas formas :
+
+    Centro Hospitalar Universitário Lisboa Central, E. P. E. (508080142)(https://www.base.gov.pt/Base4/pt/detalhe/?type=entidades&id=41882)
+    Centro Hospitalar Universitário de Lisboa Central, E.P.E. (CHULC) (508080142)(https://www.base.gov.pt/Base4/pt/detalhe/?type=entidades&id=41882)
+
+    As regular expression usadas fazem a busca do fim da string para o início. Começam pelo URL, de seguida extraem o NIF e, 
+    só por fim, o nome da entidade. 
+
     Parâmetro de entrada
         id_contrato: último ID processado / ID mais recente da tabela 'concursos_publicos'
     """
@@ -115,16 +124,52 @@ def update_columns(id_contrato):
     cur.execute('''
                 UPDATE concursos_publicos
                 SET 
-                    adjudicante = split_part(split_part(entidade_adjudicante, '(', 1), ')', 1),
-                    nif1 = split_part(split_part(entidade_adjudicante, '(', 2), ')', 1),
-                    url1 = split_part(entidade_adjudicante, ')(', 2),
-                    adjudicataria = split_part(split_part(entidades_contratadas, '(', 1), ')', 1),
-                    nif2 = split_part(split_part(entidades_contratadas, '(', 2), ')', 1),
-                    url2 = split_part(entidades_contratadas, ')(', 2),
+                    url1 = substring(entidade_adjudicante from '\((https?://[^)]+)\)'),
+                    nif1 = substring(entidade_adjudicante from '\((\w+)\)\(https?://.*?\)'),
+                    adjudicante = substring(entidade_adjudicante from '^\s*([^()]+) '),
+                    url2 = substring(entidades_contratadas from '\((https?://[^)]+)\)'),
+                    nif2 = substring(entidades_contratadas from '\((\w+)\)\(https?://.*?\)'),
+                    adjudicataria = substring(entidades_contratadas from '^\s*([^()]+) '),
                     nr_entidadesconcorrentes = CARDINALITY(STRING_TO_ARRAY(entidades_concorrentes, '|||')) + 1
                 WHERE concursos_publicos."id" > %s;
                 ''',(id_contrato,))
     conn.commit()
+
+
+
+
+def update_null_nif1(id_contrato):
+    """
+    Função que volta a fazer split da coluna entidade_adjudicante quando o split não é executado como deveria na função
+    update_columns e o valor da coluna nif1 é NULL. Este script é utilizado para quando
+
+    World Medica, S.L. (ESB82612599)(https://www.base.gov.pt/Base4/pt/detalhe/?type=entidades&id=399066)
+    """
+    
+    cur = conn.cursor()
+    cur.execute('''
+                UPDATE concursos_publicos
+                SET 
+                    url1 = substring(entidade_adjudicante from '\((https?://[^)]+)\)'),
+                    nif1 = substring(entidade_adjudicante from '\((\w+)\)\(https?://.*?\)'),
+                    adjudicante = substring(entidade_adjudicante from '^\s*([^()]+) ')
+                WHERE nif1 IS NULL AND concursos_publicos."id" > %s;
+                ''',(id_contrato,))
+    conn.commit()
+
+
+def update_null_nif2(id_contrato):
+    cur = conn.cursor()
+    cur.execute('''
+                UPDATE concursos_publicos
+                SET 
+                    url2 = substring(entidades_contratadas from '\((https?://[^)]+)\)'),
+                    nif2 = substring(entidades_contratadas from '\((\w+)\)\(https?://.*?\)'),
+                    adjudicataria = substring(entidades_contratadas from '^\s*([^()]+) ')
+                WHERE nif2 IS NULL AND concursos_publicos."id" > %s;
+                ''',(id_contrato,))
+    conn.commit()
+
 
 
 
