@@ -74,7 +74,8 @@ def new_contracts(id_contrato):
                     contratos_basegov.entidade_adjudicante,
                     contratos_basegov.entidades_contratadas,
                     contratos_basegov.entidades_concorrentes,
-                    contratos_basegov."executionPlace"
+                    contratos_basegov."executionPlace",
+                    contratos_basegov."cpv"
                 FROM contratos_basegov
                 WHERE tipo_procedimento = 'Concurso público' AND contratos_basegov."id" > %s
                 ORDER BY data_publicacao DESC, id DESC;
@@ -103,8 +104,9 @@ def write_contracts(contracts):
                         entidade_adjudicante,
                         entidades_contratadas,
                         entidades_concorrentes,
-                        "executionPlace"
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+                        "executionPlace",
+                        cpv
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
                 ''', i)
     conn.commit()
 
