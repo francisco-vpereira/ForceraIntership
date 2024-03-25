@@ -123,7 +123,7 @@ def update_columns(id_contrato):
     """
 
     cur = conn.cursor()
-    cur.execute('''
+    cur.execute(r'''
                 UPDATE concursos_publicos
                 SET 
                     url1 = substring(entidade_adjudicante from '\((https?://[^)]+)\)'),
@@ -139,37 +139,37 @@ def update_columns(id_contrato):
 
 
 
-def update_null_nif1(id_contrato):
-    """
-    Função que volta a fazer split da coluna entidade_adjudicante quando o split não é executado como deveria na função
-    update_columns e o valor da coluna nif1 é NULL. Este script é utilizado para quando
+# def update_null_nif1(id_contrato):
+#     """
+#     Função que volta a fazer split da coluna entidade_adjudicante quando o split não é executado como deveria na função
+#     update_columns e o valor da coluna nif1 é NULL. Este script é utilizado para quando
 
-    World Medica, S.L. (ESB82612599)(https://www.base.gov.pt/Base4/pt/detalhe/?type=entidades&id=399066)
-    """
+#     World Medica, S.L. (ESB82612599)(https://www.base.gov.pt/Base4/pt/detalhe/?type=entidades&id=399066)
+#     """
     
-    cur = conn.cursor()
-    cur.execute('''
-                UPDATE concursos_publicos
-                SET 
-                    url1 = substring(entidade_adjudicante from '\((https?://[^)]+)\)'),
-                    nif1 = substring(entidade_adjudicante from '\((\w+)\)\(https?://.*?\)'),
-                    adjudicante = substring(entidade_adjudicante from '^\s*([^()]+) ')
-                WHERE nif1 IS NULL AND concursos_publicos."id" > %s;
-                ''',(id_contrato,))
-    conn.commit()
+#     cur = conn.cursor()
+#     cur.execute('''
+#                 UPDATE concursos_publicos
+#                 SET 
+#                     url1 = substring(entidade_adjudicante from '\((https?://[^)]+)\)'),
+#                     nif1 = substring(entidade_adjudicante from '\((\w+)\)\(https?://.*?\)'),
+#                     adjudicante = substring(entidade_adjudicante from '^\s*([^()]+) ')
+#                 WHERE nif1 IS NULL AND concursos_publicos."id" > %s;
+#                 ''',(id_contrato,))
+#     conn.commit()
 
 
-def update_null_nif2(id_contrato):
-    cur = conn.cursor()
-    cur.execute('''
-                UPDATE concursos_publicos
-                SET 
-                    url2 = substring(entidades_contratadas from '\((https?://[^)]+)\)'),
-                    nif2 = substring(entidades_contratadas from '\((\w+)\)\(https?://.*?\)'),
-                    adjudicataria = substring(entidades_contratadas from '^\s*([^()]+) ')
-                WHERE nif2 IS NULL AND concursos_publicos."id" > %s;
-                ''',(id_contrato,))
-    conn.commit()
+# def update_null_nif2(id_contrato):
+#     cur = conn.cursor()
+#     cur.execute('''
+#                 UPDATE concursos_publicos
+#                 SET 
+#                     url2 = substring(entidades_contratadas from '\((https?://[^)]+)\)'),
+#                     nif2 = substring(entidades_contratadas from '\((\w+)\)\(https?://.*?\)'),
+#                     adjudicataria = substring(entidades_contratadas from '^\s*([^()]+) ')
+#                 WHERE nif2 IS NULL AND concursos_publicos."id" > %s;
+#                 ''',(id_contrato,))
+#     conn.commit()
 
 
 def nec_null(id_contrato):
