@@ -61,7 +61,8 @@ def new_contracts(id_contrato):
                     contratos_basegov.entidade_adjudicante,
                     contratos_basegov.entidades_contratadas,
                     contratos_basegov.entidades_concorrentes,
-                    contratos_basegov."executionPlace"
+                    contratos_basegov."executionPlace",
+                    contratos_basegov."cpv"
                 FROM contratos_basegov
                 WHERE tipo_procedimento = 'Concurso público' AND contratos_basegov."id" > %s
                 ORDER BY data_publicacao DESC, id DESC;
@@ -90,8 +91,9 @@ def write_contracts(contracts):
                         entidade_adjudicante,
                         entidades_contratadas,
                         entidades_concorrentes,
-                        "executionPlace"
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+                        "executionPlace",
+                        cpv
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
                 ''', i)
     conn.commit()
 
@@ -137,7 +139,6 @@ def update_columns(id_contrato):
 
 
 
-
 def update_null_nif1(id_contrato):
     """
     Função que volta a fazer split da coluna entidade_adjudicante quando o split não é executado como deveria na função
@@ -169,10 +170,6 @@ def update_null_nif2(id_contrato):
                 WHERE nif2 IS NULL AND concursos_publicos."id" > %s;
                 ''',(id_contrato,))
     conn.commit()
-
-
-
-
 
 
 def nec_null(id_contrato):
@@ -253,26 +250,26 @@ def tipocontrato_classifier(tcs):
 
 
 
-# Correr as funções
+# # Correr as funções
 
-# Obter último ID processado 
-last_id = lastid()
+# # Obter último ID processado 
+# last_id = lastid()
 
-# Guardar novos contratos e colunas significativas
-contratos = new_contracts(last_id)
+# # Guardar novos contratos e colunas significativas
+# contratos = new_contracts(last_id)
 
-# Copiar novos contratos para a tabela concursos_publicos
-write_contracts(contratos)
+# # Copiar novos contratos para a tabela concursos_publicos
+# write_contracts(contratos)
 
-# Dar update às colunas auxiliares que foram construídas
-update_columns(last_id)
+# # Dar update às colunas auxiliares que foram construídas
+# update_columns(last_id)
 
-# Susbtituir entradas None por 1 da coluna nr_entidadesconcorrentes
-nec_null(last_id)
+# # Susbtituir entradas None por 1 da coluna nr_entidadesconcorrentes
+# nec_null(last_id)
 
-# Classificação dos contratos consoante o tipo
-# Guardar IDs dos novos contratos e respetivo tipo
-tcontratos = contract_type(last_id)
+# # Classificação dos contratos consoante o tipo
+# # Guardar IDs dos novos contratos e respetivo tipo
+# tcontratos = contract_type(last_id)
 
-# Classificação dos novos contratos, em 2 categorias, consoante o tipo
-tipocontrato_classifier(tcontratos)
+# # Classificação dos novos contratos, em 2 categorias, consoante o tipo
+# tipocontrato_classifier(tcontratos)
