@@ -1,0 +1,97 @@
+-- CRIAÇÃO DA TABELA 
+
+
+--CREATE TABLE cpv_stat1 (
+--    cpv double precision,
+--    tipocontrato text,
+--    nec_t double precision,
+--    count double precision,
+--    mean double precision,
+--    std double precision,
+--    min double precision,
+--    q1 double precision,
+--    q2 double precision,
+--    q3 double precision,
+--    max double precision
+--);
+
+
+
+--------------------------------------------------------------------------------------
+-- Eliminar linhas em que não existam contratos numa determinada categoria de contrato
+--------------------------------------------------------------------------------------
+--DELETE FROM cpv_stat1
+--WHERE count = 0;
+
+
+
+--select * from cpv_stat order by mean desc;
+--select * from concursospublicos limit 10;
+
+
+
+-------------------------------------------------------------------------------------------
+-- Selecionar IDs, para todos os CPVs e em Concursos Públicos, em que o número de entidades
+-- concorrentes seja inferior à metade do valor médio calculado
+-------------------------------------------------------------------------------------------
+
+--SELECT contratos_basegov."id"
+--FROM contratos_basegov 
+--JOIN cpv_stat ON concursospublicos."cpv2" = cpv_stat."cpv"
+--WHERE concursospublicos."nr_entidadesconcorrentes" < 0.5 * cpv_stat."mean";
+
+
+-------------------------------------------------------------------------------------------
+-- Adicionar coluna com distância inter-quartil : Q3-Q1
+-------------------------------------------------------------------------------------------
+--ALTER TABLE cpv_stat
+--ADD COLUMN Dq DOUBLE PRECISION;
+
+--UPDATE cpv_stat 
+--SET dq = q3-q1;
+
+
+
+
+
+--SELECT SUBSTRING(contratos_basegov."cpv", 1, 2) AS cpv_prefix, COUNT(*)
+--FROM contratos_basegov 
+--JOIN cpv_stat ON cpv_prefix = cpv_stat."cpv"
+--WHERE concursospublicos."nr_entidadesconcorrentes" < 0.5 * cpv_stat."mean"
+--GROUP BY cpv_prefix
+--ORDER BY COUNT(*) DESC;
+
+
+
+
+-- Selecionar IDs cujo NEC seja inferior à media
+--SELECT contratos_basegov."id"	
+--FROM contratos_basegov 
+--JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+--JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
+--WHERE (concursos_publicos."nr_entidadesconcorrentes" < cpv_stat."mean");
+
+    
+
+-- Selecionar IDs cujo NEC seja um outlier moderado
+SELECT contratos_basegov."id", concursos_publicos."nr_entidadesconcorrentes", cpv_stat."mean", 
+		cpv_stat."q3" + 1.5*cpv_stat."dq" AS lim_superior,  cpv_stat."q1" - 1.5*cpv_stat."dq" AS lim_inferior,
+		cpv_stat."q1",cpv_stat."q2",cpv_stat."q3"
+FROM contratos_basegov 
+JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
+WHERE concursos_publicos."nr_entidadesconcorrentes" < cpv_stat."q3" + 1.5*cpv_stat."dq" AND
+	  concursos_publicos."nr_entidadesconcorrentes" > cpv_stat."q1" - 1.5*cpv_stat."dq";
+
+
+
+
+-- Selecionar IDs cujo NEC seja um outlier severo
+--SELECT contratos_basegov."id", concursos_publicos."nr_entidadesconcorrentes", cpv_stat."mean", 
+--		cpv_stat."q3" + 3*cpv_stat."dq" AS lim_superior,  cpv_stat."q1" - 3*cpv_stat."dq" AS lim_inferior,
+--	    cpv_stat."q1",cpv_stat."q2",cpv_stat."q3"
+--FROM contratos_basegov 
+--JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+--JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
+--WHERE concursos_publicos."nr_entidadesconcorrentes" < cpv_stat."q3" + 3*cpv_stat."dq" AND
+--	  concursos_publicos."nr_entidadesconcorrentes" > cpv_stat."q1" + 3*cpv_stat."dq";

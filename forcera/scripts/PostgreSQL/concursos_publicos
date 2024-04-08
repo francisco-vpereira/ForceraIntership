@@ -1,0 +1,80 @@
+-- Colunas necessárias para tabela auxiliar
+-- Coluna fundamentacao permite criar coluna artigo -> Coluna artigo permite criar coluna valor
+-- Coluna contractTypes permite cirar coluna tipo_contrato
+-- Coluna entidade_adjudicante permite criar colunas : adjudicante | NIF1 | URL1
+-- Coluna entidades_concorrentes permite criar colunas : nr_entidadesconcorrentes
+-- Coluna entidades_contratadas permite criar colunas : adjudicataria | NIF2 | URL2
+
+
+
+--------------------
+-- Criação da tabela 
+--------------------
+
+--CREATE TABLE concursos_publicos AS
+--SELECT contratos_basegov."id", contratos_basegov."contractTypes", fundamentacao, entidade_adjudicante, entidades_contratadas, entidades_concorrentes, contratos_basegov."executionPlace"
+--FROM contratos_basegov
+--WHERE tipo_procedimento = 'Concurso público';
+
+
+
+
+
+---------------------------------
+-- Criação coluna : tipo_contrato
+---------------------------------
+
+--ALTER TABLE concursos_publicos
+--ADD COLUMN tipo_contrato text;
+--
+--UPDATE concursos_publicos
+--SET tipo_contrato = CASE
+--    WHEN concursos_publicos."contractTypes" NOT LIKE '%obras%' THEN 'Bens e Serviços'
+--    ELSE 'Empreitadas' 
+--END;
+
+
+
+
+
+------------------------------------------------
+-- Criação das colunas : entidades | NIFs | URLs
+------------------------------------------------
+
+--ALTER TABLE concursos_publicos
+--ADD COLUMN adjudicante text,
+--ADD COLUMN nif1 text,
+--ADD COLUMN url1 text,
+--ADD COLUMN adjudicataria text,
+--ADD COLUMN nif2 text,
+--ADD COLUMN url2 text;
+
+--UPDATE concursos_publicos
+--SET
+--adjudicante = split_part(split_part(entidade_adjudicante, '(', 1), ')', 1),
+--nif1 = split_part(split_part(entidade_adjudicante, '(', 2), ')', 1),
+--url1 = split_part(entidade_adjudicante, ')(', 2),
+
+--adjudicataria = split_part(split_part(entidades_contratadas, '(', 1), ')', 1),
+--nif2 = split_part(split_part(entidades_contratadas, '(', 2), ')', 1),
+--url2 = split_part(entidades_contratadas, ')(', 2);
+
+
+
+-----------------------------------------------
+-- Criação da coluna : nr_entidadesconcorrentes
+-----------------------------------------------
+--ALTER TABLE concursos_publicos
+--ADD COLUMN nr_entidadesconcorrentes INTEGER;
+--
+--UPDATE concursos_publicos
+--SET nr_entidadesconcorrentes = ARRAY_LENGTH(STRING_TO_ARRAY(entidades_concorrentes, '|||'), 1) + 1;
+
+
+-- Substituir entradas nulas por 1
+
+--UPDATE concursos_publicos
+--SET nr_entidadesconcorrentes = COALESCE(nr_entidadesconcorrentes, 1);
+
+
+select * from concursos_publicos where nr_entidadesconcorrentes = 1;

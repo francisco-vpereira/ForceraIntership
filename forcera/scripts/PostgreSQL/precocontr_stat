@@ -1,0 +1,48 @@
+-- TABELA ADICIONAL FLAG R017 : INDICADORES ESTATÍSTICOS PARA PREÇO CONTRATUAL
+-- COLUNAS :
+-- 			cpv3 : 3 PRIMEIROS DÍGITOS DO CPV
+-- 			tipocontrato : TIPO DE CONTRATO
+-- 			nrcontrato : NÚMERO TOTAL DE CONTRATOS CELEBRADOS PARA CATEGORIA DE CPV
+-- 			preco_total : PREÇO TOTAL PARA TODOS OS CONTRATOS CELEBRADOS PARA CATEGORIA DE CPV
+--			ESTATÍTICAS : MIN, MEDIA, STD, Q1, Q2, Q3, MAX
+
+
+-------------------------
+-- INSERIR VALORES DO CPV
+-------------------------
+
+--INSERT INTO precoc_stat(cpv3)
+--SELECT DISTINCT(SUBSTRING(cpv,1,3)) 
+--FROM concursospublicos
+--ORDER BY SUBSTRING(cpv,1,3) DESC;
+
+
+---------------------------------------------
+-- INSERIR NÚMERO DE CONTRATOTS TOTAL POR CPV
+---------------------------------------------
+--UPDATE precoc_stat
+--SET nrcontrato = subquery.nrcontrato
+--FROM (
+--    SELECT SUBSTRING(cpv, 1, 3) AS cpv3, COUNT(*) AS nrcontrato
+--    FROM concursospublicos
+--    GROUP BY SUBSTRING(cpv, 1, 3)
+--) AS subquery
+--WHERE precoc_stat.cpv3 = subquery.cpv3;
+
+
+
+-------------------------------------------
+-- INSERIR PREÇO TOTAL POR CATEGORIA DE CPV
+-------------------------------------------
+--UPDATE precoc_stat
+--SET preco_total = subquery.sum_preco_contratual
+--FROM (
+--    SELECT SUBSTRING(cpv, 1, 3) AS cpv3, SUM(preco_contratual) AS sum_preco_contratual
+--    FROM concursospublicos
+--    GROUP BY SUBSTRING(cpv, 1, 3)
+--) AS subquery
+--WHERE precoc_stat.cpv3 = subquery.cpv3;
+
+
+
+select * from precoc_stat order by cpv3 desc;

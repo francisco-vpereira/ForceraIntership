@@ -1,0 +1,38 @@
+-- "R059" : Verificar casos em que há alterações no preço contratual
+-- Verificar se o campo precototalefetivo é superior a 0
+
+
+-- Criar coluna preco_total_efetivo
+
+--ALTER TABLE concursospublicos
+--ADD COLUMN preco_total_efetivo DOUBLE PRECISION;
+
+
+
+
+-- Importar coluna totalEffectivePrice
+
+--UPDATE concursospublicos
+--SET preco_total_efetivo = contratos_basegov."totalEffectivePrice"
+--FROM contratos_basegov
+--WHERE concursospublicos."id" = contratos_basegov."id";
+
+
+
+-- Substituir entradas nulas por 1
+
+--UPDATE concursospublicos
+--SET preco_total_efetivo = COALESCE(preco_total_efetivo, 0);
+
+
+
+--SELECT concursospublicos."id", preco_contratual, preco_total_efetivo
+--FROM concursospublicos 
+--WHERE preco_total_efetivo > 0 AND ABS(preco_total_efetivo - preco_contratual) > 0;
+
+
+SELECT SUBSTRING(concursospublicos."cpv", 1, 2) AS cpv_prefix, COUNT(*)
+FROM concursospublicos 
+WHERE preco_total_efetivo > 0 AND ABS(preco_total_efetivo - preco_contratual) > 0
+GROUP BY cpv_prefix
+ORDER BY COUNT(*) DESC;
