@@ -1,4 +1,6 @@
 -- Colunas necessárias para tabela auxiliar
+-- id
+-- data_publicacao
 -- Coluna fundamentacao permite criar coluna artigo -> Coluna artigo permite criar coluna valor
 -- Coluna contractTypes permite cirar coluna tipo_contrato
 -- Coluna entidade_adjudicante permite criar colunas : adjudicante | NIF1 | URL1
@@ -12,9 +14,10 @@
 --------------------
 
 --CREATE TABLE concursos_publicos AS
---SELECT contratos_basegov."id", contratos_basegov."contractTypes", fundamentacao, entidade_adjudicante, entidades_contratadas, entidades_concorrentes, contratos_basegov."executionPlace"
+--SELECT contratos_basegov."id", contratos_basegov."data_publicacao", contratos_basegov."contractTypes", fundamentacao, entidade_adjudicante, entidades_contratadas, entidades_concorrentes, contratos_basegov."executionPlace"
 --FROM contratos_basegov
---WHERE tipo_procedimento = 'Concurso público';
+--WHERE tipo_procedimento = 'Concurso público'
+--ORDER BY contratos_basegov."data_publicacao" DESC;
 
 
 
@@ -77,4 +80,38 @@
 --SET nr_entidadesconcorrentes = COALESCE(nr_entidadesconcorrentes, 1);
 
 
-select * from concursos_publicos where nr_entidadesconcorrentes = 1;
+--DELETE FROM concursos_publicos
+--WHERE data_publicacao = '2024-03-17';
+
+--UPDATE concursos_publicos
+--SET url1 = NULL;
+
+--UPDATE concursos_publicos
+--SET url1 = substring(entidade_adjudicante from '\((https?://[^)]*)\)'),
+--    nif1 = substring(entidade_adjudicante from '\((\d+)\)\(https?://.*?\)'),
+--	  adjudicante = regexp_replace(entidade_adjudicante, '\s*\(\d+\)\(https?:\/\/.*', '');
+	
+	
+--UPDATE concursos_publicos
+--SET url2 = substring(entidades_contratadas from '\((https?://[^)]*)\)'),
+--    nif2 = substring(entidades_contratadas from '\((\d+)\)\(https?://.*?\)'),
+--	  adjudicataria = regexp_replace(entidades_contratadas, '\s*\(\d+\)\(https?:\/\/.*', '');
+--
+
+
+--UPDATE concursos_publicos
+--SET url2 = substring(entidades_contratadas from '\((https?://[^)]+)\)'),
+--    nif2 = substring(entidades_contratadas from '\((\w+)\)\(https?://.*?\)'),
+--    adjudicataria = substring(entidades_contratadas from '^\s*([^()]+) ')
+--WHERE nif2 IS NULL;
+
+
+
+--DELETE FROM concursos_publicos
+--WHERE data_publicacao > '2024-03-20';
+
+
+
+select *
+from concursos_publicos 
+order by data_publicacao desc, id desc;

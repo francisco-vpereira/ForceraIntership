@@ -74,24 +74,35 @@
     
 
 -- Selecionar IDs cujo NEC seja um outlier moderado
-SELECT contratos_basegov."id", concursos_publicos."nr_entidadesconcorrentes", cpv_stat."mean", 
-		cpv_stat."q3" + 1.5*cpv_stat."dq" AS lim_superior,  cpv_stat."q1" - 1.5*cpv_stat."dq" AS lim_inferior,
-		cpv_stat."q1",cpv_stat."q2",cpv_stat."q3"
-FROM contratos_basegov 
-JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
-JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
-WHERE concursos_publicos."nr_entidadesconcorrentes" < cpv_stat."q3" + 1.5*cpv_stat."dq" AND
-	  concursos_publicos."nr_entidadesconcorrentes" > cpv_stat."q1" - 1.5*cpv_stat."dq";
+--SELECT contratos_basegov."id", concursos_publicos."nr_entidadesconcorrentes", cpv_stat."mean", 
+--		cpv_stat."q3" + 1.5*cpv_stat."dq" AS lim_superior,  cpv_stat."q1" - 1.5*cpv_stat."dq" AS lim_inferior,
+--		cpv_stat."q1",cpv_stat."q2",cpv_stat."q3"
+--FROM contratos_basegov 
+--JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+--JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
+--WHERE concursos_publicos."nr_entidadesconcorrentes" > cpv_stat."q3" + 1.5*cpv_stat."dq" OR
+--	  concursos_publicos."nr_entidadesconcorrentes" < cpv_stat."q1" - 1.5*cpv_stat."dq";
 
 
 
 
 -- Selecionar IDs cujo NEC seja um outlier severo
---SELECT contratos_basegov."id", concursos_publicos."nr_entidadesconcorrentes", cpv_stat."mean", 
---		cpv_stat."q3" + 3*cpv_stat."dq" AS lim_superior,  cpv_stat."q1" - 3*cpv_stat."dq" AS lim_inferior,
---	    cpv_stat."q1",cpv_stat."q2",cpv_stat."q3"
+SELECT contratos_basegov."id", concursos_publicos."nr_entidadesconcorrentes", cpv_stat."mean", 
+		cpv_stat."q3" + 3*cpv_stat."dq" AS lim_superior,  cpv_stat."q1" - 3*cpv_stat."dq" AS lim_inferior,
+	    cpv_stat."q1",cpv_stat."q2",cpv_stat."q3"
+FROM contratos_basegov 
+JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
+WHERE concursos_publicos."nr_entidadesconcorrentes" > cpv_stat."q3" + 3*cpv_stat."dq" OR
+	  concursos_publicos."nr_entidadesconcorrentes" < cpv_stat."q1" - 3*cpv_stat."dq";
+
+
+
+-- Selecionar IDs cujo NEC seja um outlier calculado a partir da constante de Medcouple
+--SELECT contratos_basegov."id", concursos_publicos."nr_entidadesconcorrentes", lower_fence, upper_fence
 --FROM contratos_basegov 
 --JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
 --JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
---WHERE concursos_publicos."nr_entidadesconcorrentes" < cpv_stat."q3" + 3*cpv_stat."dq" AND
---	  concursos_publicos."nr_entidadesconcorrentes" > cpv_stat."q1" + 3*cpv_stat."dq";
+--WHERE concursos_publicos."nr_entidadesconcorrentes" < lower_fence OR
+--	  concursos_publicos."nr_entidadesconcorrentes" > upper_fence;
+--

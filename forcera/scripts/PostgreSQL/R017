@@ -71,11 +71,24 @@
 
 
 
-SELECT contratos_basegov."id",concursos_publicos."nr_entidadesconcorrentes", precoc_stat."mean", 
-		precoc_stat."q3" + 1.5*precoc_stat."dq" AS lim_superior,  precoc_stat."q1" - 1.5*precoc_stat."dq" AS lim_inferior,
-		precoc_stat."q1",precoc_stat."q2",precoc_stat."q3"
+
+-- Selecionar IDs cujo preco contratual seja um OUTLIER MODERADO
+--SELECT contratos_basegov."id", contratos_basegov."preco_contratual", precoc_stat."mean", 
+--		precoc_stat."q3" + 3*precoc_stat."dq" AS lim_superior,  precoc_stat."q1" - 3*precoc_stat."dq" AS lim_inferior,
+--	    precoc_stat."q1",precoc_stat."q2",precoc_stat."q3"
+--FROM contratos_basegov 
+--JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+--JOIN precoc_stat ON SUBSTRING(contratos_basegov."cpv", 1, 3) = precoc_stat."cpv"
+--WHERE contratos_basegov."preco_contratual" > precoc_stat."q3" + 1.5*precoc_stat."dq" OR
+--	  contratos_basegov."preco_contratual" < precoc_stat."q1" - 1.5*precoc_stat."dq";
+
+
+
+
+-- Selecionar IDs cujo NEC seja um outlier calculado a partir da constante de Medcouple
+SELECT contratos_basegov."id", contratos_basegov."preco_contratual", lower_fence, upper_fence
 FROM contratos_basegov 
 JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
-JOIN precoc_stat ON SUBSTRING(contratos_basegov."cpv",1,3) = precoc_stat.cpv3
-WHERE concursos_publicos."nr_entidadesconcorrentes" < precoc_stat."q3" + 1.5*precoc_stat."dq" AND
-	  concursos_publicos."nr_entidadesconcorrentes" > precoc_stat."q1" - 1.5*precoc_stat."dq";
+JOIN precoc_stat ON SUBSTRING(contratos_basegov."cpv", 1, 3) = precoc_stat."cpv"
+WHERE contratos_basegov."preco_contratual" < lower_fence OR
+	  contratos_basegov."preco_contratual" > upper_fence;

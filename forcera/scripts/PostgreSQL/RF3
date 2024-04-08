@@ -26,9 +26,9 @@
 
 
 
-SELECT contratos_basegov."id" 
+SELECT contratos_basegov."id", preco_contratual, contratos_basegov."totalEffectivePrice", contratos_basegov."totalEffectivePrice"/preco_contratual AS racio
 FROM contratos_basegov 
-WHERE contratos_basegov."totalEffectivePrice" > 0 AND ABS(contratos_basegov."totalEffectivePrice" - preco_contratual) > 0;
+WHERE contratos_basegov."totalEffectivePrice" > 0 AND ABS(contratos_basegov."totalEffectivePrice" - preco_contratual) > 0 AND preco_contratual > 0 AND contratos_basegov."totalEffectivePrice"/preco_contratual > 5 AND contratos_basegov."totalEffectivePrice"/preco_contratual != 100;
 
 
 --SELECT SUBSTRING(concursospublicos."cpv", 1, 2) AS cpv_prefix, COUNT(*)

@@ -61,6 +61,6 @@
 
 
 
-
 select * from table_temp 
-order by data_publicacao desc;
+order by data_publicacao desc
+limit 200;
