@@ -1,6 +1,6 @@
 # Calcular flags booleanas diariamente 
 
-Todos os dias, este script vai atualizar duas tabelas da base de dados: 
+Existem duas tabelas essencias na base de dados: 
 
 - a tabela final: *daily_flags*
 - uma tabela auxiliar: *concursos\_publicos*
@@ -10,7 +10,9 @@ Todos os dias, este script vai atualizar duas tabelas da base de dados:
 <br>
 
 
-A tabela *daily_flags* é composta pelas seguintes colunas : 
+A tabela *daily_flags* contém o produto final. Todos os dias são copiados os IDs dos novos concursos públicos publicados no Basgov e, posteriormente, aplicadas as flags construídas aos mesmos contratos. Todas as flags são booleanas. 
+
+É composta pelas seguintes colunas : 
 
 - id: identificador do anúncio
 - data\_publicacao: data de publicação do contrato na plataforma Basegov
