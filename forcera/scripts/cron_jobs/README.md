@@ -1,27 +1,31 @@
-# Calcular flags booleanas diariamente ( Versão de teste )
+# Calcular flags booleanas diariamente 
 
-Todos os dias, este script vai atualizar duas tabelas : 
+Todos os dias, este script vai atualizar duas tabelas da base de dados: 
 
-- uma tabela chamada, temporariamente, *table_temp*
-- uma tabela auxiliar : *concursos\_publicos*
+- a tabela final: *daily_flags*
+- uma tabela auxiliar: *concursos\_publicos*
 
 
 <br>
 <br>
 
 
-A tabela *table\_temp* é composta pelas seguintes colunas : 
+A tabela *daily_flags* é composta pelas seguintes colunas : 
 
-- id : identificador do anúncio
-- data\_publicacao : data de publicação do contrato na plataforma Basegov
-- R003 : Tempo de submissão de propostas inferior ao valor definido no Artigo 135.º. É preciso ter em conta o tipo de contrato : Aquisição de Bens e Serviços OU Empreitadas
+- id: identificador do anúncio
+- data\_publicacao: data de publicação do contrato na plataforma Basegov
+- verification: coluna com valor booleano. Se for true, script correu devidamente na última execução. Caso contrário, toma o valor false. É um mecanismo preventivo e irá ser explicado mais à frente. 
+- R003: Tempo de submissão de propostas inferior ao valor definido no Artigo 135.º. É preciso ter em conta o tipo de contrato : Aquisição de Bens e Serviços OU Empreitadas
     - Tabela Auxiliar : *concursos\_publicos*
         - Coluna Auxiliar : tipo\_contrato
-- R018 : Contratos com apenas uma entidade concorrente
+- R017: Preço inusual para determinada categoria. 
+- R018: Contratos com apenas uma entidade concorrente
     - Tabela Auxiliar : *concursos\_publicos*
         - Coluna Auxiliar : nr\_entidadesconcorrentes
-- RF2 : Verificar se data de publicação de anúncio coincide com feriado nacional
-- RF3 : Verificar se houve alterações ao preço contratual após celebração do contrato
+- R019: Número baixo de concorrentes
+    - Tabelas Auxiliares: *concursos_publicos* e *precoc_stat*
+- RF2: Verificar se data de publicação de anúncio coincide com feriado nacional
+- RF3: Verificar se houve alterações ao preço contratual após celebração do contrato
 
 
 <br>
@@ -31,13 +35,16 @@ A tabela *table\_temp* é composta pelas seguintes colunas :
 A tabela *concursos\_publicos* é usada para obter informação que não vem discriminada na tabela original. Da tabela original, *contratos_basegov*, são copiadas as seguintes colunas para esta tabela : 
 
 - id
-- data\ _publicacao
+- data\_publicacao
 - contractTypes
 - fundamentacao
 - entidade_adjudicante
 - entidades_contratadas
 - entidades_concorrentes
 - executionPlace
+- cpv
+- preco_contratual
+
 
 As colunas calculadas construídas a partir das enunciadas no ponto anterior são :
 
@@ -55,7 +62,7 @@ As colunas calculadas construídas a partir das enunciadas no ponto anterior sã
 
 # Processo : 
 
-1. Determinar a data do dia de ontem no formato YYYY-MM-DD
+1. Determinar o último ID da tabela *daily_flags* cujo valor da coluna verification seja true.  
 2. Selecionar, a partir da tabela *contratos\_basegov* as colunas necessárias para preencher na tabela *concursos\_publicos* referentes ao dia de ontem (id, data\_publicacao, contractTypes, fundamentacao, entidade\_adjudicante, entidades_\contratadas, entidades\_concorrentes, executionPlace). 
 3. Inserir esses valores na tabela *concursos\_publicos*
 4. Dar update às colunas extra pertencentes à tabela *concursos\_publicos*
@@ -70,7 +77,7 @@ As colunas calculadas construídas a partir das enunciadas no ponto anterior sã
 <br>
 <br>
 
-O cronjob é definido da seguinte forma: 
+<!--- O cronjob é definido da seguinte forma: 
 
 ```
 $ crontab -e 
@@ -78,3 +85,4 @@ $ crontab -e
 # inserir este comando
 0 9 * * * /home/francisco/MECAD/COMP/comp/bin/python3 /home/francisco/MECAD/2º\ Ano/Estágio/forcera/scripts/cron_jobs/daily_ids.py
 ```
+---!>
