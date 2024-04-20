@@ -95,20 +95,20 @@
 %
 % +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \chapter{Introdução}
-\input{chapters/chap1.txt}
+\input{chapters/chap1.tex}
 
 
 
-%\chapter{Fraude e Corrupção na Contratação Pública}
-%\input{chapters/fraude.tex}
-%
-%
-%
-%\chapter{Contratação Pública em Portugal}
-%\input{chapters/ccp.tex}
-%
-%
-%
+\chapter{Fraude e Corrupção na Contratação Pública}
+\input{chapters/fraude.tex}
+
+
+
+\chapter{Contratação Pública em Portugal}
+\input{chapters/ccp.tex}
+
+
+
 %\chapter{Base de Dados}
 %\input{chapters/dados.tex}
 %
@@ -121,8 +121,8 @@
 %
 %\chapter{Construção das \textit{Red Flags}}
 %\input{chapters/funcoes.tex}
-
-
+%
+%
 %\chapter{Conclusions and Future Work}
 %\input{chapters/conclusions.tex}
 
@@ -132,14 +132,22 @@
 % +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %									Bibliografia
 % +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\clearemptydoublepage
-\begin{footnotesize}
-	\renewcommand{\bibname}{Bibliography}
-	\addcontentsline{toc}{chapter}{Bibliography}
-	\bibliographystyle{biolett}
-	\bibliography{../thesis-bib}
-	\bibliography{../thesis-bib-aux}
-\end{footnotesize}
+
+
+
+%\begin{footnotesize}
+%	\renewcommand{\bibname}{Bibliografia}
+%	\addcontentsline{toc}{chapter}{Bibliografia}
+%	\bibliographystyle{plain}
+%	\bibliography{thesis-bib}
+%	\bibliography{thesis-bib-aux}
+%\end{footnotesize}
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{thesis-bib}
+
+
 
 
 
@@ -158,8 +166,8 @@
 \appendix
 
 
-\addcontentsline{toc}{chapter}{APPENDICES}
-\include{appendices/file.tex}
+%\addcontentsline{toc}{chapter}{APPENDICES}
+%\include{appendices/file.tex}
 
 \blankpage
 \newpage

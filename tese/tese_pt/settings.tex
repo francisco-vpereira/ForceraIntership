@@ -80,7 +80,6 @@
 
 
 
-
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\usepackage{tocloft}% Control table of contents, figures, etc
 
@@ -112,6 +111,7 @@
 \usepackage{todonotes}                          						%Para permitir  to do notes.
 \usepackage{makeidx}                            						%Para poder fazer um index
 \usepackage{footnote}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -310,13 +310,18 @@
 
 
 
+\usepackage{multirow} % Required for \multirow command
+\usepackage{tabularx} % Required for setting table width
+\usepackage{cellspace} % Required for vertical padding in cells
+\usepackage{array} % Required for custom column type
 
+%\setlength{\tabcolsep}{5pt}
+%\renewcommand{\arraystretch}{1.15}
 
+\usepackage{booktabs}
+\usepackage{tabularray}
 
-
-
-
-
+\usepackage{lscape}
 
 
 
