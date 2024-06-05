@@ -48,7 +48,13 @@
 %\usepackage{tikz}
 %\usetikzlibrary{matrix}
 
-%
+
+\usepackage{threeparttable, booktabs}
+\usepackage{makecell}
+\renewcommand{\theadfont}{\small\bfseries}
+
+
+
 %\newcommand{\TN}{$T_{\text{N}}$~}
 %\newcommand{\TC}{$T_{\text{C}}$~}
 %
@@ -207,6 +213,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%% New style of enumerate for abbreviations page  %%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcolumntype{L}{>{\centering\arraybackslash}m{3cm}}
+
 
 \newenvironment{my_enumerate}
 {\begin{enumerate}
@@ -214,6 +222,13 @@
   \setlength{\parskip}{0pt}
   \setlength{\parsep}{0pt}}
 {\end{enumerate}}
+
+\newenvironment{my_itemize}
+{\begin{itemize}
+		\setlength{\itemsep}{0.2pt}
+		\setlength{\parskip}{0pt}
+		\setlength{\parsep}{0pt}}
+	{\end{itemize}}
 
 \setlength{\parindent}{0pt}
 
@@ -324,6 +339,16 @@
 \usepackage{lscape}
 
 
+\newcommand*{\img}[1]{%
+	\raisebox{-.02\baselineskip}{%
+		\includegraphics[
+		height=.5\baselineskip,
+		width=.5\baselineskip,
+		keepaspectratio,
+		]{#1}%
+	}%
+}
 
+\usepackage{pifont}
 
 

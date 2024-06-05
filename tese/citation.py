@@ -115,6 +115,72 @@ ue_dire = website_noauthor_bib(name="ue_dire",
                         last="20/04/2024"
                         )
 
+ajustedir = website_noauthor_bib(name="ajustedir",
+                        org_name="Diário da República",
+                        year="",
+                        page_title="Ajuste Direto",
+                        url="https://diariodarepublica.pt/dr/lexionario/termo/ajuste-direto",
+                        last="22/04/2024"
+                        )
+
+consultaprev = website_noauthor_bib(name="consultaprev",
+                        org_name="Diário da República",
+                        year="",
+                        page_title="Consulta Prévia",
+                        url="https://diariodarepublica.pt/dr/lexionario/termo/consulta-previa",
+                        last="22/04/2024"
+                        )
+
+concursopub = website_noauthor_bib(name="concursopub",
+                        org_name="Diário da República",
+                        year="",
+                        page_title="Concurso Público",
+                        url="https://diariodarepublica.pt/dr/lexionario/termo/concurso-publico",
+                        last="22/04/2024"
+                        )
+
+
+previaqual = website_noauthor_bib(name="previaqual",
+                        org_name="Diário da República",
+                        year="",
+                        page_title="Concurso Limitado por Prévia Qualificação",
+                        url="https://diariodarepublica.pt/dr/lexionario/termo/concurso-limitado-por-previa-qualificacao",
+                        last="22/04/2024"
+                        )
+
+dialogoconc = website_noauthor_bib(name="dialogoconc",
+                        org_name="Diário da República",
+                        year="",
+                        page_title="Diálogo Concorrencial",
+                        url="https://diariodarepublica.pt/dr/legislacao-consolidada/decreto-lei/2008-34455475-44688075",
+                        last="22/04/2024"
+                        )
+
+acordoquadro = website_noauthor_bib(name="acordoquadro",
+                        org_name="Diário da República",
+                        year="",
+                        page_title="Acordo Quadro",
+                        url="https://diariodarepublica.pt/dr/legislacao-consolidada/decreto-lei/2008-34455475-108092895",
+                        last="22/04/2024"
+                        )
+
+
+mistos = website_noauthor_bib(name="mistos",
+                        org_name="Diário da República",
+                        year="",
+                        page_title="Contratos Mistos",
+                        url="https://diariodarepublica.pt/dr/lexionario/termo/contratos-mistos-contratacao-publica",
+                        last="22/04/2024"
+                        )
+
+
+jardinagem = website_noauthor_bib(name="jardinagem",
+                        org_name="Portal BASE",
+                        year="",
+                        page_title="Detalhes contratuais",
+                        url="https://www.base.gov.pt/Base4/pt/detalhe/?type=contratos&id=9536560",
+                        last="30/04/2024"
+                        )
 
 # ------------------------------------------#
 # Open Contracting Partnership e Relacionados
@@ -217,3 +283,20 @@ idiot_guide = website_noauthor_bib(name="idiot_guide",
                                 url="https://www.open-contracting.org/resources/idiotsguide/",
                                 last="15/04/2024"
                                 )
+
+
+spreadsheet = website_noauthor_bib(name="spreadsheet",
+                                org_name="Open Contracting Partnership",
+                                year=2021,
+                                page_title="Using open contracting data",
+                                url="https://www.open-contracting.org/data/data-use/#tools",
+                                last="20/04/2024"
+                                )
+
+spreadsheet1 = website_noauthor_bib(name="spreadsheet1",
+                                org_name="Open Contracting Partnership",
+                                year=2021,
+                                page_title="Red Flags to OCDS Mapping",
+                                url="https://docs.google.com/spreadsheets/d/12PFkUlQH09jQvcnORjcbh9-8d-NnIuk4mAQwdGiXeSM/edit#gid=2027439485",
+                                last="20/04/2024"
+                                )                        

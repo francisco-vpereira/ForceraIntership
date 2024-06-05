@@ -35,83 +35,123 @@
 %
 %Quando as flags estiverem construídas e quisermos ver o anúncio de um contrato suspeito no site do basegov, podemos fazê-lo usando a função \textit{url} que, novamente, tem como parâmetro de entrada o id de um contrato. Esta função pode ter bastante utilidade nos casos que chamam bastante a atenção, como por exemplo, quando se viu um ajuste direto de 3 milhões de euros. \\
 
-
-
-\section{Contratação Fechada}
-
-\subsection{RF1 : Verificação dos Preços Contratuais para Ajustes Diretos em Regime Geral}
-
-
-Como foi apresentado anteriormente na tabela 1.4, os ajustes diretos tem diferentes limites máximos impostos por lei, mediante o tipo de obra/serviço. 
-A fim de poder identificar os contratos que não estão em conformidade com o CCP, foi necessário fazer algumas alterações na base de dados. Primeiro, foi necessário classificar o ajuste direto de acordo com o critério. Se os critério for Critério do Valor, os valores máximos permitidos são os que se encontram presentes na tabela 1.4. Se o critério for Critério Material, estamos perante uma situação em que pode ser adotado o ajuste direto independentemente do valor do contrato a celebrar. Assim, a partir da coluna \textit{fundamentacao} da tabela, pode-se verificar qual o artigo do CCP adotado para realizar o ajuste direto. 
-
+No website da OCDS encontra-se disponível para descarregar uma folha de cálculo em Excel com 73 red flags \cite{spreadsheet1} \cite{spreadsheet}, tal como se encontra representado na Tabela \ref{table:flags}.
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		\textbf{Critério}                  & \textbf{Artigos}           & \textbf{Tipo de Contrato}           & \textbf{Valor} \\ \hline
-		\multirow{3}{*}{Critério do Valor} & \multirow{3}{*}{17º a 22º} & Aquisição de bens móveis e serviços & 20000€         \\ \cline{3-4} 
-		&                            & Empreitadas de obras públicas       & 30000 €        \\ \cline{3-4} 
-		&                            & Outro tipo de contratos             & 50000 €        \\ \hline
-		Critério Material                  & 24º a 27º                  & Qualquer                            & Indefinido     \\ \hline
-	\end{tabular}
-	\caption{text}
+	\includegraphics[width=\textwidth]{imagens/tabela_flags.png}
+	\caption{Exemplo da descrição de uma flag}
+	\label{table:flags}
 \end{table}
 
-Assim, foi criada uma nova coluna \textit{artigo} que, a partir da coluna \textit{fundamentacao}, guarda apenas o artigo presente - ignora as alíneas. 
 
-\begin{lstlisting}[
-	language=SQL,
-	showspaces=false,
-	showstringspaces=false,
-	basicstyle=\ttfamily,
-	numbers=left,
-	numberstyle=\tiny,
-	commentstyle=\color{gray}, frame = single,	autogobble=true,
-	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
-	]
-	ALTER TABLE ajustesdiretos
-	ADD COLUMN artigo text;
+A fim de construir as funções que permitam selecionar contratos anómalos, foi feita uma análise, de caráter subjetivo, relativamente ao nível de importância e de facilidade de implementação. Para cada uma das 73 flags, foi atribuído um valor de 1 a 3, tanto para o nível de facilidade de implementação como para o nível de importância. Para atribuir um valor à facilidade de implementação foi necessário ter em conta se a base de dados possuía todas as variáveis necessárias, o que nem sempre se verificou. Relativamente ao nível de importância, o critério foi mais subjetivo e serviu como uma ferramenta de filtragem. Após esta classificação, foi realizada uma média ponderada destas classificações, com uma peso atribuído de 0.6 ao primeiro parâmetro e de 0.4 ao segundo parâmetro. Dessa forma, foi possível filtrar todas as flags e excluir aquelas que não eram passíveis de implementar. 
+
+Além destes indicadores, foram desenvolvidos outros 3, após discussão, que se acreditava terem valor para o resultado final. Estes indicadores foram construídos tendo em conta o CCP, as variáveis presentes na base de dados e flags definidas pela OCDS. 
+
+Nas secções que se seguem, todos os indicadores establecidos pela OCDS são identificados pela letra R e um número, enquanto que aqueles que os que foram desenvolvidos em equipa são identificados por RF e um número.
+
+Os contratos coletados encontram-se todos guardados numa tabela chamada \textit{contratos\_basegov} numa base de dados em PostgreSQL. De modo a construir os indicadores que se encontram nos capítulos seguintes, foi necessário criar quatro tabelas adicionais auxiliares:
+
+\begin{my_itemize}
+	\item concursos\_publicos: tabela para onde foram copiadas as principais variáveis referentes a concursos públicos
 	
-	UPDATE ajustesdiretos
-	SET artigo = TRIM(SUBSTRING(fundamentacao 
-			FROM 1 FOR POSITION('º' IN fundamentacao)));
-\end{lstlisting}
-
-
-
-
-
-De seguida, foi criada uma coluna \textit{criterio}, constituída apenas por duas strings : valor e material. Para um determinado contrato, se o artigo no campo \textit{fundamentacao} pertencer entre o 17º e o 22º, então é-lhe atribuído o critério valor. Caso contrário, o cirtério material. 
-
-
-\begin{lstlisting}[
-	language=SQL,
-	showspaces=false,
-	showstringspaces=false,
-	basicstyle=\ttfamily,
-	numbers=left,
-	numberstyle=\tiny,
-	commentstyle=\color{gray}, frame = single,	autogobble=true,
-	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
-	]
-	ALTER TABLE ajustesdiretos
-	ADD COLUMN criterio text;
+	\item ajustes\_diretos: tabela para onde foram copiadas as principais variáveis referentes a ajustes diretos em regime geral
 	
-	UPDATE ajustesdiretos
-	SET criterio = CASE
-	WHEN artigo = 'Artigo 17.º' OR artigo = 'Artigo 18.º' 
-	OR artigo = 'Artigo 19.º' OR artigo = 'Artigo 20.º' 
-	OR artigo = 'Artigo 21.º' OR artigo = 'Artigo 22.º' 
-	THEN 'valor'
+	\item cpv\_stats: tabela que contém os indicadores estatísticos relativamente ao número de entidade de concorrentes por divisão de CPV. Para cada divisão de CPV, dentro de todo o conjunto de concursos públicos, foi calculado o número total de contratos celebrados (count), o número total de entidades que se candidataram a todos os concursos (nec\_t), o número médio de entidades concorrentes por concurso, desvio padrão, mínimo, máximo, Q1, Q2 e Q3. 
 	
-	ELSE 'material' 
-	END;
-\end{lstlisting}
+	\item preco\_stats: Esta tabela segue uma filosofia similar à apresentada anteriormente. Contudo, em vez de se fazer uma análise por divisão de CPV, esta é feita a partir do Grupo do CPV (os três primeiros dígitos) a fim de ter uma maior granularidade. 
+\end{my_itemize}
 
 
-Assim, é possível identificar todos os contratos que não respeitem os valores apresentados nas tabelas 1.4 e 4.1 através das seguintes \textit{queries} : 
+Na Figura \ref{fig:basededados} encontra-se um esquema da relação entre as diferentes tabelas. Para efeitos de concisão do diagrama apenas são apresentadas algumas das principais colunas. As colunas que se encontram a vermelho, explicadas nas secções que se segue, dizem respeito a colunas auxiliares para a construção dos indicadores
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{imagens/basedadostabelas.png}
+	\caption{Organização das tabelas da base de dados.}
+	\label{fig:basededados}
+\end{figure}
+
+
+
+
+
+\section{RF1: Verificação dos Preços Contratuais para Ajustes Diretos em Regime Geral}
+
+
+Como foi apresentado anteriormente na Tabela \ref{tab:4}, os ajustes diretos, consoante o tipo de obra/serviço, tem diferentes limites máximos impostos por lei relativamente ao valor de adjudicação. A fim de poder identificar os contratos que não estão em conformidade com o CCP, procedeu-se da seguinte forma. Primeiramente, criou-se uma nova tabela na base de dados, a partir da tabela original, para onde foram copiados todos os ajustes diretos em regime geral e onde foi criada um nova coluna, chamada \textbf{criterio}. De seguida, para cada um dos contratos, foi identificado o artigo utilizado para fundamentar a adoção deste tipo de procedimento, presente na coluna da fundamentação. Se o artigo pertencer entre o 17º e o 22º, é atribuído ao contrato a string \textbf{valor} na nova coluna criada. Caso contrário, é atribuído a string \textbf{material}. 
+
+ \begin{table}[H]
+ 	\centering
+ 	\begin{tabular}{|c|c|c|c|}
+ 		\hline
+ 		\textbf{Critério}                  & \textbf{Artigos}           & \textbf{Tipo de Contrato}           & \textbf{Valor} \\ \hline
+ 		\multirow{3}{*}{Critério do Valor} & \multirow{3}{*}{17º a 22º} & Aquisição de bens móveis e serviços & 20000€         \\ \cline{3-4} 
+ 		&                            & Empreitadas de obras públicas       & 30000 €        \\ \cline{3-4} 
+ 		&                            & Outro tipo de contratos             & 50000 €        \\ \hline
+ 		Critério Material                  & 24º a 27º                  & Qualquer                            & Indefinido     \\ \hline
+ 	\end{tabular}
+ 	\caption{Valores máximos permitidos para Ajustes Diretos consoante o critério, artigo e tipo de contrato.}
+ \end{table}
+
+De seguida, foi necessário classificar os contratos relativamente à tipologia. Tal como se encontra representado na Tabela \ref{table:3}, os contratos podem ser classificados em duas grandes categorias: Bens e Serviços ou Empreitadas. Contudo, na coluna referente ao tipo de contrato não é feita esta discriminação. Assim, foi adicionada uma nova coluna a esta tabela, \textbf{tipo\_contrato}, que irá ter apenas uma das duas categorias anteriormente presentes para cada contrato. Para classificar cada contrato numa destas duas categorias fez-se uma busca da palavra \textit{obra} na string presente na coluna da tipologia de contrato. Se esta palavra estivesse contida na string, o contrato era classificado como Empreitada. Caso contrário, Bens e Serviços. 
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{imagens/rf1.png}
+	\caption{Processo de classificação de ajustes diretos em regime geral}
+	\label{}
+\end{figure}
+
+
+
+
+%\begin{lstlisting}[
+%	language=SQL,
+%	showspaces=false,
+%	showstringspaces=false,
+%	basicstyle=\ttfamily,
+%	numbers=left,
+%	numberstyle=\tiny,
+%	commentstyle=\color{gray}, frame = single,	autogobble=true,
+%	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+%	]
+%	ALTER TABLE ajustesdiretos
+%	ADD COLUMN artigo text;
+%	
+%	UPDATE ajustesdiretos
+%	SET artigo = TRIM(SUBSTRING(fundamentacao 
+%			FROM 1 FOR POSITION('º' IN fundamentacao)));
+%\end{lstlisting}
+
+%\begin{lstlisting}[
+%	language=SQL,
+%	showspaces=false,
+%	showstringspaces=false,
+%	basicstyle=\ttfamily,
+%	numbers=left,
+%	numberstyle=\tiny,
+%	commentstyle=\color{gray}, frame = single,	autogobble=true,
+%	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+%	]
+%	ALTER TABLE ajustesdiretos
+%	ADD COLUMN criterio text;
+%	
+%	UPDATE ajustesdiretos
+%	SET criterio = CASE
+%	WHEN artigo = 'Artigo 17.º' OR artigo = 'Artigo 18.º' 
+%	OR artigo = 'Artigo 19.º' OR artigo = 'Artigo 20.º' 
+%	OR artigo = 'Artigo 21.º' OR artigo = 'Artigo 22.º' 
+%	THEN 'valor'
+%	
+%	ELSE 'material' 
+%	END;
+%\end{lstlisting}
+
+
+Finda estas classificações quanto à tipologia e fundamentação, é possível identificar todos os contratos que não respeitem os valores apresentados na Tabela \ref{tab:4} a partir da seguinte \textit{query}: 
 
 \begin{lstlisting}[
 	language=SQL,
@@ -124,41 +164,82 @@ Assim, é possível identificar todos os contratos que não respeitem os valores
 	breaklines=true,
 	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 	]
-	SELECT * FROM ajustesdiretos
-	WHERE criterio = 'valor' AND tipocontrato = 'Bens e Servicos' AND preco > 20000;
-	
-	SELECT * FROM ajustesdiretos
-	WHERE criterio = 'valor' AND 
-	tipocontrato = 'Empreitadas' AND preco > 30000;
+	SELECT id
+	FROM ajustesdiretos
+	WHERE (criterio = 'valor' AND tipocontrato = 'Bens e Servicos' AND preco > 20000) OR (criterio = 'valor' AND tipocontrato = 'Empreitadas' AND preco > 30000);
 \end{lstlisting}
 
+Da totalidade de Ajustes Diretos em Regime Geral presentes na base de dados, 2.8\% (12828) destes foram adjudicados com um valor superior ao permitido por lei. Destes, 2.4\% (14812) dizem respeito a contratos de Bens e Serviços e 0.4\% (1984) a contratos de Empreitadas.
+
+
+\begin{figure}[H]
+	\centering
+	\begin{minipage}{.45\linewidth}
+		\includegraphics[width=\linewidth]{imagens/rf1/dist.png}
+		\caption{Distribuição do número de contratos em inconformidade com o CCP}
+		
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.5\linewidth}
+		\includegraphics[width=\linewidth]{imagens/rf1/boxplot.png}
+		\caption{Boxplot dos valores contratuais para os contratos em inconformidade com a lei}
+		
+	\end{minipage}
+\end{figure}
+
+
+Na Tabela \ref{tab:rf1} é possível observar quais são as entidades com o maior número de contratos celebrados em inconformidade com o CCP. 
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lc}
+			\hline
+			\multicolumn{1}{c}{\textbf{Entidade Adjudicante}}                                           & \textbf{Número de Contratos} \\ \hline
+			Infraestruturas de Portugal, S. A.                                                          & 377                          \\
+			Hospital de Santo Espírito da Ilha Terceira, E. P. E. R.                                    & 329                          \\
+			Município de Ponta Delgada                                                                  & 204                          \\
+			Instituto Português de Oncologia do Porto Francisco Gentil, E. P. E.                        & 203                          \\ \hline
+			\multicolumn{1}{c}{\textbf{Entidade Vencedora}}                                             & \textbf{Número de Contratos} \\ \hline
+			Meo - Serviços de Comunicações e Multimédia S.A                                             & 165                          \\
+			Urbhorta - Construção, Gestão e Exploração de Projectos de Desenvolvimento Empresarial, EEM & 53                           \\
+			Sotermáquinas-Sociedade Terceirense de Máquinas e Acessórios S.A                            & 53                          
+		\end{tabular}%
+	}
+	\caption{Entidades, adjudicantes e vencedoras, com maior número de ajustes diretos celebrados em inconformidade com o CCP}
+	\label{tab:rf1}
+\end{table}
+
+% ADCIONAR À SECÇÃO DOS ANEXOS
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=\textwidth]{imagens/rf1/adjudicantes.png}
+%	\caption{Entidades Adjudicantes com maior número de ajustes diretos celebrados em inconformidade com o CCP}
+%	\label{}
+%\end{figure}
+%
+%
+%
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=\textwidth]{imagens/rf1/vencedora.png}
+%	\caption{Entidades Adjudicantes com maior número de ajustes diretos celebrados em inconformidade com o CCP}
+%	\label{}
+%\end{figure}
 
 
 
-%Esta função tem como input uma dataframe correspondente a todos os ajustes diretos realizados com CPV 72, sendo esta obtida fazendo uso dos funções \textit{contratos} e \textit{cpv} definidas antes, e os ids dos contratos associados aos ajustes diretos. 
-%A função vai comparar todos os preços contratuais com o valor de 20.000€ pois é o limite máximo de aquisição de serviços. Esta parte tem de  ser atualizada no futuro. Contudo, a maior parte dos ajustes diretos é Aquisição de Serviços. Se os valores forem superiores a este preço, é ativada uma flag.
-%A segunda parte da função verifica se foi feita uma fundamentação para o ajuste direto. Esta vai ser sempre uma alínea qq do CCP. Mas tem de estar preenchida. Se o valor ultrapassar os 20000€ e não estiver fundamentado é claramente comportamento suspeito. Se o contrato só tiver a parte da fundamentação por preencher, pode ser má prática. 
+\section{R003 : Análise do Prazo de Apresentação de Propostas}
 
-
-
-
-
-
-
-
-\section{Contratação Aberta}
-
-\subsection{R003 : Análise do Prazo de Apresentação de Propostas}
-
+Um factor importante ao longo da publicitação de um concurso público é o prazo disponível para que diferentes entidades interessadas possam efetuar propostas. Uma das flags definidas pela OCDS incide precisamente sobre esta questão.
 
 \Lemma{}
-{
-	Short or inadequate notice to bidders to submit expressions of interest or bids. Bid period is less than expected (usually <=2 days)
-	The indicator should be calculated grouping by procurement method used, since the minimum bidding period might vary depedning on the method.  It is important to check in local regulations if there is a minimun period.  
-}
+{Short or inadequate notice to bidders to submit expressions of interest or bids. Bid period is less than expected (usually $\leq$2 days). The indicator should be calculated grouping by procurement method used, since the minimum bidding period might vary depending on the method.  It is important to check in local regulations if there is a minimun period.}
 
 
-De acordo com o artigo 135.º do CCP, o prazo mínimo para apresentação de propostas num concurso público não pode ser inferior a 6 dias e, no caso de se tratar de um procedimento de formação de um contrato de empreitada de obras públicas, a 14 dias. Assim, foi criada uma coluna adicional, \textit{tipocontrato}, para a criação desta flag a partir da coluna \textbf{contratCtypes}. Sempre que, para um determinado contrato, o tipo de contrato contiver a palavra Empreitada, é atribuída a string \textit{Empreitada} à nova coluna. Caso contrário, é atribuída a string \textit{Bens e Serviços}. De seguida, foi construída uma \textit{query} em PostgreSQL para determinar todos os contratos referentes a concursos públicos que não respeitam estas condições. \\
+De acordo com o artigo 135.º do CCP - ver Tabela \ref{table:3} - o prazo mínimo para apresentação de propostas num concurso público para Bens e Serviços não pode ser inferior a 6 dias e, no caso de se tratar de um procedimento de formação de um contrato de empreitada de obras públicas, a 14 dias. Assim, para a construção desta flag, foi criada uma coluna adicional na tabela \textit{concursos\_publicos} chamada \textbf{tipo\_contrato}, tal como no indicador RF1. De seguida, foi construída uma \textit{query} para determinar todos os contratos referentes a concursos públicos que não respeitam estas condições apresentadas na Tabela mencionada. \\
 
 
 \begin{lstlisting}[
@@ -173,20 +254,35 @@ De acordo com o artigo 135.º do CCP, o prazo mínimo para apresentação de pro
 	breaklines=true,
 	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 	]
-	SELECT concursospublicos."id"
-	FROM concursospublicos
-	WHERE tipocontrato = 'Empreitadas' AND prazo_execucao < 14;
-	
-	SELECT concursospublicos."id"
-	FROM concursospublicos
-	WHERE tipocontrato = 'Outro' AND prazo_execucao < 6;
+	SELECT contratos_basegov."id" 
+	FROM contratos_basegov
+	JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+	WHERE (concursos_publicos."tipo_contrato" = 'Empreitadas' AND contratos_basegov."anuncio_proposalDeadline" < 14 AND contratos_basegov."anuncio_proposalDeadline" > 0) 
+	OR
+	(concursos_publicos."tipo_contrato" = 'Bens e Servicos' AND contratos_basegov."anuncio_proposalDeadline" < 6 AND
+	contratos_basegov."anuncio_proposalDeadline" > 0);
 	
 \end{lstlisting}
 
 
-No código acima, \textit{concursospublicos} diz respeito à tabela da base de dados que contém a totalidade de concursos públicos obtidos através da plataforma BaseGov. Ambas as \textit{queries} devolvem os ids dos contratos celebrados que não estão em conformidade com o CCP. 
+Foi incluída uma condição adicional na \textit{query} para selecionar os contratos com prazo de apresentação de propostas superior a 0 dias. Esta condição foi imposta pois verificou-se que existiam alguns contratos com prazos negativos. Tendo em conta a dimensão dos valores - sempre superiores a 10, em módulo - inferiu-se que seriam erros de preenchimento aquando da inserção do contrato no Portal BASE e, como tal, não foram considerados. 
 
+\begin{figure}[H]
+	\centering
+	\begin{minipage}{.48\linewidth}
+		\includegraphics[width=\linewidth]{imagens/r003/boxplot_prazos.png}
+		\caption{Distribuição do prazo de apresentação das propostas em dias para as duas tipologias de contratos.}
+		
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.48\linewidth}
+		\includegraphics[width=\linewidth]{imagens/r003/main_cpvs.png}
+		\caption{Principais divisões de CPV com maior número de contratos em trangressão.}
+		
+	\end{minipage}
+\end{figure}
 
+É na divisão da Construção Civil onde se verifica a existência de um maior incumprimento do prazo mínimo de dias para apresentação de propostas, atingindo uma percentagem de 70\% dos contratos inconformes. Perante a totalidade de concursos públicos celebrados referentes a construção civil, esta percentagem é de 13\%.
 
 
 \subsection{R017 : Comparação do Preço Contratual com Preço Médio por CPV}
@@ -217,17 +313,14 @@ Contudo, a partir da construção desta tabela, constatou-se que, certamente dev
 
 \subsection{R018 : Análise de Contratos com uma entidade concorrente}
 
+Um dos parâmetros importantes a ter em conta ao analisar um contrato público prende-se com o número de entidades concorrentes. A partir deste ponto, podem ser analisadas três situações distintas ao longo do processo contratual: 
+quando apenas se candidatou uma entidade,quando se candidatou um \textit{elevado} número de entidades,quando se candidatou um \textit{baixo} número de entidades. Comecemos pela primeira, definida da seguinte forma pela OCDS:
 
 \Lemma{}
-{
-	Single bid received : Tender featured a single bidder only 
-}
+{Single bid received : Tender featured a single bidder only }
 
 
-Dado que uma das colunas da tabela diz respeito às entidades concorrentes, pode ser feita uma análise do número de entidades que concorrem a um determinado concurso. De acordo com a diretriz da OCDS, esta flag é ativada em situações em que haja apenas uma entidade a candidatar-se a um concurso. 
-
-Para tal, foi preciso criar uma nova coluna \textit{nr\_entidadesconcorrentes} que contenha apenas o número de entidades concorrentes. Visto que a coluna \textit{entidades\_concorrentes} contém elementos da forma :
-
+Dado que uma das colunas da tabela diz respeito às entidades que se candidataram a um determinado concurso, pode ser feita uma análise do número de entidades concorrentes. Esta coluna é preenchida de uma forma análoga ao representado na Tabela \ref{tab:entsconc}. 
 
 
 \begin{table}[H]
@@ -240,10 +333,11 @@ Para tal, foi preciso criar uma nova coluna \textit{nr\_entidadesconcorrentes} q
 		$\dots$       & $\dots$                                                                                                                             \\ \hline
 		$\text{ID}_n$ & $\text{Entidade}\_l$ ( $\text{NIF}\_l$) $|||$ $\text{Entidade}\_m$ ( $\text{NIF}\_m$) $|||$ $\text{Entidade}\_n$ ( $\text{NIF}\_n$) \\ \hline
 	\end{tabular}
-	\caption{Formato da coluna EntidadesConcorrentes}
+	\caption{Formato da coluna entidades\_concorrentes}
+	\label{tab:entsconc}
 \end{table}
 
-foi necessário desenvolver uma \textit{query} que, para cada elemento da coluna \textit{entidades\_concorrentes}, os separe de cada vez que encontra o separador $|||$ e conte o número de entidades total. Esse número, por conseguinte, é alocado para a nova coluna criada. 
+Para cada entidade que concorre, é inserido o respetivo nome e número de identificação fiscal (NIF) e, na eventualidade do número de entidades concorrentes ser superior a 1, a separação entre as mesmas é feita recorrendo a um separador $|||$. Desta forma, foi necessário desenvolver uma \textit{query} que conta o número de elementos separados e insira o resultado desta contagem numa nova coluna criada, chamada \textit{nr\_entidadesconcorrentes}.
 
 
 \begin{lstlisting}[
@@ -261,14 +355,69 @@ foi necessário desenvolver uma \textit{query} que, para cada elemento da coluna
 	SET nr_entidadesconcorrentes = ARRAY_LENGTH(STRING_TO_ARRAY( entidades_concorrentes, '|||'), 1) + 1;	
 \end{lstlisting}
 
+Através desta nova coluna, é possível selecionar todos os contratos que apenas contemplem uma entidade concorrente. 
+
+\begin{lstlisting}[
+	language=SQL,
+	showspaces=false,
+	basicstyle=\ttfamily,
+	numbers=left,
+	numberstyle=\tiny,
+	commentstyle=\color{gray}, frame = single,
+	breaklines=true,
+	autogobble =true,
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+	]
+	SELECT contratos_basegov."id"
+	FROM contratos_basegov
+	JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+	WHERE concursos_publicos."nr_entidadesconcorrentes" = 1;
+\end{lstlisting}
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{imagens/r018.png}
-	\caption{Grupos com maior número de contratos indiciados}
-	\label{}
+	\begin{minipage}{.48\linewidth}
+		\includegraphics[width=\linewidth]{imagens/r018/main_cpvs.png}
+		\caption{Divisões de CPV com maior número de contratos em inconformidade.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.49\linewidth}
+		\includegraphics[width=\linewidth]{imagens/r018/prices.png}
+		\caption{Valor adjudicado total para todos dos contratos em inconformidade para divisão de CPV.}
+	\end{minipage}
 \end{figure}
+
+
+
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{cccccc}
+		\hline
+		\textbf{Divisão CPV} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos \\ inconformes\end{tabular}} & \textbf{\%} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de \\ contratos total\end{tabular}} & \textbf{\%} & \textbf{\begin{tabular}[c]{@{}c@{}}Preço contratual\\ total\end{tabular}} \\ \hline
+		33                   & 4444                                                                                & 27          & 29351                                                                         & 15.1        & 279.688.414,00€                                                           \\
+		45                   & 3498                                                                                & 22          & 21525                                                                         & 16.3        & 2.103.391.451,00€                                                         \\
+		15                   & 1625                                                                                & 10          & 5963                                                                          & 27.2        & 280.726.463,00€                                                           \\
+		72                   & 1406                                                                                & 9           & 3739                                                                          & 37.6        & 65.760.473,00€                                                            \\
+		34                   & 1162                                                                                & 7           & 4597                                                                          & 25.3        & 303.614.946,00€                                                           \\
+		60                   & 1124                                                                                & 7           & 3512                                                                          & 32          & 351.923.997,00€                                                           \\
+		50                   & 1069                                                                                & 6           & 3908                                                                          & 27.4        & 205.240.508,00€                                                           \\ \midrule
+		\textbf{Total}       & 14328                                                                               & -           & 72595                                                                         & -           & -                                                                         \\ \hline
+	\end{tabular}%
+	}
+	\caption{Descrição do número de contratos, total e inconformes, para as principais divisões de CPV.}
+	\label{tab:rf18stats}
+\end{table}
+
+
+
+
+
+
 
 \subsection{R019 : Análise do Número de Entidades Concorrentes}
 
@@ -437,12 +586,16 @@ Por fim, o resultado final é um conjunto de id's na forma de tuplo que respeita
 %De seguida, foi então calculado para cada NIF o número de ajustes diretos realizados usando uma das funções anteriores e os respetivos ID's. Para cada NIF, foi comparado cada um dos nos id's com a lsita de id's dado pela função \textit{redflags2} e feito o rácio para ver a percentagem de contratos suspeitos. 
 %Agora seria interessante verificar se existem, dentro destas empresas, subgrupos entre entidades adjudicantes e adjudicatárias. 
 
+\subsection{R051 : Alta concentração de mercado}
+
+\Lemma{}
+{A small number of companies concentrate a high share of contracts in a particular market.}
+
 
 
 \subsection{RF2 : Comparação entre Preço Contratual e Preço Total Efetivo}
 
-Existem situações em que o valor contratual celebrado é alterado após celebração do contrato. Estes valores são guardados na coluna referefente ao Preço Total Efetivo. Nesses casos, é simples verificar quais são os contratos em que ocorre esta situação através de uma \textit{query}: 
-
+Existem situações em que o valor contratual celebrado é alterado após celebração do contrato, seja por não existir necessidade de usar tantos recursos como a situação oposta. Estes valores são guardados na coluna referefente ao Preço Total Efetivo. Nesses casos, é simples verificar quais são os contratos em que ocorre esta situação através de uma \textit{query}: 
 
 \begin{lstlisting}[
 	language=SQL,
@@ -455,15 +608,20 @@ Existem situações em que o valor contratual celebrado é alterado após celebr
 	autogobble = true,
 	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 	]
-	SELECT id
-	FROM concursospublicos 
-	WHERE preco_total_efetivo > 0 AND ABS(preco_total_efetivo - preco_contratual) > 0;
+	SELECT contratos_basegov."id", 
+		preco_contratual, 
+		contratos_basegov."totalEffectivePrice", 
+		contratos_basegov."totalEffectivePrice"/preco_contratual AS racio
+	FROM contratos_basegov 
+	WHERE contratos_basegov."totalEffectivePrice" > 0 AND 
+		ABS(contratos_basegov."totalEffectivePrice" - preco_contratual) > 0 AND 
+		preco_contratual > 0;
 \end{lstlisting}
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{imagens/r059.png}
+	\includegraphics[width=0.5\textwidth]{imagens/rf2/main_cpvs.png}
 	\caption{Grupos com maior número de contratos indiciados}
 	\label{}
 \end{figure}
@@ -472,35 +630,13 @@ Existem situações em que o valor contratual celebrado é alterado após celebr
 
 \subsection{RF3 : Análise da data de publicação do anúncio}
 
-Adicionalmente, foi feita uma análise do dia de publicação do anúncio em Diário da Reopública. O objetivo deste indicador é verificar se existem anúncios publicados em dias não convencionais - feriados nacionais - na tentativa de os fazer passar despercebidos.
+Adicionalmente, foi feita uma análise do dia de publicação do anúncio em Diário da República. O objetivo deste indicador é verificar se existem anúncios publicados em dias não convencionais - feriados nacionais - na tentativa de os fazer passar despercebidos. Não existe nenhuma ocorrência deste indicador nos contratos presentes na base de dados durante o período de tempo estudado. 
 
 
-\begin{figure}[H]
-	\centering
-	\begin{minipage}{.6\linewidth}
-		\includegraphics[width=\textwidth]{imagens/pieplot.png}
-		\caption{Pieplot do número de ocorrências para anúncios publicados em feriado}
-		
-	\end{minipage}
-	\hfill
-	\begin{minipage}{.38\linewidth}
-		
-			\begin{tabular}{|c|c|}
-				\hline
-				\textbf{Feriado} & \textbf{Ocorrências} \\ \hline
-				01-12            & 57                   \\ \hline
-				15-08            & 15                   \\ \hline
-				01-11            & 15                   \\ \hline
-				10-06            & 13                   \\ \hline
-				08-12            & 8                    \\ \hline
-				01-05            & 6                    \\ \hline
-				05-10            & 6                    \\ \hline
-				01-01            & 5                    \\ \hline
-				25-04            & 2                    \\ \hline
-			\end{tabular}
-			\caption{Número de ocorrências para cada feriado}
-	\end{minipage}
-\end{figure}
+
+
+\section{Processo de Automação}
+
 
 
 
