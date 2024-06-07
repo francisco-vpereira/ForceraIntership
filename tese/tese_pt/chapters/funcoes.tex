@@ -190,27 +190,51 @@ Da totalidade de Ajustes Diretos em Regime Geral presentes na base de dados, 2.8
 
 Na Tabela \ref{tab:rf1} é possível observar quais são as entidades com o maior número de contratos celebrados em inconformidade com o CCP. 
 
+%\begin{table}[H]
+%	\centering
+%	\renewcommand{\arraystretch}{1.15}
+%	\setlength{\tabcolsep}{15pt}
+%	\resizebox{\textwidth}{!}{%
+%		\begin{tabular}{lc}
+%			\hline
+%			\multicolumn{1}{c}{\textbf{Entidade Adjudicante}}                                           & \textbf{Número de Contratos} \\ \hline
+%			Infraestruturas de Portugal, S. A.                                                          & 377                          \\
+%			Hospital de Santo Espírito da Ilha Terceira, E. P. E. R.                                    & 329                          \\
+%			Município de Ponta Delgada                                                                  & 204                          \\
+%			Instituto Português de Oncologia do Porto Francisco Gentil, E. P. E.                        & 203                          \\ \hline
+%			\multicolumn{1}{c}{\textbf{Entidade Vencedora}}                                             & \textbf{Número de Contratos} \\ \hline
+%			Meo - Serviços de Comunicações e Multimédia S.A                                             & 165                          \\
+%			Urbhorta - Construção, Gestão e Exploração de Projectos de Desenvolvimento Empresarial, EEM & 53                           \\
+%			Sotermáquinas-Sociedade Terceirense de Máquinas e Acessórios S.A                            & 53                          
+%		\end{tabular}%
+%	}
+%	\caption{Entidades, adjudicantes e vencedoras, com maior número de ajustes diretos celebrados em inconformidade com o CCP}
+%\end{table}
+
+
+
 \begin{table}[H]
 	\centering
-	\renewcommand{\arraystretch}{1.15}
-	\setlength{\tabcolsep}{15pt}
-	\resizebox{\textwidth}{!}{%
+	\renewcommand{\arraystretch}{1.1}
+	\setlength{\tabcolsep}{35pt}
+	%\resizebox{\textwidth}{!}{%
 		\begin{tabular}{lc}
 			\hline
-			\multicolumn{1}{c}{\textbf{Entidade Adjudicante}}                                           & \textbf{Número de Contratos} \\ \hline
-			Infraestruturas de Portugal, S. A.                                                          & 377                          \\
-			Hospital de Santo Espírito da Ilha Terceira, E. P. E. R.                                    & 329                          \\
-			Município de Ponta Delgada                                                                  & 204                          \\
-			Instituto Português de Oncologia do Porto Francisco Gentil, E. P. E.                        & 203                          \\ \hline
-			\multicolumn{1}{c}{\textbf{Entidade Vencedora}}                                             & \textbf{Número de Contratos} \\ \hline
-			Meo - Serviços de Comunicações e Multimédia S.A                                             & 165                          \\
-			Urbhorta - Construção, Gestão e Exploração de Projectos de Desenvolvimento Empresarial, EEM & 53                           \\
-			Sotermáquinas-Sociedade Terceirense de Máquinas e Acessórios S.A                            & 53                          
+			\textbf{Entidade Adjudicante} & \multicolumn{1}{r}{\textbf{Número de Contratos}} \\ \hline
+			Empresa A                     & 377                                              \\
+			Empresa B                     & 329                                              \\
+			Empresa C                     & 204                                              \\
+			Empresa D                     & 203                                              \\ \hline
+			\textbf{Entidade Vencedora}   & \textbf{Número de Contratos}                     \\ \hline
+			Empresa E                     & 165                                              \\
+			Empresa F                     & 53                                               \\
+			Empresa G                     & 53                                              
 		\end{tabular}%
-	}
-	\caption{Entidades, adjudicantes e vencedoras, com maior número de ajustes diretos celebrados em inconformidade com o CCP}
+	%}
+	\caption{Entidades, adjudicantes e vencedoras, com maior número de ajustes diretos celebrados em inconformidade com o CCP.}
 	\label{tab:rf1}
 \end{table}
+
 
 % ADCIONAR À SECÇÃO DOS ANEXOS
 %\begin{figure}[H]
@@ -235,7 +259,7 @@ Na Tabela \ref{tab:rf1} é possível observar quais são as entidades com o maio
 
 Um factor importante ao longo da publicitação de um concurso público é o prazo disponível para que diferentes entidades interessadas possam efetuar propostas. Uma das flags definidas pela OCDS incide precisamente sobre esta questão.
 
-\Lemma{}
+\Lemma{\cite{spreadsheet1}}
 {Short or inadequate notice to bidders to submit expressions of interest or bids. Bid period is less than expected (usually $\leq$2 days). The indicator should be calculated grouping by procurement method used, since the minimum bidding period might vary depending on the method.  It is important to check in local regulations if there is a minimun period.}
 
 
@@ -288,7 +312,7 @@ Foi incluída uma condição adicional na \textit{query} para selecionar os cont
 \subsection{R017 : Comparação do Preço Contratual com Preço Médio por CPV}
 
 
-\Lemma{}
+\Lemma{\cite{spreadsheet1}}
 {
 	The difference between an item value and its expected value is above a threshold. 
 }
@@ -316,7 +340,7 @@ Contudo, a partir da construção desta tabela, constatou-se que, certamente dev
 Um dos parâmetros importantes a ter em conta ao analisar um contrato público prende-se com o número de entidades concorrentes. A partir deste ponto, podem ser analisadas três situações distintas ao longo do processo contratual: 
 quando apenas se candidatou uma entidade,quando se candidatou um \textit{elevado} número de entidades,quando se candidatou um \textit{baixo} número de entidades. Comecemos pela primeira, definida da seguinte forma pela OCDS:
 
-\Lemma{}
+\Lemma{ \cite{spreadsheet1}}
 {Single bid received : Tender featured a single bidder only }
 
 
@@ -421,7 +445,7 @@ Através desta nova coluna, é possível selecionar todos os contratos que apena
 
 \subsection{R019 : Análise do Número de Entidades Concorrentes}
 
-\Lemma{}
+\Lemma{ \cite{spreadsheet1}}
 	{
 	Low number of bidders for item and procuring entity. Number of bidders significantly less than average, based on prior similar contracts (for similar item or procuring entity) 
 	}
@@ -509,6 +533,12 @@ Os resultados obtidos, que podem ser observados na seguinte figura, mostram que 
 
 \subsection{R031 : Análise da relação entre Preço Base e Preço contratual}
 
+\Lemma{ \cite{spreadsheet1}}
+{Bid is too close to budget, estimate or preferred solution.}
+
+
+
+
 A primeira flag construída tem como objetivo comparar o preço base com o preço contratual.
 
 
@@ -588,7 +618,7 @@ Por fim, o resultado final é um conjunto de id's na forma de tuplo que respeita
 
 \subsection{R051 : Alta concentração de mercado}
 
-\Lemma{}
+\Lemma{ \cite{spreadsheet1}}
 {A small number of companies concentrate a high share of contracts in a particular market.}
 
 
@@ -636,6 +666,60 @@ Adicionalmente, foi feita uma análise do dia de publicação do anúncio em Di�
 
 
 \section{Processo de Automação}
+
+Finda a construção destes indicadores, o objetivo era automatizar o processo de aplicação destes a todos os novos contratos que são adicionados diariamente à base de dados. Este processo foi aplicado, apenas, aos concursos públicos e foram utilizadas todas as flags, exceto a R031 e R051. Primeiramente, construiu-se uma nova tabela, com a configuração da Tabela \ref{tab:dailyexample}, para onde foram copiados todos os concursos públicos e respetivos outputs das diferentes flags aplicadas aos mesmos. 
+
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lllllllll}
+			\toprule
+			\textbf{ID}                  & \textbf{Data Publicação}       & \textbf{Verificação}     & \textbf{RF2}              & \textbf{RF3}              & \textbf{R003}             & \textbf{R017}            & \textbf{R018}             & \textbf{R019}            \\ \midrule
+			\multicolumn{1}{c}{10689955} & \multicolumn{1}{c}{28/04/2024} & \multicolumn{1}{c}{true} & \multicolumn{1}{c}{false} & \multicolumn{1}{c}{false} & \multicolumn{1}{c}{false} & \multicolumn{1}{c}{true} & \multicolumn{1}{c}{false} & \multicolumn{1}{c}{true} \\ \bottomrule
+		\end{tabular}%
+	}
+	\caption{Exemplo de aplicação de todos os indicadores binários a um concurso público.}
+	\label{tab:dailyexample}
+\end{table}
+
+O objetivo seguinte é, todos os dias, copiar os identificadores dos novos concursos públicos para esta tabela. De seguida, são aplicados todos os indicadores e o resultado é inserido nas respetivas colunas. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{imagens/daily_flags_v2.png}
+	\caption{}
+	\label{}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

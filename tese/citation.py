@@ -300,3 +300,30 @@ spreadsheet1 = website_noauthor_bib(name="spreadsheet1",
                                 url="https://docs.google.com/spreadsheets/d/12PFkUlQH09jQvcnORjcbh9-8d-NnIuk4mAQwdGiXeSM/edit#gid=2027439485",
                                 last="20/04/2024"
                                 )                        
+
+
+
+
+# ---------------------------------------------- #
+#           Math + Python + PostgreSQL           #
+# ---------------------------------------------- #
+
+casella = '@book{casella2002statistical, title={Statistical Inference},author={Casella, G. and Berger, R.L.},isbn={9780534243128},lccn={20010257},series={Duxbury advanced series in statistics and decision sciences},url={"https://books.google.pt/books?id=0x_vAAAAMAAJ"},year={2002},publisher={Thomson Learning}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(casella + '\n\n')
+
+ross = '@book{ross2014introduction,title={Introduction to Probability and Statistics for Engineers and Scientists},author={Ross, S.M.},isbn={9780123948427},lccn={2014011941},url={https://books.google.pt/books?id=BaPOv33uZCMC},year={2014},publisher={Elsevier Science}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(ross + '\n\n')
+
+spe = '@book{spe,title={Outliers em Dados Estatísticos},author={Fernando Rosado},url={https://www.spestatistica.pt/publicacoes/publicacao/outliers-em-dados-estatisticos},year={2006},publisher={Sociedade Portuguesa de Estatística}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(spe + '\n\n')
+
+python = '@book{python,title={Programming in Python 3: A Complete Introduction to the Python Language},author={Summerfield, M.},isbn={9780321680563},lccn={2009035430},series={Developer\'s library},url={https://books.google.pt/books?id=H9emM_LGFDEC},year={2010},publisher={Addison-Wesley}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(python + '\n\n')
+
+postgre = '@book{sql,title={Practical PostgreSQL},author={Drake, J.D. and Worsley, J.C.},isbn={9781449310288},lccn={2002283901},url={https://books.google.pt/books?id=fI1lAgAAQBAJ},year={2002},publisher={O\'Reilly Media}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(postgre + '\n\n')
