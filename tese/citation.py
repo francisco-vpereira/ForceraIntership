@@ -30,7 +30,7 @@ def website_noauthor_bib(name="",org_name="",year="", page_title="", url="", las
     """
 
     bibtex = f"@misc{{{name},\n   author = {{{org_name}}}," \
-            f"\n   title = {{\emph{{{page_title}}}}}," \
+            f"\n   title = {{{{{page_title}}}}}," \
             f"\n   year = {{{year}}}," \
             f"\n   note = {{Último acesso em {last}}}," \
             f"\n   howpublished = {{Disponível em \\url{{{url}}}}}" \
@@ -327,3 +327,7 @@ with open(file_path, "a") as bib_file:
 postgre = '@book{sql,title={Practical PostgreSQL},author={Drake, J.D. and Worsley, J.C.},isbn={9781449310288},lccn={2002283901},url={https://books.google.pt/books?id=fI1lAgAAQBAJ},year={2002},publisher={O\'Reilly Media}}'
 with open(file_path, "a") as bib_file:
         bib_file.write(postgre + '\n\n')
+
+skew = '@article{HUBERT20085186,title = {An adjusted boxplot for skewed distributions},journal = {Computational Statistics & Data Analysis},volume = {52},number = {12},pages = {5186-5201},year = {2008},issn = {0167-9473},doi = {https://doi.org/10.1016/j.csda.2007.11.008},url = {https://www.sciencedirect.com/science/article/pii/S0167947307004434},author = {M. Hubert and E. Vandervieren},abstract = {The boxplot is a very popular graphical tool for visualizing the distribution of continuous unimodal data. It shows information about the location, spread, skewness as well as the tails of the data. However, when the data are skewed, usually many points exceed the whiskers and are often erroneously declared as outliers. An adjustment of the boxplot is presented that includes a robust measure of skewness in the determination of the whiskers. This results in a more accurate representation of the data and of possible outliers. Consequently, this adjusted boxplot can also be used as a fast and automatic outlier detection tool without making any parametric assumption about the distribution of the bulk of the data. Several examples and simulation results show the advantages of this new procedure.}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(skew + '\n\n')
