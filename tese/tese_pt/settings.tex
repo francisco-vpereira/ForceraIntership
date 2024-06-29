@@ -351,5 +351,12 @@
 }
 
 \usepackage{pifont}
+\usepackage{hyperref}
+
+\lstnewenvironment{code}[1][]%
+{\noindent\minipage{\linewidth}\medskip 
+	\lstset{basicstyle=\ttfamily\footnotesize,frame=single,#1}}
+{\endminipage}
 
 
+\newcommand{\coloredmidrule}[1]{\arrayrulecolor{#1}\midrule[1.5px]\arrayrulecolor{gray}}

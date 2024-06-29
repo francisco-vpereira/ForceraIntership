@@ -182,6 +182,24 @@ jardinagem = website_noauthor_bib(name="jardinagem",
                         last="30/04/2024"
                         )
 
+
+precobase = website_noauthor_bib(name="precobase",
+                        org_name="Portal BASE",
+                        year="",
+                        page_title="Preço Base",
+                        url="https://diariodarepublica.pt/dr/lexionario/termo/preco-base",
+                        last="30/04/2024"
+                        )
+
+
+cocoftable = website_noauthor_bib(name="cocoftab",
+                        org_name="Portugal2020",
+                        year="",
+                        page_title="Tabela de Correções Financeiras COCOF",
+                        url="https://poseur.portugal2020.pt/media/42163/decis%C3%A3o-da-com-%D1%81-2019-3452-corre%C3%A7%C3%B5es-financeiras-contratos-p%C3%BAblicos.pdf",
+                        last="30/04/2024"
+                        )
+
 # ------------------------------------------#
 # Open Contracting Partnership e Relacionados
 #-------------------------------------------#
@@ -299,7 +317,39 @@ spreadsheet1 = website_noauthor_bib(name="spreadsheet1",
                                 page_title="Red Flags to OCDS Mapping",
                                 url="https://docs.google.com/spreadsheets/d/12PFkUlQH09jQvcnORjcbh9-8d-NnIuk4mAQwdGiXeSM/edit#gid=2027439485",
                                 last="20/04/2024"
-                                )                        
+                                )     
+
+
+estado_ogp = website_noauthor_bib(name="stateogp",
+                                org_name="Open Government Partnership",
+                                year=2022,
+                                page_title="State of the Evidence: Open Contracting",
+                                url="https://www.opengovpartnership.org/documents/state-of-the-evidence-open-contracting/",
+                                last="26/04/2024"
+                                )              
+
+
+govspent = website_noauthor_bib(name="govspent",
+                                org_name="Open Government Partnership",
+                                year=2021,
+                                page_title="How governments spend: Opening up the value of global public procurement",
+                                url="https://www.open-contracting.org/wp-content/uploads/2020/08/OCP2020-Global-Public-Procurement-Spend.pdf   ",
+                                last="26/04/2024"
+                                )
+                                     
+crime = '@mastersthesis{crime,author= {Mariana Peneda},title= {Corrupção na Contratação Pública em Portugal: o impacto das ligações políticas nas empreitadas de obras públicas},school= {Universidade do Porto},year= {2023},address= {Porto}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(crime + '\n\n')
+
+bigdata = '@article{bigdata,title= "How big is Big Data? A comprehensive survey of data production, storage, and streaming in science and industry",author = "Clissa, Luca and Lassnig, Mario and Rinaldi, Lorenzo",abstract = "The contemporary surge in data production is fueled by diverse factors, with contributions from numerous stakeholders across various sectors. Comparing the volumes at play among different big data entities is challenging due to the scarcity of publicly available data. This survey aims to offer a comprehensive perspective on the orders of magnitude involved in yearly data generation by some public and private leading organizations, using an array of online sources for estimation. These estimates are based on meaningful, individual data production metrics and plausible per-unit sizes. The primary objective is to offer insights into the comparative scales of major big data players, their sources, and data production flows, rather than striving for precise measurements or incorporating the latest updates. The results are succinctly conveyed through a visual representation of the relative data generation volumes across these entities.",journal  = "Front. Big Data",volume   =  6,pages = "1271639",month    =  oct,year     =  2023,keywords = "big data; data production; data storage; data volumes; streaming data",language = "en"}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(bigdata + '\n\n')
+
+fazekas = '@inbook{inbook,author = {Fazekas, Mihaly and Saussier, Stephane},year = {2020},month = {08},pages = {131-146},title = {Big Data in Public Procurement. Colloquium},isbn = {9781138296480}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(fazekas + '\n\n')
+
+
 
 
 
@@ -331,3 +381,13 @@ with open(file_path, "a") as bib_file:
 skew = '@article{HUBERT20085186,title = {An adjusted boxplot for skewed distributions},journal = {Computational Statistics & Data Analysis},volume = {52},number = {12},pages = {5186-5201},year = {2008},issn = {0167-9473},doi = {https://doi.org/10.1016/j.csda.2007.11.008},url = {https://www.sciencedirect.com/science/article/pii/S0167947307004434},author = {M. Hubert and E. Vandervieren},abstract = {The boxplot is a very popular graphical tool for visualizing the distribution of continuous unimodal data. It shows information about the location, spread, skewness as well as the tails of the data. However, when the data are skewed, usually many points exceed the whiskers and are often erroneously declared as outliers. An adjustment of the boxplot is presented that includes a robust measure of skewness in the determination of the whiskers. This results in a more accurate representation of the data and of possible outliers. Consequently, this adjusted boxplot can also be used as a fast and automatic outlier detection tool without making any parametric assumption about the distribution of the bulk of the data. Several examples and simulation results show the advantages of this new procedure.}}'
 with open(file_path, "a") as bib_file:
         bib_file.write(skew + '\n\n')
+
+
+outliers_artigo = '@article{hoaglin1983understanding,title={Understanding Robust and Exploratory Data Analysis},author={Hoaglin, D.C. and Mosteller, F. and Tukey, J.W.},isbn={9780471097778},lccn={82308528},series={WILEY SERIES in PROBABILITY and STATISTICS: PROBABILITY and STATISTICS SECTION Series},url={https://books.google.pt/books?id=HRrvAAAAMAAJ},year={1983},publisher={Wiley}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(outliers_artigo + '\n\n')
+
+
+medcouple = '@article{mc,author = {Brys, Guy and Hubert, Mia and Struyf, Anja},year = {2004},month = {12},pages = {996-1017},title = {A Robust Measure of Skewness},volume = {13},journal = {Journal of Computational and Graphical Statistics},doi = {10.1198/106186004X12632}}'
+with open(file_path, "a") as bib_file:
+        bib_file.write(medcouple + '\n\n')

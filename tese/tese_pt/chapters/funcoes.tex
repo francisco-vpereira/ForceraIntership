@@ -1,72 +1,85 @@
 
-%\section{Exploração do Dataset}
-%
-%Numa primeira fase foram criadas funções para explorar o conjunto de dados. \\
-%
-%A função \textbf{col\_names} retorna-nos uma dataframe com todos os nomes das colunas. A função \textbf{n\_contracts} retorna-nos o número de linhas, ou seja, o número de contratos totais, da base de dados. \\
-%
-%Foi desenvolvida, também, uma função \textbf{h} que permite ver uma dataframe de forma mais apresentável.\\
-%
-%\textit{É preciso criar uma função com o código que já tenho para categorizar os contratos de acordo com o tipo de procedimento. Idem para o tipo de contrato.} \\
-
- 
-
-%\begin{table}[H]
-%	\centering
-%	\includegraphics[width= \textwidth]{tabelas/tabela_rf.pdf}
-%	\caption{}
-%	\label{}
-%\end{table}
-
-
-
- 
-
-%\section{Funções Auxiliares}
-%
-%Para a construção das \textit{flags} são necessárias outras funções mais simples. Certas funções irão ter um único propósito e os outputs de certas funções irão ser usados como inputs de outras funções. \\
-%
-%Para identificar um contrato necessitamos do seu id. Assim, criou-se uma função \textbf{all\_ids} que retorna os ids de todos os contratos da base de dados. Contudo, como não vamos trabalhar com todos os tipos de contratos e procedimentos, é necessário filtrar estes ids.
-%Para tal, criaram-se as funções \textbf{ajustes\_dir}, \textbf{consulta\_prev} e \textbf{concurso\_pub} que retornam os ids de todos os ajustes diretos, consultas prévias e concursos públicos, respetivamente. \\
-%
-%De seguida, filtraram-se os contratos por tipo de procedimento e por CPV. Para isso, criou-se a função \textit{cpv\_direto} que retorna todos os ids de ajustes diretos para serviços de consultoria em IT ( todos os CPV's começados por 72). De seguida, foi feito o mesmo para contratos públicos na função \textit{cpv\_cpub}. De forma a generalizar, criou-se a função \textit{cpv} que retorna todos os ids de contratos de um tipo de procedimento e para um determinado CPV. Tanto o tipo de procedimento como os primeiros 2 algarismos do CPV são parâmetros de entrada da função. \\
-%
-%
-%Para começar, criaram-se duas funções que permitem ver qual é o contrato associado a um determinado id. A função \textit{contrato} tem como input um único id de um contrato ( todas estas funções dizem respeito à tabela \textit{contratos} da DB) e retorna uma dataframe com uma única linha referente ao contrato associado a esse mesmo id. A função \textit{contratos} faz exatamente a mesma coisa mas para um conjunto de id's. \\
-%
-%Quando as flags estiverem construídas e quisermos ver o anúncio de um contrato suspeito no site do basegov, podemos fazê-lo usando a função \textit{url} que, novamente, tem como parâmetro de entrada o id de um contrato. Esta função pode ter bastante utilidade nos casos que chamam bastante a atenção, como por exemplo, quando se viu um ajuste direto de 3 milhões de euros. \\
-
-No website da OCDS encontra-se disponível para descarregar uma folha de cálculo em Excel com 73 red flags \cite{spreadsheet1} \cite{spreadsheet}, tal como se encontra representado na Tabela \ref{table:flags}.
+No website da OCDS encontra-se disponível para descarregar uma folha de cálculo em Excel com 73 red flags \cite{spreadsheet1} \cite{spreadsheet}. Cada uma destas flags é descrita através de um conjunto de diferentes parâmetros, tal como se encontra exemplificado na Tabela \ref{table:flags}.
 
 \begin{table}[H]
 	\centering
 	\includegraphics[width=\textwidth]{imagens/tabela_flags.png}
-	\caption{Exemplo da descrição de uma flag}
+	\caption{Exemplo de descrição de uma flag.}
 	\label{table:flags}
 \end{table}
 
 
-A fim de construir as funções que permitam selecionar contratos anómalos, foi feita uma análise, de caráter subjetivo, relativamente ao nível de importância e de facilidade de implementação. Para cada uma das 73 flags, foi atribuído um valor de 1 a 3, tanto para o nível de facilidade de implementação como para o nível de importância. Para atribuir um valor à facilidade de implementação foi necessário ter em conta se a base de dados possuía todas as variáveis necessárias, o que nem sempre se verificou. Relativamente ao nível de importância, o critério foi mais subjetivo e serviu como uma ferramenta de filtragem. Após esta classificação, foi realizada uma média ponderada destas classificações, com uma peso atribuído de 0.6 ao primeiro parâmetro e de 0.4 ao segundo parâmetro. Dessa forma, foi possível filtrar todas as flags e excluir aquelas que não eram passíveis de implementar. 
 
-Além destes indicadores, foram desenvolvidos outros 3, após discussão, que se acreditava terem valor para o resultado final. Estes indicadores foram construídos tendo em conta o CCP, as variáveis presentes na base de dados e flags definidas pela OCDS. 
 
-Nas secções que se seguem, todos os indicadores establecidos pela OCDS são identificados pela letra R e um número, enquanto que aqueles que os que foram desenvolvidos em equipa são identificados por RF e um número.
 
-Os contratos coletados encontram-se todos guardados numa tabela chamada \textit{contratos\_basegov} numa base de dados em PostgreSQL. De modo a construir os indicadores que se encontram nos capítulos seguintes, foi necessário criar quatro tabelas adicionais auxiliares:
+
+
+%Numa primeira instância, com o objetivo de filtrar e selecionar as flags com maior valor, foi feita uma avaliação para cada indicador, de caráter subjetivo, que incidiu sobre dois aspetos: \textbf{nível de importância} e \textbf{facilidade de implementação}. A facilidade de implementação de cada indicador foi classificado com um de três valores: \textbf{1} (difícil), \textbf{2} (médio) e \textbf{3} (fácil). Este parâmetro foi avaliado tendo em conta as variáveis disponíveis na base de dados para a construção dos indicadores e a descrição de cada indicador pois, naturalmente, existem alguns indicadores mais diretos de aplicar. O nível de importância de cada indicador foi também  classificado com um de três valores: \textbf{1} (pouco importante), \textbf{2} (importante) e \textbf{3} (muito importante). Este critério, dos dois considerados, é o que tem um cariz mais subjetivo. Finda a classificação de cada indicador, foi calculada uma média ponderada de ambas as classificações, atribuindo um peso de $0.6$ à facilidade de implementação e de $0.4$ ao nível de importância. Do conjunto total de flags, selecionaram-se todas cujo valor da média ponderada excedia o valor de 2, obtendo, assim, um subconjunto de 20 flags. De entre este subconjunto, foram desenvolvidas 6 flags.
+
+Numa primeira instância, com o objetivo de filtrar e selecionar as flags com maior relevância, foi feita uma avaliação para cada indicador, de caráter subjetivo, que incidiu sobre dois aspectos: \textbf{nível de importância} e \textbf{facilidade de implementação}. À facilidade de implementação de cada indicador foi atribuído um de três valores: \textbf{1} (difícil), \textbf{2} (médio) e \textbf{3} (fácil). Este parâmetro foi ponderado tendo em conta as variáveis disponíveis na base de dados para a construção dos indicadores e a descrição de cada indicador, dado existirem  indicadores mais diretos de aplicar. Quanto ao nível de importância de cada indicador, foi atribuída uma classificação com um de três valores: \textbf{1} (pouco importante), \textbf{2} (importante) e \textbf{3} (muito importante). Dos dois critérios considerados, o nível de importância revela maior pendor de subjetividade. Finda a classificação de cada indicador, foi calculada uma média ponderada de ambas as classificações, tendo-se atribuído um peso de $0.6$ à facilidade de implementação e de $0.4$ ao nível de importância. Do conjunto total de flags, selecionaram-se aquelas cujo valor da média ponderada excedia o valor de 2, obtendo, assim, um subconjunto de 20 flags. De entre este subconjunto, foram desenvolvidas 6 flags.
+
+
+
+%Além destas flags, foram desenvolvidas 3 adicionais que resultaram de discussão e troca de ideias, pois acreditava-se que agragavam valor para o resultado final. Estes indicadores foram construídos tendo em conta o CCP, as variáveis presentes na base de dados e flags definidas pela OCDS. 
+
+A somar às flags anteriormente referidas, desenvolveram-se 3 adicionais que resultaram de discussão e troca de ideias, por se entender que tal agregaria valor ao resultado final. Estes indicadores foram construídos tendo em conta o definido no CCP, as variáveis presentes na base de dados e as flags definidas pela OCDS.
+
+%Nas secções que se seguem, todos os indicadores establecidos pela OCDS são identificados pela letra \textbf{R} e um número, enquanto que os que foram desenvolvidos são identificados por \textbf{RF} e um número.
+
+Nas secções que se seguem, todos os indicadores estabelecidos pela OCDS obedecem a um código alfanumérico, sendo identificados pela letra \textbf{R} e um número, enquanto os que foram desenvolvidos são identificados por \textbf{RF} e um número.
+
+Os contratos coletados encontram-se todos guardados numa tabela denominada \textit{contratos\_basegov} que integra uma base de dados em PostgreSQL. De modo a construir os indicadores que se encontram nos capítulos seguintes, criaram-se quatro tabelas adicionais auxiliares:
 
 \begin{my_itemize}
-	\item \textbf{concursos\_publicos}: tabela para onde foram copiados todos os concursos públicos e as principais variáveis: \textit{id}, \textit{data\_publicacao}, \textit{contractTypes}, \textit{fundamentacao}, \textit{entidade\_adjudicante}, \textit{entidades\_contratadas}, \textit{entidades\_concorrentes}, \textit{executionPlace}, \textit{cpv} e \textit{preco\_contratual}. A esta tabela foram adicionadas seis colunas adicionais cujo propósito irá ser clarificado ao longo do precosso de construção das flags: \\ \textit{nr\_entidadesconcorrentes}, \textit{tipo\_contrato}, \textit{adjudicante}, \textit{nif1}, \textit{adjudicataria} e \textit{nif2}. 
+
+
+	\item \textbf{concursos\_publicos}: Foram inseridos nesta tabela todos os concursos públicos e as principais variáveis - \textit{id}, \textit{data\_publicacao}, \textit{contractTypes}, \textit{fundamentacao}, \textit{entidade\_adjudicante}, \textit{entidades\_contratadas}, \textit{entidades\_concorrentes}, \textit{executionPlace}, \textit{cpv} e \textit{preco\_contratual} - cuja explicação se encontra na Secção \ref{ch:variables}. A esta tabela foram adicionadas seis colunas:  \textit{nr\_entidadesconcorrentes}, \textit{tipo\_contrato}, \textit{adjudicante}, \textit{nif1}, \textit{adjudicataria} e \textit{nif2}, considerando-se que: 
+	
+	\begin{my_itemize}
+		
+		 \item \textit{nr\_entidadesconcorrentes}: o número de entidades que concorreram a um determinado concurso público.
+		 
+		 \item \textit{tipo\_contrato}: classifica cada um dos contratos em duas tipologias: \textbf{Bens e Serviços} ou \textbf{Obras}. 
+		 
+		 \item \textit{adjudicante} e \textit{nif1}: nome e número de identificação fiscal (NIF) da entidade contratante.
+		 
+		 \item \textit{adjudicataria} e \textit{nif2}: nome e número de identificação fiscal (NIF) da entidade contratada.
+		 
+	\end{my_itemize}
 	
 	
-	\item \textbf{ajustes\_diretos}: tabela para onde foram copiadas todos os ajustes diretos em regime geral e as principais variáveis, iguais às tabela anterior. À semelhança da tabela \textit{concursos\_publicos}, também foram criadas colunas auxiliares. Não foi incluída a coluna relativa ao número de entidades concorrentes visto que esta tipologia de contrato é resultado de um convite direto. Por outro lado, foi criada uma coluna \textit{criterio} que permite classificar cada contrato de acordo com o critério, como irá ser visto de seguida.
+	\item \textbf{ajustes\_diretos}: Tabela onde foram inseridos todos os ajustes diretos em regime geral e as principais variáveis, tal como na tabela anterior. À semelhança da tabela \textit{concursos\_publicos}, também foram criadas colunas auxiliares. Não foi incluída a coluna relativa ao número de entidades concorrentes visto que esta tipologia de contrato é resultado de um convite direto, e não de um concurso aberto a qualquer entidade. Por outro lado, foi criada uma coluna \textit{criterio} que permite classificar cada contrato de acordo com o critério: critério do \textbf{valor} ou critério \textbf{material}.
+
 	
-	\item \textbf{cpv\_stats}: tabela que contém os indicadores estatísticos relativos ao número de entidade de concorrentes por divisão de CPV. Para cada divisão de CPV, dentro de todo o conjunto de concursos públicos, foi calculado o número total de contratos celebrados (count), o número total de entidades que se candidataram a todos os concursos (nec\_t), o número médio de entidades concorrentes por concurso, desvio padrão, mínimo, máximo, Q1, Q2 e Q3. 
+	\item \textbf{cpv\_stat}: Esta tabela foi criada para desenvolver a flag R019. Nesta tabela registam-se os indicadores estatísticos - mínimo, $Q_1$ , $Q_2$, $Q_3$, média, desvio padrão, intervalo interquartil e máximo - relativos ao número de entidades concorrentes em concursos públicos para cada uma das \hyperref[sec:cepeves]{45 divisões de CPV}. Na Tabela \ref{tab:cpvstat} encontra-se um exemplo de uma das linhas desta tabela. Além dos indicadores estatísticos anteriormente referidos, podem observar-se as seguintes colunas adicionais: \textbf{nec} é a soma de todas as entidades concorrentes para todos os concursos públicos celebrados pertencentes à divisão 30 do CPV; \textbf{count} é o número total de concursos públicos celebrados pertencentes à divisão 30 do CPV; \textbf{mc\_const} é a constante de Medcouple para a distribuição do número de entidades concorrentes; \textbf{lower\_fence} e \textbf{upper\_fence} dizem respeito às extremidades do boxplot para esta divisão de CPV e são calculadas utilizando as Equações \ref{eq:medatual1} e \ref{eq:medatual}. Assim, um concurso público que se destine à aquisição de máquinas e equipamentos de escritório e informática e ao qual se candidatem menos de 2 entidades ou mais de 23, é sinalizado.
 	
-	\item \textbf{preco\_stats}: Esta tabela segue uma filosofia similar à apresentada anteriormente. Contudo, em vez de se fazer uma análise por divisão de CPV, esta é feita a partir do Grupo do CPV (os três primeiros dígitos) a fim de ter uma maior granularidade. 
+	
+	\item \textbf{preco\_stat}: a construção desta tabela obedece a uma metodologia similar à desenvolvida na das  anteriores. Contudo, em lugar de se fazer uma análise ao número de entidades concorrentes por divisão de CPV, optou-se por  uma análise do preço contratual por \hyperref[sec:cepeves]{grupo de CPV}, a fim de ter uma maior granularidade. 
+	
+	
 \end{my_itemize}
 
 
-Na Figura \ref{fig:basededados} encontra-se um esquema da relação entre as diferentes tabelas. Para efeitos de concisão do diagrama apenas são apresentadas algumas das principais colunas. As colunas que se encontram a vermelho, explicadas nas secções que se segue, dizem respeito a colunas auxiliares para a construção dos indicadores
+
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.1}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{cccccccccccccc}
+			\hline
+			\textbf{cpv} & \textbf{nec} & \textbf{count} & \textbf{mean} & \textbf{std} & \textbf{min} & \textbf{q1} & \textbf{q2} & \textbf{q3} & \textbf{max} & \textbf{iqr} & \textbf{mc\_const} & \textbf{lower\_fence} & \textbf{upper\_fence} \\ \hline
+			30           & 35540        & 5176           & 6.9           & 4.9          & 1            & 3           & 6           & 10          & 26           & 7            & 0.2                & 2.4                   & 22.8                  \\ \hline
+		\end{tabular}%
+	}
+	\caption{Exemplo de uma linha da tabela \textit{cpv\_stat} para concursos públicos referentes a aquisição de máquinas e equipamentos de escritório e informática, exceto móveis e pacotes de software.}
+	\label{tab:cpvstat}	
+\end{table}
+
+
+
+
+Na Figura \ref{fig:basededados} encontra-se um esquema da relação entre as diferentes tabelas. Para efeitos de concisão do diagrama apenas são apresentadas algumas das principais colunas. As colunas que se encontram a vermelho dizem respeito às colunas adicionais para a construção dos indicadores. É possível aceder a todos os parâmetros de um contrato que se encontre na tabela \textbf{ajustes\_diretos} ou \textbf{concursos\_publicos} através do identificador. 
 
 \begin{figure}[H]
 	\centering
@@ -75,14 +88,24 @@ Na Figura \ref{fig:basededados} encontra-se um esquema da relação entre as dif
 	\label{fig:basededados}
 \end{figure}
 
+Nas secções sucedentes, para cada uma das flags desenvolvidas é colocado em nota de rodapé a definição original.
 
 
 
+\section{RF1: Verificação dos preços contratuais para ajustes diretos}
 
-\section{RF1: Verificação dos Preços Contratuais para Ajustes Diretos em Regime Geral}
 
+Este é um dos indicadores que foi desenvolvido e tem como base o CCP. Como foi apresentado anteriormente na Tabela \ref{tab:4}, os ajustes diretos, consoante o tipo de obra/serviço, tem diferentes limites máximos permitidos por lei relativamente ao valor de adjudicação. A fim de poder identificar os contratos que não estão em conformidade com o CCP, procedeu-se da seguinte forma:
 
-Como foi apresentado anteriormente na Tabela \ref{tab:4}, os ajustes diretos, consoante o tipo de obra/serviço, tem diferentes limites máximos impostos por lei relativamente ao valor de adjudicação. A fim de poder identificar os contratos que não estão em conformidade com o CCP, procedeu-se da seguinte forma. Primeiramente, criou-se uma nova tabela na base de dados, a partir da tabela original, para onde foram copiados todos os ajustes diretos em regime geral e onde foi criada um nova coluna, chamada \textbf{criterio}. De seguida, para cada um dos contratos, foi identificado o artigo utilizado para fundamentar a adoção deste tipo de procedimento, presente na coluna da fundamentação. Se o artigo pertencer entre o 17º e o 22º, é atribuído ao contrato a string \textbf{valor} na nova coluna criada. Caso contrário, é atribuído a string \textbf{material}. 
+\begin{itemize}
+	
+	\item Construiu-se, a partir da tabela original, uma nova tabela ajustes\_diretos, onde se inseriram todos os ajustes diretos em regime geral e criou-se uma coluna, denominada \textbf{criterio}. 
+
+	\item Para cada um dos contratos, foi identificado o artigo utilizado para fundamentar a adoção deste tipo de procedimento, presente na coluna da \textit{fundamentação}. Se o artigo utilizado for qualquer um entre o 17º e o 22º, é atribuído ao contrato o critério do \textbf{valor} na coluna criada. Caso contrário, é atribuído o critério \textbf{material}.
+	
+\end{itemize}
+
+%Primeiramente, criou-se uma nova tabela \textbf{ajustes\_diretos}, a partir da tabela original, para onde foram inseridos todos os ajustes diretos em regime geral e criou-se uma nova coluna, chamada \textbf{criterio}. De seguida, para cada um dos contratos, foi identificado o artigo utilizado para fundamentar a adoção deste tipo de procedimento, presente na coluna da fundamentação. Se o artigo utilizado for qualquer um entre o 17º e o 22º, é atribuído ao contrato o critério do \textbf{valor} na nova coluna criada. Caso contrário, é atribuído o critério \textbf{material}. 
 
  \begin{table}[H]
  	\centering
@@ -97,8 +120,7 @@ Como foi apresentado anteriormente na Tabela \ref{tab:4}, os ajustes diretos, co
  	\caption{Valores máximos permitidos para Ajustes Diretos consoante o critério, artigo e tipo de contrato.}
  \end{table}
 
-De seguida, foi necessário classificar os contratos relativamente à tipologia. Tal como se encontra representado na Tabela \ref{table:3}, os contratos podem ser classificados em duas grandes categorias: Bens e Serviços ou Empreitadas. Contudo, na coluna referente ao tipo de contrato não é feita esta discriminação. Assim, foi adicionada uma nova coluna a esta tabela, \textbf{tipo\_contrato}, que irá ter apenas uma das duas categorias anteriormente presentes para cada contrato. Para classificar cada contrato numa destas duas categorias fez-se uma busca da palavra \textit{obra} na string presente na coluna da tipologia de contrato. Se esta palavra estivesse contida na string, o contrato era classificado como Empreitada. Caso contrário, Bens e Serviços. 
-
+Posteriormente, foi necessário classificar os contratos relativamente à tipologia. Tal como se encontra representado na Tabela \ref{table:3}, os contratos podem ser classificados em duas grandes categorias: Bens e Serviços ou Empreitadas. Contudo, na coluna referente ao tipo de contrato não é feita esta discriminação. Assim, foi adicionada uma nova coluna a esta tabela, \textbf{tipo\_contrato}, que contemplará apenas uma das duas categorias anteriormente presentes para cada contrato. Para classificar cada contrato numa destas duas categorias fez-se uma busca da palavra \textit{obra} na string presente na coluna da tipologia de contrato. Se esta palavra estivesse contida na string, o contrato era classificado como Empreitada. Caso contrário, Bens e Serviços. 
 
 \begin{figure}[H]
 	\centering
@@ -106,9 +128,6 @@ De seguida, foi necessário classificar os contratos relativamente à tipologia.
 	\caption{Ilustração do processo de classificação de ajustes diretos em regime geral}
 	\label{}
 \end{figure}
-
-
-
 
 %\begin{lstlisting}[
 %	language=SQL,
@@ -153,7 +172,9 @@ De seguida, foi necessário classificar os contratos relativamente à tipologia.
 %\end{lstlisting}
 
 
-Finda estas classificações quanto à tipologia e fundamentação, é possível identificar todos os contratos que não respeitem os valores apresentados na Tabela \ref{tab:4} a partir da seguinte \textit{query}: 
+Concluídas as classificações, quanto à tipologia e fundamentação, é possível identificar todos os contratos que não respeitem os valores apresentados na Tabela \ref{tab:4} a partir da seguinte \textit{query}: 
+
+\clearpage
 
 \begin{lstlisting}[
 	language=SQL,
@@ -171,7 +192,7 @@ Finda estas classificações quanto à tipologia e fundamentação, é possível
 	WHERE (criterio = 'valor' AND tipocontrato = 'Bens e Servicos' AND preco > 20000) OR (criterio = 'valor' AND tipocontrato = 'Empreitadas' AND preco > 30000);
 \end{lstlisting}
 
-Da totalidade de Ajustes Diretos em Regime Geral presentes na base de dados, 2.8\% (12828) destes foram adjudicados com um valor superior ao permitido por lei. Destes, 2.4\% (14812) dizem respeito a contratos de Bens e Serviços e 0.4\% (1984) a contratos de Empreitadas.
+Da totalidade de Ajustes Diretos em Regime Geral presentes na base de dados, 14812(2.8\%) destes foram adjudicados com um valor superior ao permitido por lei. Destes, 12828(2.4\%) dizem respeito a contratos de Bens e Serviços e 1984(0.4\%) a contratos de Empreitadas.
 
 
 \begin{figure}[H]
@@ -190,7 +211,7 @@ Da totalidade de Ajustes Diretos em Regime Geral presentes na base de dados, 2.8
 \end{figure}
 
 
-Na Tabela \ref{tab:rf1} é possível observar quais são as entidades com o maior número de contratos celebrados em inconformidade com o CCP. 
+Na Tabela \ref{tab:rf1} é possível observar que existem entidades, cujo nome não é divulgado por motivos de confidencialidade, com um elevado número de contratos celebrados em inconformidade com o CCP. 
 
 %\begin{table}[H]
 %	\centering
@@ -257,15 +278,14 @@ Na Tabela \ref{tab:rf1} é possível observar quais são as entidades com o maio
 
 
 
-\section{R003 : Análise do Prazo de Apresentação de Propostas}
+\section{R003: Análise do prazo de apresentação de propostas}
 
-Um factor importante ao longo da publicitação de um concurso público é o prazo disponível para que diferentes entidades interessadas possam efetuar propostas. Uma das flags definidas pela OCDS incide precisamente sobre esta questão.
+Um factor relevante a considerar-se no período da publicitação de um concurso público, é o prazo disponível para que diferentes entidades interessadas possam apresentar propostas. Uma das flags definidas pela OCDS incide precisamente sobre esta questão\footnote{Short or inadequate notice to bidders to submit expressions of interest or bids. Bid period is less than expected (usually $\leq$2 days). The indicator should be calculated grouping by procurement method used, since the minimum bidding period might vary depending on the method.  It is important to check in local regulations if there is a minimun period.}.
 
-\Lemma{\cite{spreadsheet1}}
-{Short or inadequate notice to bidders to submit expressions of interest or bids. Bid period is less than expected (usually $\leq$2 days). The indicator should be calculated grouping by procurement method used, since the minimum bidding period might vary depending on the method.  It is important to check in local regulations if there is a minimun period.}
+%\Lemma{\cite{spreadsheet1}}
+%{}
 
-
-De acordo com o artigo 135.º do CCP - ver Tabela \ref{table:3} - o prazo mínimo para apresentação de propostas num concurso público para Bens e Serviços não pode ser inferior a 6 dias e, no caso de se tratar de um procedimento de formação de um contrato de empreitada de obras públicas, a 14 dias. Assim, para a construção desta flag, foi criada uma coluna adicional na tabela \textit{concursos\_publicos} chamada \textbf{tipo\_contrato}, tal como no indicador RF1. De seguida, foi construída uma \textit{query} para determinar todos os contratos referentes a concursos públicos que não respeitam estas condições apresentadas na Tabela mencionada. \\
+De acordo com o artigo 135.º do CCP - ver Tabela \ref{table:3} - o prazo mínimo para apresentação de propostas num concurso público para Bens e Serviços não pode ser inferior a 6 dias e, no caso de se tratar de um procedimento de formação de um contrato de empreitada de obras públicas, a 14 dias. Assim, para a construção desta flag, foi criada uma coluna adicional na tabela \textit{concursos\_publicos} denominada \textbf{tipo\_contrato}, tal como no indicador RF1. Posteriormente, foi construída uma \textit{query} para determinar todos os concursos públicos que não respeitam as condições apresentadas na Tabela \ref{table:3}. \\
 
 
 \begin{lstlisting}[
@@ -291,7 +311,8 @@ De acordo com o artigo 135.º do CCP - ver Tabela \ref{table:3} - o prazo mínim
 \end{lstlisting}
 
 
-Foi incluída uma condição adicional na \textit{query} para selecionar os contratos com prazo de apresentação de propostas superior a 0 dias. Esta condição foi imposta pois verificou-se que existiam alguns contratos com prazos negativos. Tendo em conta a dimensão dos valores - sempre superiores a 10, em módulo - inferiu-se que seriam erros de preenchimento aquando da inserção do contrato no Portal BASE e, como tal, não foram considerados. 
+Foi incluída uma condição adicional na \textit{query} para selecionar os contratos com prazo de apresentação de propostas superior a 0 dias. Esta condição foi imposta pois verificou-se que existiam alguns contratos com prazos negativos. Tendo em conta a dimensão dos valores - sempre superiores a 10, em módulo - inferiu-se que seriam erros de preenchimento aquando da inserção do contrato no Portal BASE porém não foram considerados na construção deste indicador. 
+
 
 \begin{figure}[H]
 	\centering
@@ -308,46 +329,121 @@ Foi incluída uma condição adicional na \textit{query} para selecionar os cont
 	\end{minipage}
 \end{figure}
 
-É na divisão da Construção Civil onde se verifica a existência de um maior incumprimento do prazo mínimo de dias para apresentação de propostas, atingindo uma percentagem de 70\% dos contratos inconformes. Perante a totalidade de concursos públicos celebrados referentes a construção civil, esta percentagem é de 13\%.
+Perante a totalidade de concursos públicos celebrados, verificou-se a existência de 4647(3.7\%) contratos em inconformidade com a condição imposta por este indicador. É na divisão da Construção Civil onde se verifica a existência de um maior incumprimento do prazo mínimo de dias para apresentação de propostas, representando cerca de 60\%(2871) da totalidade dos contratos inconformes. 
 
 
-%\section{R017 : Comparação do Preço Contratual com Preço Médio por CPV}
-%
-%
-%\Lemma{\cite{spreadsheet1}}
-%{
-%	The difference between an item value and its expected value is above a threshold. 
-%}
-%
-%Para construção deste indicador foi calculado o preço médio por CPV. O conjunto de contratos foi agrupado pelos primeiros três dígitos - grupo - do CPV de forma a obter um maior nível de granularidade. Para cada um dos 302 grupos foi calculado o preço contratual médio, desvio padrão, mínimo, máximo e primeiro, segundo e terceiro quartis. O resultado obtido assemelha-se à seguinte tabela : 
-%
-%
-%\begin{table}[h!]
-%	
-%	\setlength\tabcolsep{1pt}
-%	\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} |c|c|c|c|c|c|c|c|c|c|}
-%		\hline
-%		\textbf{cpv3} & \textbf{preco\_total} & \textbf{count} & \textbf{mean} & \textbf{std} & \textbf{min} & \textbf{q1} & \textbf{q2} & \textbf{q3} & \textbf{max} \\ \hline
-%		641           & 6700942.8           & 57             & 117560.4    & 179755.1   & 1575         & 10639.2     & 60000       & 165892.2    & 885500       \\ \hline
-%	\end{tabular*}
-%	\caption{Primeira linha da tabela auxiliar construída}
-%	
-%\end{table}
-%
-%
-%Contudo, a partir da construção desta tabela, constatou-se que, certamente devido a erros de preenchimento na plataforma BaseGOV, existem inúmeros valores de preço contratuais com valores negativos ou com valor nulo. Desta forma, o valor médio calculado não corresponde ao verdadeiro valor médio e, como tal, a comparação que se pretendia efetuar na próxima etapa deste indicador entre o preço contratual e o preço médio contratual por grupo é inapropriada. 
 
-\section{R018 : Análise de Contratos com uma entidade concorrente}
+
+
+
+
+
+
+
+
+\section{R017: Análise do preço contratual, por grupo de CPV}
+
+
+A construção deste indicador teve como objectivo verificar se o preço contratual de um determinado contrato se encontrava dentro de um limite expectável, consoante o \hyperref[sec:cepeves]{grupo do CPV} do mesmo\footnote{The difference between an item value and its expected value is above a threshold.}. Para tal, foi utilizada a tabela auxilar da base de dados, \textit{precoc\_stat}. Para cada um dos 302 grupos de CPV foram calculados os indicadores estatísticos, preço total adjudicado por grupo e respetivas extremidades para a deteção de outliers.
+
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.4}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{cccccccccccccc}
+		\hline
+		\textbf{cpv} & \textbf{preco\_total} & \textbf{count} & \textbf{mean} & \textbf{std} & \textbf{min} & \textbf{q1} & \textbf{q2} & \textbf{q3} & \textbf{max} & \textbf{iqr} & \textbf{mc\_const} & \textbf{lower\_fence} & \textbf{upper\_fence} \\ \hline
+		157          & 16.807.688,00€        & 699            & 24.045,30€    & 40.901,61€   & 45.5         & 5890,52€    & 12.750,00€  & 25.000,00€  & 521.364,10€  & 19.109,50€   & 0.51               & 2121,30€              & 156268,30€            \\ \hline
+	\end{tabular}%
+	}
+	\caption{Exemplo de uma linha da tabela \textit{precoc\_stat} para concursos públicos referentes alimentos para animais.}
+	\label{tab:precocstat}	
+\end{table}
+
+
+
+
+O desenvolvimento deste indicador agregou os contratos pelo grupo do CPV com o objetivo de se conseguir um maior nível de granularidade. Porém, ao construir esta tabela, constatou-se a existência de inúmeros valores de preços contratuais  negativos ou  nulos,  que, presume-se, terão ficado a dever-se a erros de preenchimento na plataforma Portal BASE. Desta forma, o valor médio obtido não corresponde ao verdadeiro valor real e, como tal, a comparação que se pretendia efetuar na próxima etapa deste indicador entre o preço contratual e o preço médio contratual por grupo não produz resultados fidedignos. 
+
+Aplicando este indicador ao conjunto de concursos públicos, verificou-se a presença de $N_{Total} = 27261$ contratos inconformes, o que equivale a 21\% dos concursos públicos totais.  
+
+\vfill
+
+\begin{figure}[H]
+	\centering
+	\begin{minipage}{.48\linewidth}
+		\includegraphics[width=\linewidth]{imagens/r017/cpvdiv.png}
+		\caption{Divisões de CPV com maior número de contratos em inconformidade.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.49\linewidth}
+		\includegraphics[width=\linewidth]{imagens/r017/cpvgroup.png}
+		\caption{Grupos de CPV com maior número de contratos em inconformidade.}
+	\end{minipage}
+\end{figure}
+
+
+
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{ccccc}
+		\hline
+		\textbf{Grupo CPV}   & \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos \\ inconformes ($N_1$)\end{tabular}} & \textbf{$\frac{N_1}{N_{Total}}$\%} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de \\ contratos total ($N_2$)\end{tabular}} & \textbf{$\frac{N_1}{N_{2}}$\%} \\ \hline
+		45                   & 6128                                                                                        & 22.5                               & 22371                                                                                 & 27.4                           \\
+		33                   & 5446                                                                                        & 19.9                               & 30419                                                                                 & 17.9                           \\ \hline
+		\textbf{Divisão CPV} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos \\ inconformes ($N_1$)\end{tabular}} & \textbf{$\frac{N_1}{N_{Total}}$\%} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de \\ contratos total ($N_2$)\end{tabular}} & \textbf{$\frac{N_1}{N_{2}}$\%} \\ \hline
+		331                  & 5098                                                                                        & 18.7                               & 20996                                                                                 & 24.3                           \\
+		452                  & 4872                                                                                        & 17.8                               & 15635                                                                                 & 31.2                           \\
+		454                  & 680                                                                                         & 2.5                                & 3611                                                                                  & 18.8                           \\
+		341                  & 570                                                                                         & 2.1                                & 2781                                                                                  & 20.5                           \\ \hline
+		331                  & \multicolumn{4}{l}{Equipamento Médico}                                                                                                                                                                                                                    \\
+		452                  & \multicolumn{4}{l}{Obras de construção total ou parcial e obras de engenharia civil}                                                                                                                                                                      \\
+		454                  & \multicolumn{4}{l}{Trabalho de conclusão de construção}                                                                                                                                                                                                   \\
+		341                  & \multicolumn{4}{l}{Veículos motorizados}                                                                                                                                                                                                                  \\ \hline
+	\end{tabular}%
+	}
+	\caption{Descrição do número de contratos, total e inconformes, para os principais grupos e divisões de CPV. Definição das principais divisões de CPV.}
+	\label{tab:rf17stats}
+\end{table}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{imagens/r017/diffs.png}
+	\caption{Boxplot da diferença dos preços contratuais e respetivas extremidades superiores para os grupos 331 e 452 do CPV.}
+	\label{fig:diffscpvs}
+\end{figure}
+
+Apesar de os valores de $Q_1$ e $Q_3$ não se encontrarem corretos dada a existência de valores nulos e negativos na amostra utilizada para calcula-los, é possível, ainda assim, observar na Figura \ref{fig:diffscpvs} como de encontram distribuídas as diferenças entre os preços contratuais e o valor máximo tolerado para cada grupo do CPV. No caso de contratos referentes a obras de construção total ou parcial e obras de engenharia civil (452) existe um desfasamento significativo entre os valores praticados e os valores tolerados pois verifica-se que pelo menos 50\% dos contratos ultrapassam em 500.000,00€ o valor máximo da extremidade superior. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{R018: Análise de concursos públicos com uma entidade concorrente}
 \label{ch:entis}
 
-Um dos parâmetros importantes a ter em conta ao analisar um contrato público prende-se com o número de entidades concorrentes. A partir deste ponto, podem ser analisadas três situações distintas ao longo do processo contratual: 
-quando apenas se candidatou uma entidade,quando se candidatou um \textit{elevado} número de entidades,quando se candidatou um \textit{baixo} número de entidades. Comecemos pela primeira, definida da seguinte forma pela OCDS:
+Um dos parâmetros a respeitar aquando do estudo de um contrato público prende-se com a análise do número de entidades concorrentes. Partindo deste pressuposto, constatam-se três situações distintas ao longo do processo contratual: candidatura de apenas uma entidade, candidatura de um \textit{elevado} número de entidades e, por fim, candidatura de um \textit{reduzido} número de entidades. O indicador R018 proposto pela OCDS pretende, precisamente,  selecionar todos os contratos em que se verifique a participação de apenas um concorrente durante o processo de candidatura\footnote{Single bid received : Tender featured a single bidder only.}.
 
-\Lemma{ \cite{spreadsheet1}}
-{Single bid received : Tender featured a single bidder only }
-
-
-Dado que uma das colunas da tabela diz respeito às entidades que se candidataram a um determinado concurso, pode ser feita uma análise do número de entidades concorrentes. Esta coluna é preenchida de uma forma análoga ao representado na Tabela \ref{tab:entsconc}. 
+Atendendo a  que uma das colunas da tabela contempla a  identificação das entidades que se candidataram a um determinado concurso, é exequível uma análise ao número de entidades concorrentes. Na Tabela \ref{tab:entsconc} pode ser observado, de uma forma genérica, como é que esta coluna se encontra preenchida na base de dados. 
 
 
 \begin{table}[H]
@@ -360,11 +456,11 @@ Dado que uma das colunas da tabela diz respeito às entidades que se candidatara
 		$\dots$       & $\dots$                                                                                                                             \\ \hline
 		$\text{ID}_n$ & $\text{Entidade}\_l$ ( $\text{NIF}\_l$) $|||$ $\text{Entidade}\_m$ ( $\text{NIF}\_m$) $|||$ $\text{Entidade}\_n$ ( $\text{NIF}\_n$) \\ \hline
 	\end{tabular}
-	\caption{Formato da coluna entidades\_concorrentes}
+	\caption{Formato genérico da coluna \textbf{entidades\_concorrentes}.}
 	\label{tab:entsconc}
 \end{table}
 
-Para cada entidade que concorre, é inserido o respetivo nome e número de identificação fiscal (NIF) e, na eventualidade do número de entidades concorrentes ser superior a 1, a separação entre as mesmas é feita recorrendo a um separador $|||$. Desta forma, foi necessário desenvolver uma \textit{query} que conta o número de elementos separados e insira o resultado desta contagem numa nova coluna criada, chamada \textit{nr\_entidadesconcorrentes}.
+Para cada entidade concorrente é inserido o respetivo nome e número de identificação fiscal (NIF). Quando o número de entidades concorrentes é superior a 1, a separação entre elas é feita recorrendo a um separador $|||$. Desta forma, foi necessário desenvolver uma \textit{query} que contabiliza o número de elementos separados e, posteriormente, insira o resultado numa nova coluna criada, chamada \textit{nr\_entidadesconcorrentes}.
 
 
 \begin{lstlisting}[
@@ -382,7 +478,7 @@ Para cada entidade que concorre, é inserido o respetivo nome e número de ident
 	SET nr_entidadesconcorrentes = ARRAY_LENGTH(STRING_TO_ARRAY( entidades_concorrentes, '|||'), 1) + 1;	
 \end{lstlisting}
 
-Através desta nova coluna, é possível selecionar todos os contratos que apenas contemplem uma entidade concorrente. 
+Esta nova coluna possibilita a seleção imediata de todos os contratos que contemplem somente uma entidade concorrente.
 
 \begin{lstlisting}[
 	language=SQL,
@@ -401,6 +497,30 @@ Através desta nova coluna, é possível selecionar todos os contratos que apena
 	WHERE concursos_publicos."nr_entidadesconcorrentes" = 1;
 \end{lstlisting}
 
+Foram detetados cerca de 20\% ($N_{Total} =$ 25274) concursos públicos em que apenas se candidatou uma entidade. Na Tabela \ref{tab:rf18stats} é percetível quais  as principais divisões de CPV onde se verifica esta inconformidade e respetivos valores.
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{cccccc}
+			\hline
+			\textbf{Divisão CPV} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos \\ inconformes ($N_1$)\end{tabular}} & \textbf{ $\frac{N_1}{N_{Total}}$\%} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de \\ contratos total ($N_2$)\end{tabular}} & \textbf{ $\frac{N_1}{N_{2}}$\%} & \textbf{\begin{tabular}[c]{@{}c@{}}Preço contratual\\ total\end{tabular}} \\ \hline
+			33                   & 4444                                                                                & 27          & 29351                                                                         & 15.1        & 279.688.414,00€                                                           \\
+			45                   & 3498                                                                                & 22          & 21525                                                                         & 16.3        & 2.103.391.451,00€                                                         \\
+			15                   & 1625                                                                                & 10          & 5963                                                                          & 27.2        & 280.726.463,00€                                                           \\
+			72                   & 1406                                                                                & 9           & 3739                                                                          & 37.6        & 65.760.473,00€                                                            \\
+			34                   & 1162                                                                                & 7           & 4597                                                                          & 25.3        & 303.614.946,00€                                                           \\
+			60                   & 1124                                                                                & 7           & 3512                                                                          & 32          & 351.923.997,00€                                                           \\
+			50                   & 1069                                                                                & 6           & 3908                                                                          & 27.4        & 205.240.508,00€                                                           \\ \midrule
+			\textbf{Total}       & 14328                                                                               & -           & 72595                                                                         & -           & -                                                                         \\ \hline
+		\end{tabular}%
+	}
+	\caption{Descrição do número de contratos, total e inconformes, para as principais divisões de CPV.}
+	\label{tab:rf18stats}
+\end{table}
+
 
 \begin{figure}[H]
 	\centering
@@ -418,202 +538,21 @@ Através desta nova coluna, é possível selecionar todos os contratos que apena
 
 
 
-\begin{table}[H]
-	\centering
-	\renewcommand{\arraystretch}{1.15}
-	\setlength{\tabcolsep}{15pt}
-	\resizebox{\textwidth}{!}{%
-	\begin{tabular}{cccccc}
-		\hline
-		\textbf{Divisão CPV} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos \\ inconformes\end{tabular}} & \textbf{\%} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de \\ contratos total\end{tabular}} & \textbf{\%} & \textbf{\begin{tabular}[c]{@{}c@{}}Preço contratual\\ total\end{tabular}} \\ \hline
-		33                   & 4444                                                                                & 27          & 29351                                                                         & 15.1        & 279.688.414,00€                                                           \\
-		45                   & 3498                                                                                & 22          & 21525                                                                         & 16.3        & 2.103.391.451,00€                                                         \\
-		15                   & 1625                                                                                & 10          & 5963                                                                          & 27.2        & 280.726.463,00€                                                           \\
-		72                   & 1406                                                                                & 9           & 3739                                                                          & 37.6        & 65.760.473,00€                                                            \\
-		34                   & 1162                                                                                & 7           & 4597                                                                          & 25.3        & 303.614.946,00€                                                           \\
-		60                   & 1124                                                                                & 7           & 3512                                                                          & 32          & 351.923.997,00€                                                           \\
-		50                   & 1069                                                                                & 6           & 3908                                                                          & 27.4        & 205.240.508,00€                                                           \\ \midrule
-		\textbf{Total}       & 14328                                                                               & -           & 72595                                                                         & -           & -                                                                         \\ \hline
-	\end{tabular}%
-	}
-	\caption{Descrição do número de contratos, total e inconformes, para as principais divisões de CPV.}
-	\label{tab:rf18stats}
-\end{table}
 
 
 
 
 
 
+\section{R019: Análise do número de entidades concorrentes}
 
-%\section{R019 : Análise do Número de Entidades Concorrentes}
-%
-%\Lemma{ \cite{spreadsheet1}}
-%	{
-%	Low number of bidders for item and procuring entity. Number of bidders significantly less than average, based on prior similar contracts (for similar item or procuring entity) 
-%	}
-%
-%
-%Para a construção deste indicador, foi necessário construir uma tabela adicional. Para cada uma das 46 divisões de CPV, foi feita uma contagem de todos os contratos, calculado o número total de entidades concorrentes de entre todos os contratos e foram calculados os seguintes indicadores estatísticos : média, desvio-padrão, primeiro-quartil, segundo-quartil, terceiro-quartil, mínimo e máximo. Este procedimento foi feito através de um script \textit{python}, obtendo-se uma tabela do género : 
-%
-%\begin{table}[H]
-%	\centering
-%	\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-%		\hline
-%		\textbf{cpv} & \textbf{nec\_t} & \textbf{count} & \textbf{mean} & \textbf{std} & \textbf{min} & \textbf{q1} & \textbf{q2} & \textbf{q3} & \textbf{max} \\ \hline
-%		98           & 1739            & 586            & 2.968         & 2.251        & 1            & 1           & 2           & 4           & 15           \\ \hline
-%	\end{tabular}
-%	\caption{}
-%\end{table}
-%
-%sendo que \textbf{cpv} corresponde a cada umas das divisões de CPV, \textit{nec\_t} corresponde ao número total de entidades concorrentes em todos os concursos, \textit{count} é número total de contratos, \textbf{mean}, \textbf{std}, \textbf{min}, \textbf{q1}, \textbf{q2}, \textbf{q3} e \textbf{max} são, respetivamente, o valor médio, o desvio padrão, mínimo, primeiro quartil, segundo quartil, terceiro quartil e máximo para todos os contratos cujos primeiros dois digitos do CPV sejam iguais aos da primeira coluna. 
-%
-%Com o resultado obtido, foi feita, numa primeira instância, uma representação gráfica dos valores da média, mediana e desvio-padrão, por CPV, a fim de ter uma ideia da dispersão - distância entre a média e o desvio padrão - e simetria da distribuição - distância entre média e mediana - dos preços contratuais.
-%
-%\begin{figure}[!htbp]
-%	\centering
-%	\includegraphics[width=\textwidth]{imagens/mmdp.png}
-%	\caption{Comparação da Média, Mediana e Desvio Padrão do NEC em CP por CPV}
-%	\label{}
-%\end{figure}
-%
-%Foi, também, feita uma representação gráfica do boxplot para cada umas divisões do CPV. 
-%
-%%\begin{figure}[!htbp]
-%%	\centering
-%%	\includegraphics[width=.9\textwidth]{imagens/cpv1.png}
-%%	\caption{Boxplot referente ao número de entidades concorrentes em Concursos Públicos por CPV : I}
-%%	\label{}
-%%\end{figure}
-%%
-%%
-%%\begin{figure}[h!]
-%%	\centering
-%%	\includegraphics[width=.9\textwidth]{imagens/cpv2.png}
-%%	\caption{Boxplot referente ao número de entidades concorrentes em Concursos Públicos por CPV : II}
-%%	\label{}
-%%\end{figure}
-%
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[width=.9\textwidth]{imagens/cpv3.png}
-%	\caption{Boxplot referente ao número de entidades concorrentes em Concursos Públicos por CPV }
-%	\label{}
-%\end{figure}
-%
-%
-%Assim, a fim de selecionarmos os IDs de todos os contratos que respeitem a definição enunciada anteriormente, foi construída a seguinte \textit{query} que retorna todos os contratos cujo número de entidades concorrentes seja inferior à metade do número de entidades concorrentes esperado.  
-%
-%\begin{lstlisting}[
-%	language=SQL,
-%	showspaces=false,
-%	basicstyle=\ttfamily,
-%	numbers=left,
-%	numberstyle=\tiny,
-%	commentstyle=\color{gray}, frame = single,
-%	breaklines=true,
-%	autogobble =true,
-%	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
-%	]
-%	SELECT concursospublicos."id"
-%	FROM concursospublicos 
-%	JOIN cpv_stat ON concursospublicos."cpv2" = cpv_stat."cpv"
-%	WHERE concursospublicos."nr_entidadesconcorrentes" < 0.5 * cpv_stat."mean";
-%\end{lstlisting}
-%
-%Os resultados obtidos, que podem ser observados na seguinte figura, mostram que existe uma forte predominância dos CPVs começados por 33 e 45, o que pode ser um indicador de que existe um elevado número de contratos com um número \textit{baixo} de entidades concorrentes. 
-%
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[width=\textwidth]{imagens/r019.png}
-%	\caption{Grupos com maior número de contratos indiciados}
-%	\label{}
-%\end{figure}
-%
-%
-%
-%
-%
-%\section{R031 : Análise da relação entre Preço Base e Preço contratual}
-%
-%\Lemma{ \cite{spreadsheet1}}
-%{Bid is too close to budget, estimate or preferred solution.}
-%
-%
-%
-%
-%A primeira flag construída tem como objetivo comparar o preço base com o preço contratual.
-%
-%
-%Numa primeira instância, pegou-se num \textit{subset} de contratos da base de dados em PostgreSQL e guardou-se numa \textit{dataframe} em Python. 
-%Utilizando a função \textit{cpv}, obtiveram-se os id's dos contratos de um dos tipos de contrato desejados e para um determinado cpv. Numa fase inicial optou-se pelos ids concursos públicos para CPV's começados por 72. 
-%
-%
-%Para se poder comparar ambos os preços foram desenvolvidas algumas funções auxiliares.
-%Primeiramente, desenvolveu-se a função \textit{preco\_contratual1} que devolve, a partir do id de um anúncio, o valor do preço contratual desse mesmo anúncio.
-%A função \textit{preco\_contratual2} faz o mesma coisa mas para um tabela genérica pertencente à base de dados. A função \textit{preco\_contrato3} generaliza a primeira função, pois retorna um conjunto de preços contratuais referentes a um conjunto de ids de anúncios que leva como input. A função \textit{preco\_contratual4} generaliza a função anterior para qualquer tabela. Os precos contratuais são retornados no formato de array.
-%
-%
-%De seguida, foi feito o mesmo para o preço base. Foi utilizada a mesma abordagem e construíu-se a função \textit{preco\_base3} que retorna os valores dos preços base para um conjunto de id's. 
-%
-%
-%Assim, foi construída uma primeira versão para esta flag. 
-%
-%\begin{verbatim}
-%	def redflag(pbase, pcontr, tol, ids, r, df):
-%\end{verbatim}
-%
-%Definiram-se como parâmetros de entrada desta função o conjunto de preços bases - pbase - e preços contratuais - pcontr - associados a um determinado conjunto de ids - ids - que já conseguimos determinar usando as funções criadas anteriormente. É preciso fornecer uma tolerância - tol - que vai definir a diferença máxima permitida entre o preço base e o contratual e um racio máximo permitido entre o preco base e contratual. 
-%
-%
-%O objetivo desta flag é identificar todos os contratos cujo preço contratual pertença a um intervalo em torno do preço base, definido pelo parâmetro \textit{tol}.
-%
-%\begin{figure}[H]
-%	\centering
-%	\includegraphics[width=0.7\textwidth]{imagens/pbasecontr.png}
-%	\caption{}
-%	\label{}
-%\end{figure}
-%
-%
-%%O preço base é conhecido à priori, por isso esta flag não tem muito valor por si só. Quando for acoplada com outras flags pode sugerir um comportamento suspeito. Também é preciso ter em conta como é que o preço base é calculado. Se o preço base for calculado por excesso e o preço contratual for próximo do preço base, pode haver corrupção tanto por parte da entidade adjudicante como da adjudicatária. 
-%
-%Contudo, ao longo da construção desta flag verificou-se a existência de casos em que o preço base é significativamente superior ao preço contratual, chegando a atingir uma ordem de grandeza de $\approx 10^2$. Isto deve-se a dois fatores : o preço base definido é demasiado elevado comparativamente ao preço contratual ou o preço base diz respeito a casos em que a adjudicação de um determinado serviço/obra é feita por lotes.
-%
-%\begin{table}[H]
-%	\centering
-%	\begin{tabular}{|c|c|c|c|c|}
-%		\hline
-%		\multicolumn{1}{|l|}{\textbf{Número de Anúncio}} & \multicolumn{1}{l|}{\textbf{ID}} & \multicolumn{1}{l|}{\textbf{Lote}} & \multicolumn{1}{l|}{\textbf{Preço Base}} & \multicolumn{1}{l|}{\textbf{Preço Contratual}}          \\ \hline
-%		& 10471090                         & 1                                  &                                          & \cellcolor[HTML]{F2FCFE}{\color[HTML]{555555} 77454.72} \\ \cline{2-3} \cline{5-5} 
-%		& 10471049                         & 2                                  &                                          & \cellcolor[HTML]{F2FCFE}{\color[HTML]{555555} 85365.84} \\ \cline{2-3} \cline{5-5} 
-%		\multirow{-3}{*}{11171/2023}                     & 10470972                         & 3                                  & \multirow{-3}{*}{373860.48}              & \cellcolor[HTML]{F2FCFE}{\color[HTML]{555555} 89886.72} \\ \hline
-%	\end{tabular}
-%	\caption{Exemplo de contrato adjudicado por lotes}
-%\end{table}
-%
-%
-%Tendo em conta que na base de dados não é disponibilizado o preço base para cada lote, foi utilizada a seguinte abordagem. É de salientar que no caso de adjudicação por lotes, o número de anúncio é igual para cada um dos lotes, mas cada lote tem um id diferente. 
-%
-%Sempre que o rácio $\text{preçobase} / \text{preçocontratual}$, para um certo contrato, é superior a determinado limite, o respetivo id é guardado. A partir do id do contrato obtém-se o número do anúncio e, para todos os contratos com o mesmo número de anúncio, são somados os preços contratuais e o resultado final é comparado com o preço base. 
-%
-%Por fim, o resultado final é um conjunto de id's na forma de tuplo que respeita as condições anteriormente mencionadas.
+A aplicação deste indicador pretende analisar se o número de entidades que concorrem a um determinado concurso público supera os limites inferior e superior expectáveis\footnote{Low number of bidders for item and procuring entity. Number of bidders significantly less than average, based on prior similar contracts (for similar item or procuring entity)}. Apesar de o indicador definido pela OCDS incidir apenas na análise de concursos públicos com um número baixo de concorrentes, optou-se, ao desenvolver este indicador, por incluir uma barreira superior para detetar concursos com um elevado número de concorrentes. A inclusão deste passo foi motivado pela potencial presença de entidades concorrentes sem intenção de vencer e, desta forma, simularem falsa competição.
 
 
+Nas Figuras \ref{fig:distisnec} e \ref{fig:boxplotsnec} pode observar-se a distribuição do número de entidades concorrentes para cada divisão do CPV. Como se verifica, existe uma enorme variabilidade entre estas diferentes divisões e, excetuando a divisão 41, todas as distribuições evidenciam uma nítida assimetria à direita.
 
 
-
-
-%\section{R051 : Alta concentração de mercado}
-%
-%\Lemma{ \cite{spreadsheet1}}
-%{A small number of companies concentrate a high share of contracts in a particular market.}
-
-
-
-\section{RF2 : Comparação entre Preço Contratual e Preço Total Efetivo}
-
-Existem situações em que o valor contratual celebrado é alterado após celebração do contrato, seja por não existir necessidade de usar tantos recursos como a situação oposta. Estes valores são guardados na coluna referefente ao Preço Total Efetivo. Nesses casos, é simples verificar quais são os contratos em que ocorre esta situação através de uma \textit{query}: 
+Para a construção deste indicador foi utilizada a tabela auxiliar \textit{cpv\_stat}. A definição das barreiras inferior e superior para identificar os outliers para cada divisão de CPV, obdeceu ao calculo da contante de Medcouple para cada uma delas (divisão) e, consequentemente, definiram-se as respetivas extremidades. Assim, com o intuito de se  selecionar todos os contratos cujo número de entidades concorrentes seja considerado um outlier, construíu-se a seguinte \textit{query}: 
 
 \begin{lstlisting}[
 	language=SQL,
@@ -621,38 +560,364 @@ Existem situações em que o valor contratual celebrado é alterado após celebr
 	basicstyle=\ttfamily,
 	numbers=left,
 	numberstyle=\tiny,
-	commentstyle=\color{gray},	frame=single,
+	commentstyle=\color{gray}, frame = single,
 	breaklines=true,
-	autogobble = true,
+	autogobble =true,
 	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 	]
-	SELECT contratos_basegov."id", 
-		preco_contratual, 
-		contratos_basegov."totalEffectivePrice", 
-		contratos_basegov."totalEffectivePrice"/preco_contratual AS racio
+	SELECT contratos_basegov."id"
 	FROM contratos_basegov 
-	WHERE contratos_basegov."totalEffectivePrice" > 0 AND 
-		ABS(contratos_basegov."totalEffectivePrice" - preco_contratual) > 0 AND 
-		preco_contratual > 0;
+	JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+	JOIN cpv_stat ON SUBSTRING(contratos_basegov."cpv", 1, 2) = cpv_stat."cpv"
+	WHERE concursos_publicos."nr_entidadesconcorrentes" < lower_fence OR
+		  concursos_publicos."nr_entidadesconcorrentes" > upper_fence;
+	
 \end{lstlisting}
 
+Os resultados obtidos, que constam na seguinte Figura \ref{fig:necincump}, evidenciam uma forte predominância das divisões 33 e 45 do CPV. Foram detetados cerca de 18\% ($N_{Total} = 22951$) contratos cujo número de entidades concorrentes é considerado outlier. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\textwidth]{imagens/rf2/main_cpvs.png}
-	\caption{Grupos com maior número de contratos indiciados}
-	\label{}
+	\includegraphics[width=\textwidth]{imagens/r019/colecao.png}
+	\caption{Da esquerda para a direita: Divisões de CPV com maior número de contratos em inconformidade relativamente ao número de entidades concorrentes; Distribuição do número de outliers para as divisões 33 e 45, respetivamente.}
+	\label{fig:necincump}
 \end{figure}
 
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{ccccccc}
+			\hline
+			\textbf{Divisão CPV} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos \\ inconformes ($N_1$)\end{tabular}} & \textbf{$\frac{N_1}{N_{Total}}$\%} & \textbf{\begin{tabular}[c]{@{}c@{}}\% Outliers\\ inferiores\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}\% Outliers \\ superiores\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de \\ contratos total ($N_2$)\end{tabular}} & \textbf{$\frac{N_2}{N_{Total}}$\%} \\ \hline
+			33                   & 8182                                                                                        & 35.6                               & 88.7                                                                      & 11.3                                                                      & 29351                                                                                 & 27.8                               \\
+			45                   & 6381                                                                                        & 27.8                               & 68.4                                                                      & 31.6                                                                       & 21525                                                                                 & 29.6                               \\ \hline
+		\end{tabular}%
+	}
+	\caption{Descrição do número de contratos, total e inconformes, para as principais divisões de CPV.}
+	\label{tab:rf19stats}
+\end{table}
+
+
+Dos outliers detetados, considerando apenas as divisões 33 e 45, constata-se que a maioria se posiciona abaixo da extremidade inferior, circunstância que remete para um elevado número de contratos celebrados com um número de entidades concorrentes reduzido.
+
+
+
+\section{R031: Comparação entre preço base e preço contratual}
+
+Um dos indicadores definidos pela OCDS incide na deteção de contratos cujo preço contratual seja muito próximo do preço base\footnote{Winning bid is within threshold value of budget or estimated price.}. No processo de construção deste indicador, a ocorrência de uma das seguintes situações foi constante, tendo todas sido consideradas na elaboração da query final:
+ \textit{query} final:
+
+\begin{my_enumerate}
+	
+	\item O valor do preço base para um determinado contrato ou era 0 ou não se encontrava preenchido (\textit{None}). \label{ponto1}
+	
+	\item O valor do preço contratual era superior ao valor do preço base. \label{ponto2}
+	
+	\item O valor do preço contratual era inferior ao valor do preço base.
+	
+\end{my_enumerate}
+
+Como foi constatado anteriormente, nos termos do CCP, o preço base é definido como o montante máximo que a entidade adjudicante se dispõe a pagar pela execução do objeto contratual \cite{precobase}. Procedeu-se à adaptação deste indicador de forma a incluir o mecanismo de deteção de todos os contratos em que o preço contratual é superior ao preço base, criando-se, assim, a zona de \textit{rejeição II}.
+
+%Desta forma, este indicador foi adaptado de forma a incluir o mecanismo de deteção de todos os contratos em que o preço contratual é superior ao preço base, criando-se, assim, a \textit{zona de rejeição II}. 
+
+É de ressalvar que na elaboração deste indicador não foram considerados contratos ao abrigo do regime especial de adjudicação por lotes. O motivo pela qual se optou pela referida exclusão, prende-se com o facto de, contratualmente, cada lote ter um preço base associado e, no Portal BASE, o preço base ser definido de igual forma para todos os lotes. Na Tabela \ref{tab:lotes} encontra-se um exemplo de um contrato adjudicado por lotes. Na última coluna, \textbf{Preço Base Real}, encontram-se os preços base para cada lote. É de sublinhar, contudo, que estes valores foram obtidos a partir do documento PDF onde é finalizado o contrato e que se encontra disponível, apenas em alguns contratos, para consulta no Portal BASE. Em virtude de não se afigurar viável a criação de um mecanismo de obtenção dos preços base por cada lote dado, optou-se pela sua exclusão.
+
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{ccccc
+			>{\columncolor[HTML]{ECECEC}}c }
+		\hline
+		\textbf{Número de Anúncio}   & \textbf{ID} & \textbf{Lote} & \textbf{Preço Base}           & \textbf{Preço Contratual} & \textit{\textbf{Preço Base Real}} \\ \hline
+		& 10471090    & 1             &                               & 77.454,72€                & \textit{129.276,00€}              \\
+		& 10471049    & 2             &                               & 85.365,84€                & \textit{104.072,64€}              \\
+		& 10470972    & 3             &                               & 89.886,72€                & \textit{104.072,64€}              \\
+		\multirow{-4}{*}{11171/2023} & 10539451    & 4             & \multirow{-4}{*}{373.860,48€} & 29.075,76€                & \textit{36.439,20€}               \\ \hline
+	\end{tabular}%
+	}
+	\caption{Exemplo de um contrato adjudicado por lotes.}
+\label{tab:lotes}
+\end{table}
+
+
+
+
+
+
+Assim, com o objetivo de incluir os primeiros dois pontos mencionados em \ref{ponto1} e \ref{ponto2} e detetar todos os contratos com um preço contratual \textit{próximo} do preço base, construiu-se-se a seguinte \hyperref[lst:r31]{função}, definida em \ref{lst:r31}. Esta função tem como parâmetro de entrada um valor máximo de tolerância $\epsilon$ cuja finalidade é definir a \textit{zona de rejeição I}. Estas zonas de rejeição encontram-se ilustradas na Figura \ref{fig:rej}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.8\textwidth]{imagens/r31/r31.png}
+	\caption{Ilustração das zonas de rejeição do preço contratual. }
+	\label{fig:rej}
+\end{figure}
+
+Em suma, a deteção de contratos que obdecem às condições impostas por este indicador seguem o processo ilustrado na Figura \ref{fig:r31}. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{imagens/r31/r31procss.png}
+	\caption{Ilustração do processo de deteção de contratos inconformes. }
+	\label{fig:r31}
+\end{figure}
+
+Verificou-se que na base de dados 20 dos concursos públicos continham preço base nulo e 3597 não continham este campo preenchido. Consequentemente, foram descartados estes 3597 (2.8\%) concursos públicos do processo de comparação. 
+Dentro da primeira e segunda zona de rejeição, contaram-se 35967 e 348 contratos celebrados, respetivamente. Para efeitos de demonstração, o nível de tolerância utilizado nesta análise foi de $0.1$. Assim sendo, são sinalizados todos os contratos cujo preço contratual seja superior a $90\%$ do preço base. Esta abordagem não se revela como a mais eficiente, já que diferentes níveis de tolerância devem ser tomados consoante a categoria do contrato, considerando a agregação por grupo ou divisão do CPV. O resultado final encontra-se na Tabela \ref{tab:r31vales}. 
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{clcl|cc|cc}
+		\hline
+		\multicolumn{4}{c|}{\textbf{Preço Base}}                                        & \multicolumn{2}{c|}{\multirow{2}{*}{\textbf{Zona de rejeição I}}} & \multicolumn{2}{c}{\multirow{2}{*}{\textbf{Zona de rejeição II}}} \\
+		\multicolumn{2}{c}{\textbf{Nulo}}          & \multicolumn{2}{c|}{\textbf{None}} & \multicolumn{2}{c|}{}                                             & \multicolumn{2}{c}{}                                              \\ \hline
+		3497 & \multicolumn{1}{l|}{\textit{2.7\%}} & 20        & \textit{0.02\%}        & 35967                      & \textit{27.6\%}                      & 348                       & \textit{0.26\%}                       \\ \hline
+	\end{tabular}%
+	}
+	\caption{Número de contratos inconformes e respetivas percentagens.}
+	\label{tab:r31vales}
+\end{table}
+
+Nas Figuras \ref{fig:r31nulos}, \ref{fig:r31nulos2} e \ref{fig:r31nulo3} podem observar-se as principais divisões de CPV que não respeitam o preenchimento do preço base no Portal BASE, com maior número de contratos celebrados cujo preço contratual pertence à zona de rejeição I e zona de rejeição II, respetivamente.
+
+Antes da celebração de um contrato, o preço base é conhecido e, desta forma,  esta flag não agrega muito valor se considerada de forma isolada. Quando acoplada a outras flags pode sugerir um comportamento suspeito. 
+
+Por outro lado, é preciso ter em conta como é que o preço base é calculado e se se encontra dentro do preço de mercado. Se o preço base for calculado por excesso e o preço contratual for próximo do preço base, poderá haver indícios de anomalias.
+
+
+
+
+
+\section{R051: Análise da concentração de mercado}
+
+
+Com a construção deste indicador procura-se averiguar a existência de empresas com uma alta concentração de concursos adjudicados para determinado mercado\footnote{A small number of companies concentrate a high share of contracts in a particular market.}. 
+As diretrizes da OCDS sugerem que se calcule a proporção de contratos ganhos por uma determinada entidade adjudicatária e a proporção do valor total adjudicado para um determinado período de tempo (por exemplo: um ano). Na elaboração deste indicador optou-se por duas abordagens.
+
+
+%Este indicador foi desenvolvido e aplicado apenas para contratos de comercialização de energia, água e gás. 
+
+
+
+\subsection{Abordagem 1}
+
+Com esta abordagem pretendeu-se avaliar a existência  de uma eventual tendência de um grupo seleto de empresas vencerem a maioria dos concursos públicos para um determinado grupo de CPV. O processo encontra-se ilustrado na Figura \ref{fig:ab1}. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{imagens/r51/r51_v2.png}
+	\caption{Ilustração do processo da abordagem 1.}
+\label{fig:ab1}
+\end{figure}
+
+Sempre que um contrato é analisado, procede-se à identificação do grupo do CPV. Seguidamente, determina-se o número total de contratos celebrados para esse mesmo grupo de CPV ao longo de um determinado período de tempo\footnote{Ao longo do desenvolvimento deste indicador, o período de tempo considerado consistiu nos 12 meses precedentes à data de celebração do contrato.}, guardando o resultado na variável $X_1$. Após este passo, identifica-se a entidade adjudicatária do concurso em análise e calcula-se o número de contratos ganhos para o mesmo grupo de CPV ao longo do mesmo período de tempo, guardando o resultado na variável $X_2$. Por fim, é calculado o rácio entre $X_2$ e $X_1$. 
+
+Na Tabela \ref{tab:r51exemplo1} encontra-se um exemplo de aplicação do método com empresas fictícias e números gerados aleatoriamente. Finda a seleção de todos os contratos de um grupo de CPV, verifica-se que existem 1564 contratos celebrados. Da totalidade de contratos celebrados, a Empresa A venceu 257 concursos, a Empresa B venceu 1271 e a Empresa C venceu 38. Ao calcular os respetivos rácios, o facto da Empresa B ser a vencedora de uma grande porção da totalidade de contratos pode ser revelador de um comportamento anómalo, de forma oposta à Empresa C, cujo rácio toma um valor baixo. 
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{cccc}
+		\cline{2-4}
+		& \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos celebrados, \\ por empresa, para grupo de CPV\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos total\\ celebrados para grupo de CPV\end{tabular}} & \textbf{Rácio} \\ \hline
+		\textbf{Empresa A} & 257                                                                                                                & \multirow{3}{*}{1564}                                                                                     & 0.16           \\
+		\textbf{Empresa B} & 1271                                                                                                               &                                                                                                           & 0.81           \\
+		\textbf{Empresa C} & 38                                                                                                                 &                                                                                                           & 0.03            \\ \hline
+	\end{tabular}%
+	}
+	\caption{Exemplo da abordagem 2 para um conjunto de empresas fictícias de um determinado grupo de CPV.}
+	\label{tab:r51exemplo1}
+\end{table}
+
+
+
+\subsection{Abordagem 2}
+
+Esta abordagem teve como objetivo verificar se existia uma tendência de determinadas entidades adjudicantes celebrarem concursos públicos sempre com empresas pertencentes a um grupo restrito. O processo desenvolvido apresenta-se ilustrado na Figura \ref{fig:ab2}. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{imagens/r51/r51_v1.png}
+	\caption{Ilustração do processo da abordagem 2.}
+	\label{fig:ab2}
+\end{figure}
+
+O processo inicia-se com a identificação do grupo do CPV do contrato a analisar. Num segundo momento, é identificada a entidade adjudicante através do respetivo NIF, representado por $\text{NIF}_1$, e calcula-se o número de contratos celebrados por esta mesma entidade, ao longo de um período de tempo, para o grupo de CPV em questão, guardando o resultado na variável $X_1$. De seguida, é identificada a entidade adjudicatária através do respetivo NIF, representado por $\text{NIF}_2$, e é calculado o número de contratos celebrados entre $\text{NIF}_1$ e $\text{NIF}_2$, para o mesmo grupo de CPV e o mesmo período de tempo, guardando o resultado em $X_2$. Por fim, é calculado o rácio entre $X_1$ e $X_2$. Os valores do rácio variam entre zero e um, seno que valores muito próximos da unidade podem indiciar uma predisposição de contratação de serviços apenas de uma determinada empresa. 
+
+Na Tabela \ref{tab:r51exemplo} exemplifica-se a aplicação da abordagem 2. Para um determinado contrato, deteta-se que uma entidade adjudicante celebrou 300 contratos, para uma determinada categoria de CPV, ao longo dos últimos 12 meses. Estes contratos foram celebrados apenas com três empresas, sendo 193 deles com a Empresa A, 12 com a Empresa B e 95 com a Empresa C. Na sequência do cálculo dos rácios, constata-se que o valor deste para os contratos celebrados entre a entidade adjudicante e a Empresa A se destaca dos demais, podendo ser revelador de um comportamento evasivo. 
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{c|cc|c}
+			\hline
+			\textbf{\begin{tabular}[c]{@{}c@{}}Entidade\\ Adjudicante\end{tabular}} &                    & \textbf{\begin{tabular}[c]{@{}c@{}}Número de contratos\\ celebrados para grupo de CPV\end{tabular}} & \textbf{Rácio} \\ \hline
+			\multirow{3}{*}{300}                                                    & \textbf{Empresa A} & 193                                                                                                 & 0.64           \\
+			& \textbf{Empresa B} & 12                                                                                                  & 0.04           \\
+			& \textbf{Empresa C} & 95                                                                                                  & 0.32           \\ \hline
+		\end{tabular}%
+	}
+	\caption{Exemplo de ilustração da abordagem 2 para uma entidade adjudicante e conjunto de empresas fictícias.}
+	\label{tab:r51exemplo}
+\end{table}
+
+
+
+\section{RF2: Comparação entre Preço Contratual e Preço Total Efetivo}
+
+Verificam-se situações em que o valor contratual celebrado é alterado após a celebração do contrato, seja por não existir a necessidade de usar todos os  recursos previstos como a situação oposta. Contudo, tal como foi visto anteriormente, também existem casos em que este campo diz respeito ao preço contratual referente à prestação completa de um serviço e o preço contratual diz respeito ao preço acordado por unidade (quilómetro, hora, dia). Estes valores são guardados na coluna referefente ao Preço Total Efetivo. Nesses casos, é simples verificar quais são os contratos em que ocorre esta situação através de uma \textit{query}: 
+
+
+%\begin{lstlisting}[
+%	language=SQL,
+%	showspaces=false,
+%	basicstyle=\ttfamily,
+%	numbers=left,
+%	numberstyle=\tiny,
+%	commentstyle=\color{gray},	frame=single,
+%	breaklines=true,
+%	autogobble = true,
+%	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+%	]
+%	SELECT contratos_basegov."id", 
+%	FROM contratos_basegov 
+%	WHERE contratos_basegov."totalEffectivePrice" > 0 AND 
+%		ABS(contratos_basegov."totalEffectivePrice" - preco_contratual) > 0 AND 
+%		preco_contratual > 0;
+%\end{lstlisting}
+%
+%
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=0.5\textwidth]{imagens/rf2/main_cpvs.png}
+%	\caption{Grupos com maior número de contratos indiciados}
+%	\label{}
+%\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{minipage}{.48\linewidth}
+		\begin{lstlisting}[
+			language=SQL,
+			showspaces=false,
+			basicstyle=\ttfamily,
+			numbers=left,
+			numberstyle=\tiny,
+			commentstyle=\color{gray},	frame=single,
+			breaklines=true,
+			autogobble = true,
+			postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+			]
+			SELECT contratos_basegov."id"
+			FROM contratos_basegov 
+			WHERE contratos_basegov."totalEffectivePrice" > 0 AND 
+			ABS(contratos_basegov."totalEffectivePrice" - preco_contratual) > 0 AND 
+			preco_contratual > 0;
+		\end{lstlisting}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.48\linewidth}
+		\centering
+		\includegraphics[width=0.5\textwidth]{imagens/rf2/main_cpvs.png}
+		\caption{Grupos com maior número de contratos indiciados}
+		\label{}
+	\end{minipage}
+\end{figure}
 
 
 \section{RF3: Análise da data de publicação do anúncio}
 
-Adicionalmente, foi feita uma análise do dia de publicação do anúncio em Diário da República. O objetivo deste indicador é verificar se existem anúncios publicados em dias não convencionais - feriados nacionais - na tentativa de os fazer passar despercebidos. Não existe nenhuma ocorrência deste indicador nos contratos presentes na base de dados durante o período de tempo estudado. 
+Adicionalmente, foi feita uma análise da data de publicação do anúncio em Diário da República. O objetivo deste indicador, cujo código se encontra disponível para consulta na Secção \ref{lst:rf3code}, é verificar a publicação de anúncios publicados em datas não convencionais - domingos e feriados nacionais - na tentativa de os fazer passar despercebidos. Não existe nenhuma ocorrência deste indicador nos contratos presentes na base de dados durante o período de tempo considerado. 
 
 
 
+\section{Processo de automação}
 
+Finda a construção dos indicadores apresentados no Capítulo \ref{ch:cap5}, automatizou-se o processo de aplicação destes indicadores a todos os novos contratos que são adicionados diariamente à base de dados. Este processo foi aplicado somente a concursos públicos, tendo sido utilizadas todas as flags, exceto a R031 e R051. Primeiramente, construiu-se uma nova tabela, chamada \textit{daily\_flags}, com a configuração da Tabela \ref{tab:dailyexample}. 
+
+
+\begin{table}[H]
+	\centering
+	\renewcommand{\arraystretch}{1.15}
+	\setlength{\tabcolsep}{15pt}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lllllllll}
+			\toprule
+			\textbf{ID}                  & \textbf{Data Publicação}       & \textbf{Verificação}     & \textbf{RF2}              & \textbf{RF3}              & \textbf{R003}             & \textbf{R017}            & \textbf{R018}             & \textbf{R019}            \\ \midrule
+			\multicolumn{1}{c}{12345678} & \multicolumn{1}{c}{01/01/2024} & \multicolumn{1}{c}{true} & \multicolumn{1}{c}{false} & \multicolumn{1}{c}{false} & \multicolumn{1}{c}{false} & \multicolumn{1}{c}{true} & \multicolumn{1}{c}{false} & \multicolumn{1}{c}{true} \\ \bottomrule
+		\end{tabular}%
+	}
+	\caption{Exemplo de aplicação de todos os indicadores binários a um concurso público.}
+	\label{tab:dailyexample}
+\end{table}
+
+Esta tabela é constituída pelo identificador do contrato, a data de publicação, uma coluna de verificação - cujo propósito irá ser clarificado nos próximos parágrafos - e as colunas referentes a cada uma das flags, cujo output é binário: \textit{true} ou \textit{false}. 
+
+
+Ao longo do processo de automação, selecionam-se, diariamente, os novos concursos públicos adicionados à tabela principal \textit{contratos\_basegov}, copiam-se as colunas que contém o identificador e a data de publicação dos mesmos, aplicam-se as flags e insere-se o respetivo output nesta nova tabela. 
+
+
+Antes de executar o software necessário para realizar este procedimento com sucesso, foram aplicados, manualmente, os indicadores da Tabela \ref{tab:dailyexample} a todos os concursos públicos presentes na base de dados. Só após concluir este passo é que se deu início à execução do software responsável pelo processo de automação. Na Figura \ref{fig:esquema} é possível observar um esquema panorâmico deste processo e das distintas etapas que o compõe.  
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{imagens/daily_flags_v2.png}
+	\caption{Esquema do processo de automatização.}
+	\label{fig:esquema}
+\end{figure}
+
+
+Este procedimento obedece a duas fases distintas. 
+
+A primeira inicia-se com o desenvolvimento de quatro ficheiros desenvolvidos em python, cada um deles com um objetivo específico, descritos a seguir. 
+
+No ficheiro \textbf{table\_update.py} são definidas as funções responsáveis por atualizar e realizar as operações intermédias necessárias na tabela auxiliar \textit{concursos\_publicos}. Começa-se por definir uma função que verifica qual foi o último \textit{id} a ser copiado para esta tabela, evitando-se, assim, a repetição de contratos. De seguida, são construídas funções com o objetivo de :
+
+\begin{my_enumerate}
+	
+	\item Copiar as colunas \textit{id}, \textit{data\_publicacao}, 	\textit{contractTypes}, \textit{fundamentacao}, \textit{entidade\_adjudicante}, \textit{entidades\_contratadas}, \textit{entidades\_concorrentes}, \textit{executionPlace}, \textit{cpv} e \textit{preco\_contratual} dos novos contratos da tabela original.
+	
+	\item Fazer a separação das colunas \textit{entidade\_adjudicante} e \textit{entidades\_contratadas}.
+	
+	\item Fazer o cálculo do número de entidades concorrentes.
+	
+	\item Fazer a classificação dos contratos de acordo com a tipologia: \textbf{Bens e Serviços} ou \textbf{Empreitadas}.
+	
+\end{my_enumerate}
+
+
+
+No ficheiro \textbf{flag\_calculator.py} são definidas todas as funções responsáveis por calcular os indicadores presentes na Tabela \ref{tab:dailyexample}. Para tal, utilizou-se a biblioteca \textit{psycopg2} que permite realizar a conexão entre o python e base de dados. As funções definidas, não só são responsáveis por calcular o output de um determinado indicador para um contrato, como, também, atualizar a tabela \textit{daily\_flags} com o resultado final. Por fim, foi criada uma função global que sistematiza o cálculo de todas as flags numa única função.
+
+Em \textbf{process\_update.py} são invocadas todas as funções desenvolvidas nos ficheiros \textbf{flag\_calculator.py} e \textbf{table\_update.py}. Neste caso, começa por se aplicar as funções desenvolvidas no primeiro ficheiro e, só de seguida, as do último. Se o processo de cálculo das flags ocorrer com sucesso, é atribuído um valor \textit{true} na coluna de verificação para todos os contratos considerados. Esta coluna funciona como um mecanismo de prevenção para a eventualidade de o processo não decorrer como suposto. 
+
+Quando ocorre alguma anomalia e este processo não decorre como planeado, a coluna de verificação assume o valor \textit{false}. Nessas situações são invocadas as funções do ficheiro \textbf{none\_cases.py}. Inicialmente, são identificadas todas as entradas da tabela \textit{daily\_flags} que contenham o valor \textit{false} nesta coluna. De seguida, procede-se à remoção das mesmas e, por fim, repete-se todo o processo descrito anteriormente.
+
+
+%Começa-se por criar uma imagem em Docker com os ficheiros desenvolvidos. De seguida, no serviço de cloud AWS, foi criado um repositório, num Elastic Container Register (ECR), onde se armazenou a imagem Docker. Para executar os ficheiros presentes nesta imagem, foi criada uma função Lambda que guarda o output na tabela \textit{daily\_flags} da base de dados. Por fim, de forma a executar este processo de forma diária, foi programada uma calendarização do mesmo através do AWS Event Bridge. 
+
+
+
+Após a construção destes ficheiros, dá-se início à segunda fase. Nesta, são utilizadas ferramentas que executam, de forma automática e sem qualquer tipo de intervenção manual, todos os ficheiros referidos anteriormente.
+
+Para implementar este processo, começa-se por criar uma imagem Docker com os ficheiros desenvolvidos. O Docker é uma plataforma que permite criar, executar e gerir aplicações em \textit{containers}, que, em suma, são unidades de \textit{software} que incluem todas as funcionalidades que uma aplicação necessita para funcionar corretamente: o código, runtime, ferramentas do sistema e bibliotecas.
+
+A seguir, no serviço de cloud AWS, foi criado um repositório no Elastic Container Registry (ECR), onde a imagem Docker foi armazenada. Para executar os ficheiros presentes nesta imagem, foi criada uma função Lambda que guarda o output na tabela \textit{daily\_flags} da base de dados. Por fim, de forma a garantir que este processo é executado diariamente, foi programada uma calendarização do mesmo através do serviço AWS Event Bridge. 
 
 
 

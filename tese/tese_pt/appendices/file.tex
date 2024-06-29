@@ -1,7 +1,5 @@
 \chapter{}
 
-
-%
 %\begin{longtblr}[
 %	caption = {Indicadores Estatísticos referentes ao número de entidades concorrentes em concursos públicos por CPV : R019},
 %	label = {tab:test},
@@ -152,6 +150,94 @@
 
 
 
+
+\begin{code}[caption={Simulação em Python para calcular percentagem de outliers numa distribuição normal.},captionpos=b, label=lst:normalcode,
+	language=python,
+	showspaces=false,
+	showstringspaces=false,
+	basicstyle=\ttfamily,
+	numbers=left,
+	numberstyle=\tiny,
+	commentstyle=\color{gray}, 
+	frame=single,
+	autogobble=true,
+	breaklines=true,
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+	]
+	np.random.seed(5)	
+	upper_size = list()
+	lower_size = list()
+	
+	for i in range(10000):
+	
+		# Dimensao da amostra
+		n = 2000
+		
+		# Amostra Aleatoria (Distribuicao Normal: Media = 0 | Var = 1)
+		amostra = np.random.normal(loc=0, scale=1, size=n)
+		
+		# Calcular primeiro e terceiro quartil
+		q1 = np.percentile(amostra, 25)
+		q3 = np.percentile(amostra, 75)
+		
+		# Calcular extremidade/whisker superior e inferior
+		upper_whisker = q3 + 1.5 * (q3 - q1)
+		lower_whisker = q1 - 1.5 * (q3 - q1)
+		
+		# Localizar pontos pertencentes alem-fronteira
+		upper_points = np.where(amostra > upper_whisker)[0]
+		lower_points = np.where(amostra < lower_whisker)[0]
+		
+		# Calcular a percentagem de pontos alem-fronteira
+		upper_size.append(len(upper_points) / n * 100)
+		lower_size.append(len(lower_points) / n * 100)
+	
+\end{code}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{imagens/stats/histos_barreiras.png}
+	\caption{Distribuição da percentagem de outliers, para ambos os lados da distribuição, de 10000 amostras geradas a partir de uma distribuição normal.}
+	\label{fig:normalouts}
+\end{figure}
+
+
+
+
+
+
+
+\chapter{Construção das \textit{Red Flags}}
+
+\begin{code}[caption={\textit{Query} em PostgreSQL para detetar contratos cuja data de publicação do anúncio em Diário da República seja feito num domingo ou feriado nacional.},captionpos=b, label=lst:rf3code,
+	language=SQL,
+	showspaces=false,
+	basicstyle=\ttfamily,
+	numbers=left,
+	numberstyle=\tiny,
+	commentstyle=\color{gray},	frame=single,
+	breaklines=true,
+	autogobble = true,
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+	]
+	WITH sundays AS (
+		SELECT generate_series::date AS sunday_date
+		FROM generate_series('2018-01-01'::date, '2024-05-01'::date, '1 week'::interval)
+		WHERE EXTRACT(DOW FROM generate_series) = 0)
+	SELECT contratos_basegov."id"
+	FROM contratos_basegov
+	JOIN concursos_publicos ON contratos_basegov."id" = concursos_publicos."id"
+	WHERE tipo_procedimento = 'Concurso público' 
+		AND EXTRACT(YEAR FROM contratos_basegov."data_publicacao") >= 2018 
+		AND contratos_basegov."data_celebracao" <= '2024-05-01'
+		AND (TO_CHAR(contratos_basegov."anuncio_drPublicationDate", 'MM-DD') IN 
+		('01-01','04-25','05-01','06-10','08-15','10-05','11-01','12-01','12-08','12-25')
+		OR contratos_basegov."anuncio_drPublicationDate" IN (SELECT sunday_date FROM sundays));
+	
+\end{code}
+
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{imagens/r019_hist1.png}
@@ -165,7 +251,80 @@
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{imagens/r019_hist3.png}
-	\caption{Distribuição do NEC por CPV}
-	\label{}
+	\caption{Distribuição do número de entidades concorrentes por cada umas das 45 divisões de CPV.}
+	\label{fig:distisnec}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{imagens/cpv3.png}
+	\caption{Boxplot do número de entidades concorrentes por cada umas das 45 divisões de CPV.}
+	\label{fig:boxplotsnec}
+\end{figure}
+
+
+\begin{code}[caption={Código em Python referente à flag R031.},captionpos=b,label=lst:r31,
+	language=python,
+	showspaces=false,
+	showstringspaces=false,
+	basicstyle=\ttfamily,
+	numbers=left,
+	numberstyle=\tiny,
+	commentstyle=\color{gray}, 
+	frame=single,
+	autogobble=true,
+	breaklines=true,
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+	]
+	def flagr31(tol):
+	"""
+	Parametro de entrada:
+	tol(float): número entre 0 e 1
+	
+	return: tuplo de IDs que respeitam as condicoes impostas
+	"""
+	
+	cur = conn.cursor()
+	cur.execute('''
+	SELECT id
+	FROM contratos_basegov
+	WHERE tipo_procedimento = 'Concurso publico' 
+	AND anuncio_preco_base IS NOT NULL 
+	AND anuncio_preco_base > 0 
+	AND preco_contratual < anuncio_preco_base 
+	AND preco_contratual > anuncio_preco_base * (1 - %s) 
+	AND n_anuncio IN (
+	SELECT n_anuncio
+	FROM contratos_basegov
+	GROUP BY n_anuncio
+	HAVING COUNT(DISTINCT n_anuncio) = 1
+	);
+	''', (tol,))
+	
+	return(cur.fetchall())
+	
+\end{code}
+
+
+
+\begin{figure}[h]
+	\begin{minipage}{.33\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{imagens/r31/pb.png}
+		\caption{Distribuição do número de concursos públicos, cujo valor do preço base no Portal BASE é nulo, por divisão de CPV.}
+		\label{fig:r31nulos}
+	\end{minipage}
+	\begin{minipage}{.33\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{imagens/r31/pcpb.png}
+		\caption{Distribuição do número de concursos públicos, cujo valor do preço contratual é superior ao preço base, por divisão de CPV.}
+		\label{fig:r31nulos2}
+	\end{minipage}
+	\begin{minipage}{.33\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{imagens/r31/pcpbnear.png}
+		\caption{Distribuição do número de concursos públicos, cujo valor do preço contratual é muito próximo do preço base, por divisão de CPV.}
+		\label{fig:r31nulo3}
+	\end{minipage}
 \end{figure}
 
