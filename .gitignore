@@ -1,3 +1,6 @@
+scripts/notebooks/1. análise_inicial
+scripts/notebooks/2. análise_intermedia
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
