@@ -1,5 +1,11 @@
 scripts/notebooks/1. análise_inicial
 scripts/notebooks/2. análise_intermedia
+scripts/notebooks/3. análise_final
+scripts/scripts_py/functions.py
+scripts/scripts_py/flags.py
+scripts/scripts_py/script.py
+
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
