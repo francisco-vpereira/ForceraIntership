@@ -1,6 +1,6 @@
 (English version below.)
 
-<br> <br>
+<br>
 
 # Contratos Públicos e Red Flags 
 
