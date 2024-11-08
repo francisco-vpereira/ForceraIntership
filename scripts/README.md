@@ -12,6 +12,8 @@ AWS
 ```
 Diretório que contém scripts em python e ficheiro dockerfile a fim de fazer deploy na AWS. São exatamente os mesmos scripts contidos em `cron_jobs/final_scripts`, exceto na parte onde são definidas as variáveis ambientes a fim de aceder à base de dados. 
 
+*Directory containing Python scripts and a Dockerfile for deployment on AWS. These are the same scripts found in cron_jobs/final_scripts, except for the part where environment variables are defined to access the database.*
+
 ***
 
 #### 2. cron_jobs
@@ -84,6 +86,7 @@ scripts_py
 
 Versão preliminar do produto final. Script **functions.py** contém funções auxiliares para extrair informação da tabela principal da base de dados. 
 
-Em **AWS_step** está descrito o procedimento para pôr o código a correr nunma função Lambda na AWS diariamente. 
+#### 5. AWS_step
+Descrição do procedimento para pôr o código a correr nunma função Lambda diariamente. 
 
 
