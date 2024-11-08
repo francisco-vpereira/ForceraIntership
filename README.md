@@ -9,7 +9,9 @@ Para uma descrição mais detalhada, consultar o ficheiro README de cada diretó
 
 3. notas: contém documentação acerca do Código dos Contratos Públicos (CCP), da Open Contracting Partnership (OCP), links úteis e o conjunto de redflags numa folha de excel. 
 
-4. scripts: contém todos os scripts desenvolvidos ao longo do estágio. 
+4. scripts: contém todos os scripts desenvolvidos ao longo do estágio.
+
+5. tese: dissertação final.
 
 
 **Dependências**
@@ -43,6 +45,9 @@ For a more detailed description, please refer to the README file in each directo
 3. notas: provides documentation on the Public Contracts Code (CCP), the Open Contracting Partnership (OCP), useful links, and a collection of red flags in an Excel sheet.
 
 4. scripts: contains all scripts developed during the internship.
+
+5. tese: final dissertation.
+
 
 **Dependencies**
 
