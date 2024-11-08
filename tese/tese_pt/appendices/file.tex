@@ -277,31 +277,31 @@
 	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
 	]
 	def flagr31(tol):
-	"""
-	Parametro de entrada:
-	tol(float): número entre 0 e 1
+		"""
+		Parametro de entrada:
+		tol(float): número entre 0 e 1
+		
+		return: tuplo de IDs que respeitam as condicoes impostas
+		"""
 	
-	return: tuplo de IDs que respeitam as condicoes impostas
-	"""
+		cur = conn.cursor()
+		cur.execute('''
+		SELECT id
+		FROM contratos_basegov
+		WHERE tipo_procedimento = 'Concurso publico' 
+		AND anuncio_preco_base IS NOT NULL 
+		AND anuncio_preco_base > 0 
+		AND preco_contratual < anuncio_preco_base 
+		AND preco_contratual > anuncio_preco_base * (1 - %s) 
+		AND n_anuncio IN (
+		SELECT n_anuncio
+		FROM contratos_basegov
+		GROUP BY n_anuncio
+		HAVING COUNT(DISTINCT n_anuncio) = 1
+		);
+		''', (tol,))
 	
-	cur = conn.cursor()
-	cur.execute('''
-	SELECT id
-	FROM contratos_basegov
-	WHERE tipo_procedimento = 'Concurso publico' 
-	AND anuncio_preco_base IS NOT NULL 
-	AND anuncio_preco_base > 0 
-	AND preco_contratual < anuncio_preco_base 
-	AND preco_contratual > anuncio_preco_base * (1 - %s) 
-	AND n_anuncio IN (
-	SELECT n_anuncio
-	FROM contratos_basegov
-	GROUP BY n_anuncio
-	HAVING COUNT(DISTINCT n_anuncio) = 1
-	);
-	''', (tol,))
-	
-	return(cur.fetchall())
+		return(cur.fetchall())
 	
 \end{code}
 

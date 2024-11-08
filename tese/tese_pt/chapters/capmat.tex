@@ -1,4 +1,4 @@
-O \textit{boxplot}, também conhecido como diagrama de extremos e quartis, é uma ferramenta gráfica recorrente em Estatística, que permite visualizar a distribuição de um conjunto unidimensional de dados\cite{casella2002statistical} \cite{ross2014introduction}. Esta ferramenta, proposta por John Tukey, em 1970, permite compreender o comportamento da distribuição dos dados, da sua dispersão e simetria. A informação obtida pelo \textit{boxplot} resulta dos seguintes componentes: 
+O \textit{boxplot}, também conhecido como diagrama de extremos e quartis, é uma ferramenta gráfica recorrente em Estatística, que permite visualizar a distribuição de um conjunto unidimensional de dados\cite{casella2002statistical} \cite{ross2014introduction}. Esta ferramenta, proposta por John Tukey, em 1970, é um importante auxiliar na análise do comportamento da distribuição dos dados, da sua dispersão e simetria. A informação obtida pelo \textit{boxplot} resulta dos seguintes componentes: 
 
 
 \begin{my_itemize}
@@ -66,7 +66,7 @@ Desta forma, nas amostras que sigam distribuições diferentes da distribuição
 
 Por forma a solucionar a questão da assimetria de uma distribuição, foi proposto um ajuste relativamente à definição das extremidades do boxplot convencional (Hubert e Vandervieren, 2007) \cite{hoaglin1983understanding}. Este ajuste resulta numa generalização do boxplot que pode ser aplicado a todas as distribuições, tem em conta a sua simetria e evita a má classificação de \textit{outliers}. Para realizar este ajuste é preciso ter em conta a medida de simetria de uma distribuição, obtida pela constante de Medcouple \cite{mc}. 
 
-Considere-se uma amostra unidimensional ${x_1, \dots, x_n}$ gerada a partir de uma distribuição F. A constante de Medcouple é definida da seguinte forma:
+Considere-se uma amostra unidimensional ${x_1, \dots, x_n}$ gerada a partir de uma qualquer distribuição F. A constante de Medcouple é definida da seguinte forma:
 
 
 \begin{equation}
@@ -112,9 +112,9 @@ Aqui, $h_l(\text{MC})$ e $h_u(\text{MC})$ são funções a modelar. De forma a g
 	\end{tabular}
 \end{center}
 
-com $a,a_1,a_2,b,b_1,b_2 \in \mathbb{R}$. Para derivar estas constantes foram utilizadas diversas distribuições\footnote{Foram utilizadas distribuições $\Gamma$, $\chi^2$, Pareto, entre outras}, onde se tentaram definir extremidades de modo que, a percentagem de outliers fosse aproximadamente 0.7\%, à semelhança do \textit{boxplot} convencional, e cujo valor da constante de Medcouple não fosse superior a 0.6. Desta forma, não foram consideradas distribuições muito assimétricas.
+com $a,a_1,a_2,b,b_1,b_2 \in \mathbb{R}$. Para derivar estas constantes foram utilizadas diversas distribuições\footnote{Foram utilizadas distribuições $\Gamma$, $\chi^2$, Pareto, entre outras}, onde se tentaram definir extremidades de modo que, a percentagem de outliers fosse aproximadamente 0.7\%, à semelhança do \textit{boxplot} convencional utilizado na distribuição Gaussiana, e cujo valor da constante de Medcouple não fosse superior a 0.6. Desta forma, não foram consideradas distribuições muito assimétricas.
 
-O modelo que apresentou um melhor desempenho na determinação de extremidades foi o exponencial, com valores estimados de $a = -4$ e $b = 3$. Assim, Hubert e Vandervieren (2007), sugerem que sejam utilizados os seguintes intervalos, consoante a assimetria da distribuição, na construção dos boxplots: 
+O modelo que apresentou um melhor desempenho na determinação de extremidades foi o exponencial, com valores estimados de $a = -4$ e $b = 3$, por Hubert e Vandervieren (2007). Assim, estes autores sugerem que sejam utilizados os seguintes intervalos, consoante a assimetria da distribuição, na construção dos boxplots: 
 
 \begin{align}
 	\text{MC} \geq 0: & \quad [Q_1 -  1.5 e^{-4\text{MC}} \hspace{1px} \text{IQR} \hspace{2px} , \hspace{2px} Q_3 + 1.5 e^{3\text{MC}} \hspace{1px} \text{IQR}] 	\label{eq:medatual1} \\ \vspace{3px}
