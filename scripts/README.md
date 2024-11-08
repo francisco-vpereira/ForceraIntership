@@ -41,11 +41,11 @@ O processo está descrito detalhadamente no ficheiro README.
 
 <br>
 
-_Directory containing the automated process for calculating flags and updating the final table in PostgreSQL.
+*Directory containing the automated process for calculating flags and updating the final table in PostgreSQL.*
 
-The final product is in the **final_scripts** directory. In **flag_calculator.py**, all functions for calculating the different identifiers/flags are defined. In **table_update.py**, an auxiliary table in the database is populated, which is used to calculate indicators in **flag_calculator.py**. In **none_cases.py**, a prevention mechanism is developed to handle cases where the script may not run as expected. The final script is **process_update.py**.
+*The final product is in the **final_scripts** directory. In **flag_calculator.py**, all functions for calculating the different identifiers/flags are defined. In **table_update.py**, an auxiliary table in the database is populated, which is used to calculate indicators in **flag_calculator.py**. In **none_cases.py**, a prevention mechanism is developed to handle cases where the script may not run as expected. The final script is **process_update.py**.*
 
-The process is described in detail in the README file._
+*The process is described in detail in the README file.*
 
 ***
 
