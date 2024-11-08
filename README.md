@@ -1,3 +1,7 @@
+(English version below.)
+
+<br> <br>
+
 # Contratos Públicos e Red Flags 
 
 Neste repositório encontra-se todo o trabalho desenvolvido ao longo de um estágio curricular realizado na empresa FORCERA, para efeitos de conclusão do meu ciclo de estudos.
