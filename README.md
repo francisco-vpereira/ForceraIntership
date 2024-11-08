@@ -4,8 +4,8 @@ PT
 
 # Contratos Públicos e Red Flags 
 
-Neste repositório encontra-se todo o trabalho desenvolvido ao longo de um estágio curricular realizado na FORCERA.
-Para uma descrição mais detalhada, abrir  ficheiro README de cada diretório.  
+Neste repositório encontra-se todo o trabalho desenvolvido ao longo de um estágio curricular realizado na empresa FORCERA, para efeitos de conclusão do meu ciclo de estudos.
+Para uma descrição mais detalhada, consultar o ficheiro README de cada diretório.  
 
 1. [apresentacao_mensal](https://github.com/forcera/red_flags/tree/master/apresentacao_mensal): contém os ficheiros referentes à apresentação mensal interna. 
 
@@ -23,7 +23,7 @@ Para uma descrição mais detalhada, abrir  ficheiro README de cada diretório.
 - pandas 2.1.1
 - postgreSQL 8.1
 
-  
+
 ## Execução do programa localmente
 
 Aceder ao diretório `scripts/cron_jobs/final_scripts`. O script final é `process_update.py`
