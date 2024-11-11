@@ -23,7 +23,7 @@ conn = psycopg2.connect(
     port = 5432,
     #database = "contratosbasegov",
     user = "contratosbasegov",
-    password = "8n9nyeTBFUyCcLJShNrZdPUai2KQkue4")
+    password = "")
 
 cur = conn.cursor()
 
