@@ -1,3 +1,5 @@
+***English version below.***
+
 # Calcular flags booleanas diariamente 
 
 Existem duas tabelas essencias na base de dados: 
@@ -77,20 +79,10 @@ As colunas calculadas construídas a partir das enunciadas no ponto anterior sã
 
 
 <br>
-<br>
 
-<!--- O cronjob é definido da seguinte forma: 
-
-```
-$ crontab -e 
-
-# inserir este comando
-0 9 * * * /home/francisco/MECAD/COMP/comp/bin/python3 /home/francisco/MECAD/2º\ Ano/Estágio/forcera/scripts/cron_jobs/daily_ids.py
-```
----!>
-
-
-
+***
+ <br> 
+ 
 # Calculate Daily Boolean Flags
 
 There are two essential tables in the database:
