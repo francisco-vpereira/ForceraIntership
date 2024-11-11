@@ -16,7 +16,15 @@ Diretório que contém scripts em python e ficheiro dockerfile a fim de fazer de
 
 ***
 
-#### 2. cron_jobs
+#### 2. Plot_datasets
+
+*Csv files, extracted from the database, to create plots.*
+
+#### 3. PostgreSQL
+
+*Set of PostgreSQL queries developed in order to implement the different flags constructed during this internship + create auxiliary tables.*
+
+#### 4. cron_jobs
 
 ```
 cron_jobs
@@ -49,43 +57,8 @@ O processo está descrito detalhadamente no ficheiro README.
 
 ***
 
-#### 3. notebooks
 
-```
-notebooks
-├── 1. análise_inicial
-│   ├── contratos.ipynb
-│   ├── contratospublicos.ipynb
-│   ├── contratos_v2.ipynb
-│   └── flags.ipynb
-├── 2. análise_intermedia
-│   ├── contratospublicos.ipynb
-│   ├── contratos_v2.ipynb
-│   ├── R018_NEC.ipynb
-│   ├── R049_adaptado.ipynb
-│   ├── R049.ipynb
-│   └── R059.ipynb
-└── 3. análise_final
-    ├── automacao.ipynb
-    ├── flagR017.ipynb
-    ├── flagR019.ipynb
-    ├── Plots.ipynb
-    ├── precoscontr_analise.ipynb
-    ├── r018.py
-    ├── r019.py
-    ├── R031.ipynb
-    ├── R051_HHI.ipynb
-    ├── R051.ipynb
-    ├── R051_variante.ipynb
-    └── teste.py
-```
-Processo de análise e construção das flags foi feito maioritarimente em Jupyter Notebook. 
-
-*The process of analyzing and building the flags was primarily done in Jupyter Notebook.*
-
-***
-
-#### 4. scripts_py
+#### 3. scripts_py
 
 ```
 scripts_py
@@ -99,8 +72,3 @@ Versão preliminar do produto final. Script **functions.py** contém funções a
 *Preliminary version of the final product. The **functions.py** script contains helper functions to extract information from the main table in the database.*
 
 
-#### 5. AWS_step
-
-Descrição do procedimento para pôr o código a correr nunma função Lambda diariamente. 
-
-*Description of the procedure to run the code in a Lambda function daily.*
