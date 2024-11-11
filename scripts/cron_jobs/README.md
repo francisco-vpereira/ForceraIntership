@@ -88,3 +88,82 @@ $ crontab -e
 0 9 * * * /home/francisco/MECAD/COMP/comp/bin/python3 /home/francisco/MECAD/2º\ Ano/Estágio/forcera/scripts/cron_jobs/daily_ids.py
 ```
 ---!>
+
+
+
+# Calculate Daily Boolean Flags
+
+There are two essential tables in the database:
+
+- The final table: *daily_flags*
+- An auxiliary table: *concursos\_publicos*
+
+
+<br>
+<br>
+
+
+The *daily_flags* table contains the final product. Each day, the IDs of new public tenders published on Basgov are copied, and the constructed flags are subsequently applied to these contracts. All flags are boolean.
+
+It is composed of the following columns:
+
+- **id**: announcement identifier
+- **data\_publicacao**: contract publication date on the Basegov platform
+- **verification**: column with a boolean value. If true, the script ran successfully in the last execution; otherwise, it takes the value false. This is a preventive mechanism and will be explained later.
+- **R003**: Proposal submission time is less than the value defined in Article 135. The contract type needs to be considered: Acquisition of Goods and Services OR Works.
+    - **Auxiliary Table**: *concursos\_publicos*
+        - **Auxiliary Column**: tipo\_contrato
+- **R017**: Unusual price for a particular category.
+- **R018**: Contracts with only one competing entity.
+    - **Auxiliary Table**: *concursos\_publicos*
+        - **Auxiliary Column**: nr\_entidadesconcorrentes
+- **R019**: Low number of competitors.
+    - **Auxiliary Tables**: *concursos_publicos* and *precoc_stat*
+- **RF2**: Check if the publication date of the announcement coincides with a national holiday.
+- **RF3**: Check if there were changes to the contractual price after the contract signing.
+
+
+<br>
+<br>
+
+
+The *concursos\_publicos* table is used to obtain information not specified in the original table. From the original table, *contratos_basegov*, the following columns are copied to this table:
+
+- **id**
+- **data\_publicacao**
+- **contractTypes**
+- **fundamentacao**
+- **entidade_adjudicante**
+- **entidades_contratadas**
+- **entidades_concorrentes**
+- **executionPlace**
+- **cpv**
+- **preco_contratual**
+
+
+The calculated columns built from those listed above are:
+
+- **tipo\_contrato**: column with two values: Goods and Services OR Works. Built from the contractTypes column
+- **adjudicante**: name of the awarding entity. Built from the entidade\_adjudicante column
+- **nif1**: tax ID (NIF) of the awarding entity. Built from the entidade\_adjudicante column
+- **url1**: URL redirecting to the Basegov page where contracts signed by the awarding entity are listed. Built from the entidade\_adjudicante column
+
+- **adjudicataria**: name of the awarded entity. Built from the entidades\_contratadas column
+- **nif2**: tax ID (NIF) of the awarded entity. Built from the entidades\_contratadas column
+- **url2**: URL redirecting to the Basegov page where contracts signed by the awarded entity are listed. Built from the entidades\_contratadas column
+- **nr\_entidadesconcorrentes**: number of entities that applied to a given public tender. Calculated from the entidades\_concorrentes column
+
+
+
+# Process:
+
+1. Determine the last ID in the *daily_flags* table where the verification column value is true.
+2. Select from the *contratos\_basegov* table the necessary columns to populate in the *concursos\_publicos* table for the previous day (**id**, **data\_publicacao**, **contractTypes**, **fundamentacao**, **entidade\_adjudicante**, **entidades\_contratadas**, **entidades\_concorrentes**, **executionPlace**).
+3. Insert these values into the *concursos\_publicos* table.
+4. Update the extra columns belonging to the *concursos\_publicos* table:
+    - First, populate the columns: **adjudicante**, **nif1**, **url1**, **adjudicataria**, **nif2**, **url2** **nr\_entidadesconcorrentes**.
+5. In the **nr\_entidadesconcorrentes** column, replace empty entries with 1. By default, competitor entities do not include information regarding the winning entity. If only one entity participated in a given tender, the **entidades\_concorrentes** column value will be null in those cases.
+6. Classify the contract type and insert the value in the **tipo\_contrato** column.
+7. Add to the *table_temp* table the identifiers of announcements from the previous day along with their respective dates. Assign each flag a false value.
+8. Apply the R003 flag query to the set of public tenders from the previous day. If a flag is triggered, update the *table\_temp* table.
+9. Follow an analogous process for the remaining 3 flags.
