@@ -4,7 +4,7 @@
 
 # Contratos Públicos e Red Flags 
 
-Neste repositório encontra-se todo o trabalho desenvolvido ao longo de um estágio curricular realizado na empresa FORCERA, para efeitos de conclusão do meu ciclo de estudos.
+Neste repositório encontra-se todo o trabalho desenvolvido ao longo de um estágio curricular realizado na empresa FORCERA, para efeitos de conclusão do mestrado em Estatística Computacional e Análise de Dados (FCUP).
 Para uma descrição mais detalhada, consultar o ficheiro README de cada diretório.  
 
 1. apresentacao_mensal: contém os ficheiros referentes à apresentação mensal interna. 
@@ -39,7 +39,7 @@ Aceder ao diretório `scripts/cron_jobs/final_scripts`. O script final é `proce
 
 # Public Contracts and Red Flags
 
-This repository contains all the work developed during an internship at FORCERA, as part of the requirements to complete my studies.
+This repository contains all the work developed during an internship at FORCERA, as part of the requirements to complete my master's degree in Computational Statistics and Data Analysis (FCUP).
 For a more detailed description, please refer to the README file in each directory.
 
 1. apresentacao_mensal: contains files related to the internal monthly presentation.
